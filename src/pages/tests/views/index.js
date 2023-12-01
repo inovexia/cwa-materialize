@@ -6,6 +6,7 @@ import TableContainer from '@mui/material/TableContainer'
 import TableHead from '@mui/material/TableHead'
 import TableRow from '@mui/material/TableRow'
 import Paper from '@mui/material/Paper'
+import Translations from 'src/layouts/components/Translations'
 
 export default function BasicTable(props) {
   return (
@@ -21,7 +22,7 @@ export default function BasicTable(props) {
           </TableRow>
         </TableHead>
         <TableBody>
-          {props && Array.isArray(props.data) ? (
+          {props && !Array.isArray(props.data) ? (
             props.data.map((row, index) => (
               <TableRow key={row.guid} sx={{ '&:last-child td, &:last-child th': { border: 0 } }}>
                 <TableCell component='th' scope='row'>
@@ -35,7 +36,9 @@ export default function BasicTable(props) {
             ))
           ) : (
             <TableRow key='none' sx={{ '&:last-child td, &:last-child th': { border: 0 } }}>
-              <TableCell colspan='5'>{props.responseMessage}</TableCell>
+              <TableCell colspan='5'>
+                <Translations text={props.responseMessage} message='No test found' />
+              </TableCell>
             </TableRow>
           )}
         </TableBody>

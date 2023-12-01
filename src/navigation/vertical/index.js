@@ -29,13 +29,6 @@ const navigation = () => {
       title: 'Users',
       path: '/users',
       icon: 'mdi:email-outline'
-    },
-    {
-      path: '/acl',
-      action: 'read',
-      subject: 'acl-page',
-      title: 'Access Control',
-      icon: 'mdi:shield-outline'
     }
   ]
 }
