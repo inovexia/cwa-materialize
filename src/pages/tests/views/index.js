@@ -22,7 +22,7 @@ export default function BasicTable(props) {
           </TableRow>
         </TableHead>
         <TableBody>
-          {props && !Array.isArray(props.data) ? (
+          {props && Array.isArray(props.data) ? (
             props.data.map((row, index) => (
               <TableRow key={row.guid} sx={{ '&:last-child td, &:last-child th': { border: 0 } }}>
                 <TableCell component='th' scope='row'>
