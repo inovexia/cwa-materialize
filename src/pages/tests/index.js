@@ -8,18 +8,21 @@ import PageHeader from 'src/@core/components/page-header'
 
 // ** Module Specific Imports
 import TestList from 'src/pages/tests/views/index'
-import TestApis from 'src/pages/tests/components/apis'
+import TestApis from 'src/pages/tests/_components/apis'
 
 const Page = () => {
-  const [allTests, setAllTests] = useState([])
+  const [dataList, setDataList] = useState([])
+  const [responseStatus, setResponseStatus] = useState(false)
+  const [responseMessage, setResponseMessage] = useState('')
 
   // view all listing Using API
   const getTests = useRef(async () => {
     const response = await TestApis.getAllTests()
     if (response.success === true) {
-      setAllTests(response.payload.data)
+      setDataList(response.payload.data)
     }
-    console.log(response)
+    setResponseStatus(response.status)
+    setResponseMessage(response.message)
   })
   useEffect(() => {
     getTests.current()
@@ -37,7 +40,7 @@ const Page = () => {
       />
       <Grid item xs={12}>
         <Card>
-          <TestList data={allTests} />
+          <TestList data={dataList} responseStatus={responseStatus} responseMessage={responseMessage} />
         </Card>
       </Grid>
     </Grid>

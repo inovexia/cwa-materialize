@@ -26,8 +26,6 @@ axiosInstance.interceptors.request.use(
 axiosInstance.interceptors.response.use(
   response => {
     // You can add global response handling here.
-    console.log(response)
-
     return response
   },
   error => {
