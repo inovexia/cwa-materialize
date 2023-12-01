@@ -21,9 +21,8 @@ export default function BasicTable(props) {
           </TableRow>
         </TableHead>
         <TableBody>
-          {props &&
-            props.data.length > 0 &&
-            props.data.map(row => (
+          {props && Array.isArray(props.data) ? (
+            props.data.map((row, index) => (
               <TableRow key={row.guid} sx={{ '&:last-child td, &:last-child th': { border: 0 } }}>
                 <TableCell component='th' scope='row'>
                   {row.guid}
@@ -33,11 +32,10 @@ export default function BasicTable(props) {
                 <TableCell>{row.type}</TableCell>
                 <TableCell>{row.status}</TableCell>
               </TableRow>
-            ))}
-
-          {props && !Array.isArray(props) && (
+            ))
+          ) : (
             <TableRow key='none' sx={{ '&:last-child td, &:last-child th': { border: 0 } }}>
-              <TableCell colspan='5'>No tests found</TableCell>
+              <TableCell colspan='5'>{props.responseMessage}</TableCell>
             </TableRow>
           )}
         </TableBody>
