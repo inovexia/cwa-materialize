@@ -60,10 +60,6 @@ const User = () => {
     setMetaData(res.payload.meta)
   }, [reload])
 
-  useEffect(() => {
-    getUsers()
-  }, [getUsers])
-
   const handleCheckboxChange = userId => {
     const isChecked = checkedIds.includes(userId)
     if (isChecked) {
@@ -122,32 +118,24 @@ const User = () => {
   }
 
   //  Multiple Filter
-  const handleFiltersChange = async () => {
-    try {
-      setLoader(true)
-      const formData = new FormData()
-      formData.append('search', searchTerm)
-      formData.append('status', statusFilter)
-      formData.append('role', roleFilter)
-      formData.append('order_by', orderFilter)
-      setLoader(true)
-      const res = await UserApi.filterUsers(formData)
-      setLoader(false)
-      if (res.success) {
-        setAllUsers(res.payload.data)
-        setMetaData(res.payload.meta)
-      } else {
-        toast.error('Failed to fetch filtered results')
-      }
-    } catch (error) {
-      console.error(error)
-      toast.error('An error occurred while fetching filtered results')
-    }
-  }
+  const handleFiltersChange = useCallback(async () => {
+    setLoader(true)
+    const formData = new FormData()
+    formData.append('search', searchTerm)
+    formData.append('status', statusFilter)
+    formData.append('role', roleFilter)
+    formData.append('order_by', orderFilter)
+    setLoader(true)
+    const res = await UserApi.filterUsers(formData)
+    setLoader(false)
+    if (!res.success) return toast.error('Failed to fetch filtered results')
+    setAllUsers(res.payload.data)
+    setMetaData(res.payload.meta)
+  }, [searchTerm, statusFilter, roleFilter, orderFilter])
 
   useEffect(() => {
     handleFiltersChange()
-  }, [searchTerm, statusFilter, roleFilter, orderFilter])
+  }, [handleFiltersChange])
 
   //  Bulk activate user
   const handleSelectedBulkAction = async selectedBulkAct => {
