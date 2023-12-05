@@ -6,8 +6,9 @@ const axiosInstance = axios.create({
   timeout: 10000,
   headers: {
     Authorization: 'Bearer ' + process.env.NEXT_PUBLIC_CAAPIS_TOKEN,
-    Network: process.env.NEXT_PUBLIC_CAAPIS_NETWORK_ID,
-    Cookie: process.env.NEXT_PUBLIC_CAAPIS_SESSION_ID
+    Network: process.env.NEXT_PUBLIC_CAAPIS_NETWORK_ID
+
+    //Cookie: process.env.NEXT_PUBLIC_CAAPIS_SESSION_ID,
   }
 })
 

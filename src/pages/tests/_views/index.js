@@ -7,6 +7,9 @@ import TableHead from '@mui/material/TableHead'
 import TableRow from '@mui/material/TableRow'
 import Paper from '@mui/material/Paper'
 import Translations from 'src/layouts/components/Translations'
+import Switch from '@mui/material/Switch'
+import FormGroup from '@mui/material/FormGroup'
+import FormControlLabel from '@mui/material/FormControlLabel'
 
 export default function BasicTable(props) {
   return (
@@ -31,7 +34,11 @@ export default function BasicTable(props) {
                 <TableCell>{row.title}</TableCell>
                 <TableCell>{row.details}</TableCell>
                 <TableCell>{row.type}</TableCell>
-                <TableCell>{row.status}</TableCell>
+                <TableCell>
+                  <FormGroup>
+                    <FormControlLabel control={<Switch defaultChecked={row.status === '1' ? true : ''} />} />
+                  </FormGroup>
+                </TableCell>
               </TableRow>
             ))
           ) : (
