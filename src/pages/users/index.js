@@ -1,65 +1,119 @@
 import React, { useEffect, useState, useRef, useCallback } from 'react'
 
 // ** MUI Imports
-import {
-  Grid,
-  Card,
-  Link,
-  Button,
-  Box,
-  Typography,
-  Table,
-  Checkbox,
-  TableContainer,
-  TableHead,
-  TableBody,
-  TableRow,
-  TableCell,
-  Paper
-} from '@mui/material'
-import CircularProgress from '@mui/material/CircularProgress'
+import { Grid, Card, CardHeader, CardContent, Button, Box, Link, Typography } from '@mui/material'
+import MenuItem from '@mui/material/MenuItem'
+import Menu from '@mui/material/Menu'
+import IconButton from '@mui/material/IconButton'
+import Icon from 'src/@core/components/icon'
 import toast from 'react-hot-toast'
 
-// ** API
-import UserApi from 'src/pages/users/components/apis'
+// ** Store Imports
+import { useDispatch, useSelector } from 'react-redux'
 
-// ** Global Imports
-import Icon from 'src/@core/components/icon'
-import Toolbar from 'src/pages/users/components/toolbar'
-import DeleteUser from 'src/pages/users/view/deleteUser'
-import ArchiveUser from 'src/pages/users/view/archiveUser'
-import SwitchField from 'src/pages/users/components/Switch'
-import ActionMenu from 'src/pages/users/components/actionMenu'
-import Pagination from 'src/pages/users/view/pagination'
+// ** Utils Import
+import { getInitials } from 'src/@core/utils/get-initials'
+import CustomAvatar from 'src/@core/components/mui/avatar'
 
-// ** Style
+// ** Core Imports
+import PageHeader from 'src/layouts/components/page-header'
 
-const User = () => {
+// ** Module Specific Imports
+import UserList from 'src/pages/users/_views/index'
+import UserApi from 'src/pages/users/_components/apis'
+import CreateUser from 'src/pages/users/_views/createUser'
+import Toolbar from 'src/pages/users/_components/toolbar'
+
+// ** Actions Imports
+//import { fetchData, deleteUser } from 'src/pages/tests/_models/index'
+import Pagination from 'src/pages/users/_components/pagination'
+
+// ** renders client column
+
+const RowOptions = ({ id }) => {
+  // ** Hooks
+  const dispatch = useDispatch()
+
+  // ** State
+  const [anchorEl, setAnchorEl] = useState(null)
+  const rowOptionsOpen = Boolean(anchorEl)
+
+  const handleRowOptionsClick = event => {
+    setAnchorEl(event.currentTarget)
+  }
+
+  const handleRowOptionsClose = () => {
+    setAnchorEl(null)
+  }
+
+  const handleDelete = () => {
+    dispatch(deleteUser(id))
+    handleRowOptionsClose()
+  }
+
+  return (
+    <>
+      <IconButton size='small' onClick={handleRowOptionsClick}>
+        <Icon icon='mdi:dots-vertical' />
+      </IconButton>
+      <Menu
+        keepMounted
+        anchorEl={anchorEl}
+        open={rowOptionsOpen}
+        onClose={handleRowOptionsClose}
+        anchorOrigin={{
+          vertical: 'bottom',
+          horizontal: 'right'
+        }}
+        transformOrigin={{
+          vertical: 'top',
+          horizontal: 'right'
+        }}
+        PaperProps={{ style: { minWidth: '8rem' } }}
+      >
+        <MenuItem
+          component={Link}
+          sx={{ '& svg': { mr: 2 } }}
+          onClick={handleRowOptionsClose}
+          href='/apps/user/view/overview/'
+        >
+          <Icon icon='mdi:eye-outline' fontSize={20} />
+          View
+        </MenuItem>
+        <MenuItem onClick={handleRowOptionsClose} sx={{ '& svg': { mr: 2 } }}>
+          <Icon icon='mdi:pencil-outline' fontSize={20} />
+          Edit
+        </MenuItem>
+        <MenuItem onClick={handleDelete} sx={{ '& svg': { mr: 2 } }}>
+          <Icon icon='mdi:delete-outline' fontSize={20} />
+          Delete
+        </MenuItem>
+      </Menu>
+    </>
+  )
+}
+
+const Page = () => {
+  const [currentPage, setCurrentPage] = useState('1')
+  const [itemPerPage, setItemPerPage] = useState('10')
   const [checkedIds, setCheckedIds] = useState([])
-  const [selectedBulkAct, setSelectedBulkAct] = useState('')
-  const [loader, setLoader] = useState(true)
-  const [openModal, setOpenModal] = useState(false)
-  const [openArcModal, setOpenArcModal] = useState(false)
-  const [guidToDelete, setGuidToDelete] = useState('')
-  const [allUsers, setAllUsers] = useState([])
+  const [dataList, setDataList] = useState([])
   const [metaData, setMetaData] = useState(undefined)
+  const [responseStatus, setResponseStatus] = useState(false)
+  const [responseMessage, setResponseMessage] = useState('')
+  const [drawerOpen, setDrawerOpen] = useState(false)
+  const [reload, setReload] = useState(0)
+  const [loader, setLoader] = useState(true)
   const [searchTerm, setSearchTerm] = useState('')
   const [statusFilter, setStatusFilter] = useState('')
   const [roleFilter, setRoleFilter] = useState('')
   const [orderFilter, setOrderFilter] = useState('')
-  const [reload, setReload] = useState(0)
-  const [currentPage, setCurrentPage] = useState(1)
+  const [bulkAction, setBulkAction] = useState('')
   const doReload = () => setReload(r => r + 1)
 
-  const getUsers = useCallback(async () => {
-    setLoader(true)
-    const res = await UserApi.filterUsers()
-    setLoader(false)
-    if (!res.success) return
-    setAllUsers(res.payload.data)
-    setMetaData(res.payload.meta)
-  }, [reload])
+  const toggleCreateDrawer = () => setDrawerOpen(!drawerOpen)
 
+  // Single Checkbox
   const handleCheckboxChange = userId => {
     const isChecked = checkedIds.includes(userId)
     if (isChecked) {
@@ -68,53 +122,24 @@ const User = () => {
       setCheckedIds([...checkedIds, userId])
     }
   }
-
-  const handleBulkCheckboxChange = () => {
-    if (checkedIds.length === allUsers.length) {
-      setCheckedIds([])
+  //  Bulk activate user
+  const handleSelectedBulkAction = async selectedBulkAct => {
+    setLoader(true)
+    const formData = new FormData()
+    checkedIds.forEach((user, index) => {
+      formData.append(`users[${index}]`, user)
+      formData.append(`status`, selectedBulkAct)
+    })
+    setLoader(true)
+    const res = await UserApi.changeStatus(formData)
+    setLoader(false)
+    if (res.success) {
+      setDataList(res.payload.data)
+      setMetaData(res.payload.meta)
+      toast.success(res.message)
     } else {
-      setCheckedIds(allUsers.map(user => user.guid))
+      toast.error(res.message)
     }
-  }
-  // Delete Modal OPEN
-  const handleClickOpen = guid => {
-    setGuidToDelete(guid)
-    setOpenModal(true)
-  }
-  const handleDeleteClick = (guid, onClose) => {
-    handleClickOpen(guid)
-    onClose()
-  }
-
-  // Archive Modal OPEN
-  const handleClickArcOpen = guid => {
-    setGuidToDelete(guid)
-    setOpenArcModal(true)
-  }
-  const handleArchiveClick = (guid, onClose) => {
-    handleClickArcOpen(guid)
-    onClose()
-  }
-
-  const handleCloseModal = () => {
-    setOpenModal(false)
-    setOpenArcModal(false)
-  }
-  // Delete user
-  const handleUserDeleted = async () => {
-    const updatedUsers = await UserApi.getAllUsers()
-    if (!updatedUsers.success) return
-    setAllUsers(updatedUsers.payload.data)
-    setMetaData(updatedUsers.payload.meta)
-    setOpenModal(false)
-  }
-  // Archive User
-  const handleUserArchived = async () => {
-    const updatedUsers = await UserApi.getAllUsers()
-    if (updatedUsers.success === true) {
-      setAllUsers(updatedUsers.payload.data)
-    }
-    setOpenModal(false)
   }
 
   //  Multiple Filter
@@ -125,176 +150,98 @@ const User = () => {
     formData.append('status', statusFilter)
     formData.append('role', roleFilter)
     formData.append('order_by', orderFilter)
+    formData.append('results_per_page', itemPerPage)
+    formData.append('page', currentPage)
     setLoader(true)
     const res = await UserApi.filterUsers(formData)
     setLoader(false)
-    if (!res.success) return toast.error('Failed to fetch filtered results')
-    setAllUsers(res.payload.data)
+    if (!res.success) return
+    setDataList(res.payload.data)
     setMetaData(res.payload.meta)
-  }, [searchTerm, statusFilter, roleFilter, orderFilter])
+    setResponseStatus(res.status)
+    setResponseMessage(res.message)
+  }, [searchTerm, statusFilter, roleFilter, orderFilter, reload, itemPerPage, currentPage])
 
   useEffect(() => {
     handleFiltersChange()
   }, [handleFiltersChange])
 
-  //  Bulk activate user
-  const handleSelectedBulkAction = async selectedBulkAct => {
-    try {
-      setLoader(true)
-      const formData = new FormData()
-      checkedIds.forEach((user, index) => {
-        formData.append(`users[${index}]`, user)
-        formData.append(`status`, selectedBulkAct)
-      })
-      setLoader(true)
-      const res = await UserApi.changeStatus(formData)
-      setLoader(false)
-      if (res.success) {
-        setAllUsers(res.payload.data)
-        setMetaData(res.payload.meta)
-        toast.success(res.message)
-      } else {
-        toast.error(res.message)
-      }
-    } catch (error) {
-      console.error(error)
-      toast.error('An error occurred while fetching filtered results')
-    }
+  const handlePageChange = page => {
+    setCurrentPage(page)
   }
 
-  // Pagination
-  const handlePageChange = useCallback(page => {
-    setCurrentPage(page)
-  }, [])
+  //  Bulk Action
+  const handleBulkAction = useCallback(async () => {
+    const formData = new FormData()
+    if (bulkAction === '1' || bulkAction === '0') {
+      checkedIds.forEach((user, index) => {
+        formData.append(`users[${index}]`, user)
+        formData.append(`status`, bulkAction)
+      })
+
+      const res = await UserApi.changeStatus(formData)
+      setReload(true)
+      setResponseStatus(res.status)
+      setResponseMessage(res.message)
+    }
+  }, [bulkAction, checkedIds])
 
   useEffect(() => {
-    getUsers()
-  }, [getUsers, currentPage])
-  console.log(checkedIds)
+    handleBulkAction()
+  }, [handleBulkAction, bulkAction, checkedIds])
+
   return (
-    <Grid container spacing={6}>
-      <Grid item xs={12}>
-        <Toolbar
-          setSearchTerm={setSearchTerm}
-          setLoader={setLoader}
-          onStatusFilterChange={setStatusFilter}
-          onRoleFilterChange={setRoleFilter}
-          onOrderFilterChange={setOrderFilter}
-          onSelectedBulkAction={handleSelectedBulkAction}
-          checkedLength={checkedIds}
-        />
-      </Grid>
-      {loader ? (
-        <Box
-          className='loader'
-          sx={{
-            width: '100%',
-            textAlign: 'center',
-            position: 'absolute',
-            top: '50%',
-            left: '50%',
-            right: '50%',
-            transform: 'translate(-50%,-50%)'
-          }}
-        >
-          <CircularProgress disableShrink sx={{ my: 5 }} />
-        </Box>
-      ) : (
+    <>
+      <Grid container spacing={6}>
         <Grid item xs={12}>
-          <Card>
-            <TableContainer component={Paper}>
-              <Table>
-                <TableHead>
-                  <TableRow>
-                    <TableCell>
-                      <Checkbox
-                        checked={checkedIds.length === allUsers && allUsers.length}
-                        indeterminate={checkedIds.length > 0 && checkedIds.length < allUsers.length}
-                        onChange={handleBulkCheckboxChange}
-                      />
-                    </TableCell>
-                    <TableCell>Username</TableCell>
-                    <TableCell>User Email</TableCell>
-                    <TableCell>Role</TableCell>
-                    <TableCell>Status</TableCell>
-                    <TableCell>Action</TableCell>
-                  </TableRow>
-                </TableHead>
-                <TableBody>
-                  {allUsers && allUsers.length !== 0 ? (
-                    allUsers.map((user, index) => (
-                      <TableRow key={index}>
-                        <TableCell>
-                          <Checkbox
-                            checked={checkedIds.includes(user.guid)}
-                            onChange={() => handleCheckboxChange(user.guid)}
-                          />
-                        </TableCell>
-                        <TableCell>
-                          <Typography variant='body2' component='h3'>
-                            <Link
-                              href={`/users/${user.guid}`}
-                              passHref
-                              style={{ textDecoration: 'none', color: 'inherit' }}
-                            >
-                              {user.first_name} {user.last_name}
-                            </Link>
-                          </Typography>
-                          <Typography variant='body2' component='h5'>
-                            {user.guid}
-                          </Typography>
-                        </TableCell>
-                        <TableCell>
-                          <Typography variant='body2' component='h4'>
-                            {user.email}
-                          </Typography>
-                          <Typography variant='body2' component='h5'>
-                            {user.mobile}
-                          </Typography>
-                        </TableCell>
-                        <TableCell>
-                          <Typography variant='body2' component='h4' style={{ textTransform: 'uppercase' }}>
-                            {user.role}
-                          </Typography>
-                        </TableCell>
-                        <TableCell>
-                          <SwitchField id={user.guid} status={user.status} />
-                        </TableCell>
-                        <TableCell>
-                          <Grid container spacing={2} alignItems='center'>
-                            <ActionMenu
-                              id={user.guid}
-                              onDeleteClick={handleDeleteClick}
-                              onArchiveClick={handleArchiveClick}
-                            />
-                          </Grid>
-                        </TableCell>
-                      </TableRow>
-                    ))
-                  ) : (
-                    <p style={{ padding: '15px' }}>User not found!</p>
-                  )}
-                </TableBody>
-              </Table>
-            </TableContainer>
-            {/* <Pagination metaData={metaData} onPageChange={handlePageChange} /> */}
+          <PageHeader
+            title={<Typography variant='h5'>Users</Typography>}
+            subtitle={<Typography variant='body2'>List all users</Typography>}
+            toggleDrawer={toggleCreateDrawer}
+            buttonTitle='Add User'
+          />
+          <Card style={{ marginTop: '30px' }}>
+            <CardHeader title='Search Filters' sx={{ pb: 4, '& .MuiCardHeader-title': { letterSpacing: '.15px' } }} />
+            <CardContent>
+              <Toolbar
+                checkedIds={checkedIds}
+                setCheckedIds={setCheckedIds}
+                setSearchTerm={setSearchTerm}
+                searchTerm={searchTerm}
+                setLoader={setLoader}
+                onStatusFilterChange={setStatusFilter}
+                onRoleFilterChange={setRoleFilter}
+                onOrderFilterChange={setOrderFilter}
+                //onSelectedBulkAction={setBulkAction}
+                checkedLength={checkedIds}
+                bulkAction={bulkAction}
+                setBulkAction={setBulkAction}
+              />
+            </CardContent>
+            <UserList
+              checkedIds={checkedIds}
+              setCheckedIds={setCheckedIds}
+              responseStatus={responseStatus}
+              responseMessage={responseMessage}
+              loader={loader}
+              dataList={dataList}
+              setDataList={setDataList}
+              setMetaData={setMetaData}
+            />
+            <Pagination
+              itemPerPage={itemPerPage}
+              setItemPerPage={setItemPerPage}
+              currentPage={currentPage}
+              onPageChange={handlePageChange}
+              checkedIds={checkedIds}
+              metaData={metaData}
+            />
           </Card>
-          <DeleteUser
-            mdOpen={openModal}
-            handleClose={handleCloseModal}
-            guidToDelete={guidToDelete}
-            onUserDeleted={handleUserDeleted}
-          />
-          <ArchiveUser
-            mdOpen={openArcModal}
-            handleClose={handleCloseModal}
-            guidToDelete={guidToDelete}
-            onUserArchived={handleUserArchived}
-          />
         </Grid>
-      )}
-    </Grid>
+      </Grid>
+      <CreateUser open={drawerOpen} toggle={toggleCreateDrawer} setReload={setReload} />
+    </>
   )
 }
 
-export default User
+export default Page

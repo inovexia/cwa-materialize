@@ -1,8 +1,8 @@
 import { useRouter } from 'next/router'
 
 const UserPage = () => {
-  const router = useRouter()
-  const { id } = router.query
+  const { query } = useRouter()
+  const { id } = query
   return (
     <div>
       <h1>User Details</h1>

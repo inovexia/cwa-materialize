@@ -11,7 +11,7 @@ import IconButton from '@mui/material/IconButton'
 import toast from 'react-hot-toast'
 
 // ** API
-import UserApi from 'src/pages/users/components/apis'
+import UserApi from 'src/pages/users/_components/apis'
 
 const Toolbar = ({
   searchTerm,
@@ -22,12 +22,13 @@ const Toolbar = ({
   onOrderFilterChange,
   onSelectedBulkAction,
   checkedLength,
-  onSelectedBulkDelete
+  onSelectedBulkDelete,
+  bulkAction,
+  setBulkAction
 }) => {
   const [statusFilter, setStatusFilter] = useState('')
   const [roleFilter, setRoleFilter] = useState('')
   const [orderFilter, setOrderFilter] = useState('')
-  const [bulkAction, setBulkAction] = useState('')
   const [selectedBulkAct, setSelectedBulkAct] = useState('')
 
   const handleSearchButtonClick = () => {
@@ -58,8 +59,7 @@ const Toolbar = ({
   // Bulk Action
   const handleBulkAction = event => {
     const selectedAction = event.target.value
-    setSelectedBulkAct(selectedAction)
-    onSelectedBulkAction(selectedAction) // Pass the selected bulk action to the parent
+    setBulkAction(selectedAction) // Pass the selected bulk action to the parent
   }
   return (
     <Grid container spacing={6}>

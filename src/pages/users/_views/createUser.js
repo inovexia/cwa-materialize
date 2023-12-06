@@ -1,5 +1,5 @@
 // ** React Imports
-import { useState } from 'react'
+import { useState, useEffect } from 'react'
 
 // ** MUI Imports
 import Drawer from '@mui/material/Drawer'
@@ -14,7 +14,7 @@ import Typography from '@mui/material/Typography'
 import Box from '@mui/material/Box'
 import FormControl from '@mui/material/FormControl'
 import FormHelperText from '@mui/material/FormHelperText'
-import CircularProgress from '@mui/material/CircularProgress'
+import LoadingButton from '@mui/lab/LoadingButton'
 
 // ** Third Party Imports
 import * as yup from 'yup'
@@ -25,8 +25,9 @@ import { yupResolver } from '@hookform/resolvers/yup'
 // ** Icon Imports
 import Icon from 'src/@core/components/icon'
 
-// ** Import Model
-import TestApis from 'src/pages/tests/_components/apis'
+// ** API
+import UserApi from 'src/pages/users/_components/apis'
+import AuthApi from 'src/configs/commonConfig'
 
 const Header = styled(Box)(({ theme }) => ({
   display: 'flex',
@@ -34,13 +35,6 @@ const Header = styled(Box)(({ theme }) => ({
   padding: theme.spacing(3, 4),
   justifyContent: 'space-between'
 }))
-
-const defaultValues = {
-  title: '',
-  type: '',
-  details: '',
-  category: ''
-}
 
 const showErrors = (field, valueLen, min) => {
   if (valueLen === 0) {
@@ -53,10 +47,13 @@ const showErrors = (field, valueLen, min) => {
 }
 
 const schema = yup.object().shape({
-  title: yup.string().required().min(3),
-  type: yup.string().required(),
-  details: yup.string(),
-  category: yup.string()
+  username: yup.string(),
+  first_name: yup.string().required().min(3).max(15),
+  middle_name: yup.string(),
+  last_name: yup.string().required().min(3).max(15),
+  role: yup.string().required(),
+  status: yup.string(),
+  email: yup.string()
 })
 
 const SidebarAddUser = props => {
@@ -64,50 +61,70 @@ const SidebarAddUser = props => {
   const { open, toggle } = props
 
   // ** State
-  const [type, setType] = useState('evaluated')
-  const [loading, setLoading] = useState(false)
-  const [category, setCategory] = useState('')
   const [responseMessage, setResponseMessage] = useState('')
+  const [settings, setSettings] = useState('')
+  const [reqField, setReqField] = useState('')
+  const [loading, setLoading] = useState(false)
 
   // ** Hooks
   const {
     reset,
+    register,
     control,
-    setValue,
-    setError,
     handleSubmit,
     formState: { errors }
   } = useForm({
-    defaultValues,
+    defaultValues: {
+      username: '',
+      first_name: '',
+      middle_name: '',
+      last_name: '',
+      role: 'student',
+      status: '1',
+      mobile: '',
+      email: ''
+    },
     mode: 'onChange',
     resolver: yupResolver(schema)
   })
 
-  const onSubmit = async data => {
-    setLoading(true)
-    const response = await TestApis.addTest(data)
-    setLoading(false)
-    if (response.success === true) {
-      toast.success(response.message)
-      toggle()
-      reset()
-    } else {
-      toast.error(response.message)
+  // Get Settings
+  useEffect(() => {
+    const fetchSetting = async () => {
+      const res = await AuthApi.regCommonSettings()
+      setSettings(res && res.payload)
     }
+    fetchSetting()
+  }, [])
+
+  // Get Required Field
+  useEffect(() => {
+    const fetchData = async () => {
+      const res = await AuthApi.RegRequiredField()
+      setReqField(res && res.payload)
+    }
+    fetchData()
+  }, [])
+
+  const handleFormSubmit = async data => {
+    setLoading(true)
+    const response = await UserApi.createUser(data)
+    setLoading(false)
+    if (!response.success) return toast.success(response.message)
+    props.setReload(true)
+    toggle()
+    reset()
   }
 
   const handleClose = () => {
     toggle()
     reset()
   }
-
   return (
     <Drawer
       open={open}
       anchor='right'
-      variant='temporary'
       onClose={handleClose}
-      ModalProps={{ keepMounted: true }}
       sx={{ '& .MuiDrawer-paper': { width: { xs: 300, sm: 400 } } }}
     >
       <Header>
@@ -116,125 +133,230 @@ const SidebarAddUser = props => {
           <Icon icon='mdi:close' fontSize={20} />
         </IconButton>
       </Header>
-      <Box sx={{ p: 4 }}>
-        {responseMessage && <FormHelperText sx={{ color: 'error.main' }}>{responseMessage}</FormHelperText>}
-      </Box>
+      {responseMessage && responseMessage ? (
+        <Box sx={{ p: 4 }}>
+          {responseMessage && <FormHelperText sx={{ color: 'error.main' }}>{responseMessage}</FormHelperText>}
+        </Box>
+      ) : (
+        ''
+      )}
       <Box sx={{ p: 5 }}>
-        <form onSubmit={handleSubmit(onSubmit)}>
+        <form onSubmit={handleSubmit(handleFormSubmit)}>
+          {settings && settings.auto_generate_username !== 'true' ? (
+            <FormControl fullWidth sx={{ mb: 6 }}>
+              <Controller
+                name='username'
+                control={control}
+                rules={{ required: true }}
+                render={({ field: { value, onChange } }) => (
+                  <TextField
+                    label='Username'
+                    value={value}
+                    required
+                    onChange={onChange}
+                    placeholder='Username'
+                    error={Boolean(errors.username)}
+                  />
+                )}
+              />
+              {errors.username && (
+                <FormHelperText sx={{ color: 'error.main' }}>{errors.username.message}</FormHelperText>
+              )}
+            </FormControl>
+          ) : (
+            ''
+          )}
+
           <FormControl fullWidth sx={{ mb: 6 }}>
             <Controller
-              name='title'
+              name='first_name'
               control={control}
               rules={{ required: true }}
               render={({ field: { value, onChange } }) => (
                 <TextField
-                  label='Title'
+                  label='First Name'
                   value={value}
                   onChange={onChange}
-                  placeholder='John Doe'
-                  error={Boolean(errors.title)}
+                  placeholder='John'
+                  error={Boolean(errors.first_name)}
                 />
               )}
             />
-            {errors.title && <FormHelperText sx={{ color: 'error.main' }}>{errors.title.message}</FormHelperText>}
+            {errors.first_name && (
+              <FormHelperText sx={{ color: 'error.main' }}>{errors.first_name.message}</FormHelperText>
+            )}
           </FormControl>
 
           <FormControl fullWidth sx={{ mb: 6 }}>
-            <InputLabel id='test-type'>Test Type</InputLabel>
             <Controller
-              name='type'
+              name='middle_name'
+              control={control}
+              render={({ field: { value, onChange } }) => (
+                <TextField
+                  label='Middle Name'
+                  value={value}
+                  onChange={onChange}
+                  placeholder='Middle Name'
+                  error={Boolean(errors.middle_name)}
+                />
+              )}
+            />
+            {errors.middle_name && (
+              <FormHelperText sx={{ color: 'error.main' }}>{errors.middle_name.message}</FormHelperText>
+            )}
+          </FormControl>
+          <FormControl fullWidth sx={{ mb: 6 }}>
+            <Controller
+              name='last_name'
+              control={control}
+              rules={{ required: true }}
+              render={({ field: { value, onChange } }) => (
+                <TextField
+                  label='Last Name'
+                  value={value}
+                  onChange={onChange}
+                  placeholder='Doe'
+                  error={Boolean(errors.last_name)}
+                />
+              )}
+            />
+            {errors.last_name && (
+              <FormHelperText sx={{ color: 'error.main' }}>{errors.last_name.message}</FormHelperText>
+            )}
+          </FormControl>
+
+          <FormControl fullWidth sx={{ mb: 6 }}>
+            <InputLabel id='user-role'>User Role</InputLabel>
+            <Controller
+              name='role'
+              control={control}
+              rules={{ required: true }}
+              render={({ field: { value, onChange } }) => (
+                <Select
+                  fullWidth
+                  //value={value}
+                  label='User Role'
+                  labelId='userRoleLabel'
+                  onChange={onChange}
+                  defaultValue='student'
+                  error={Boolean(errors.role)}
+                  inputProps={{ placeholder: 'Select Role' }}
+                >
+                  <MenuItem value='superadmin'>Super Admin</MenuItem>
+                  <MenuItem value='admin'>Admin</MenuItem>
+                  <MenuItem value='teacher'>Instructor</MenuItem>
+                  <MenuItem value='student'>Student</MenuItem>
+                  <MenuItem value='parent'>Parent</MenuItem>
+                </Select>
+              )}
+            />
+            {errors.role && (
+              <FormHelperText sx={{ color: 'error.main' }} id='validation-basic-select'>
+                This field is required
+              </FormHelperText>
+            )}
+          </FormControl>
+          <FormControl fullWidth sx={{ mb: 6 }}>
+            <InputLabel id='user-status'>Status</InputLabel>
+            <Controller
+              name='status'
               control={control}
               rules={{ required: true }}
               render={({ field: { value, onChange } }) => (
                 <Select
                   fullWidth
                   value={value}
-                  label='Test Type'
-                  labelId='testTypeLabel'
+                  label='Status'
+                  labelId='statusLabel'
                   onChange={onChange}
-                  error={Boolean(errors.type)}
-                  inputProps={{ placeholder: 'Select Type' }}
+                  defaultValue='1'
+                  error={Boolean(errors.status)}
+                  inputProps={{ placeholder: 'Select Status' }}
                 >
-                  <MenuItem value='evaluated'>Evaluated</MenuItem>
-                  <MenuItem value='practice'>Practice</MenuItem>
-                  <MenuItem value='quiz'>Quiz</MenuItem>
+                  <MenuItem value='1'>Active</MenuItem>
+                  <MenuItem value='0'>Inactive</MenuItem>
                 </Select>
               )}
             />
-            {errors.type && (
+            {errors.status && (
               <FormHelperText sx={{ color: 'error.main' }} id='validation-basic-select'>
                 This field is required
               </FormHelperText>
             )}
           </FormControl>
+          {reqField && reqField.email ? (
+            <FormControl fullWidth sx={{ mb: 6 }}>
+              <Controller
+                name='email'
+                control={control}
+                rules={{ required: true }}
+                render={({ field: { value, onChange } }) => (
+                  <TextField
+                    label='Email'
+                    value={value}
+                    required
+                    onChange={onChange}
+                    placeholder='Email'
+                    error={Boolean(errors.email)}
+                  />
+                )}
+              />
+              {errors.email && <FormHelperText sx={{ color: 'error.main' }}>{errors.email.message}</FormHelperText>}
+            </FormControl>
+          ) : (
+            <FormControl fullWidth sx={{ mb: 6 }}>
+              <TextField {...register('email')} label='Email' variant='outlined' name='email' pattern='[A-Za-z]{1,}' />
+            </FormControl>
+          )}
+          {reqField && reqField.mobile ? (
+            <FormControl fullWidth sx={{ mb: 6 }}>
+              <Controller
+                name='mobile'
+                control={control}
+                rules={{ required: true }}
+                render={({ field: { value, onChange } }) => (
+                  <TextField
+                    label='Mobile Number'
+                    value={value}
+                    required
+                    onChange={onChange}
+                    placeholder='Mobile Number'
+                    error={Boolean(errors.mobile)}
+                  />
+                )}
+              />
+              {errors.mobile && <FormHelperText sx={{ color: 'error.main' }}>{errors.mobile.message}</FormHelperText>}
+            </FormControl>
+          ) : (
+            <FormControl fullWidth sx={{ mb: 6 }}>
+              <Controller
+                name='mobile'
+                control={control}
+                render={({ field: { value, onChange } }) => (
+                  <TextField
+                    label='Mobile Number'
+                    value={value}
+                    onChange={onChange}
+                    placeholder='Mobile Number'
+                    error={Boolean(errors.mobile)}
+                  />
+                )}
+              />
+              {errors.mobile && <FormHelperText sx={{ color: 'error.main' }}>{errors.mobile.message}</FormHelperText>}
+            </FormControl>
+          )}
 
-          <FormControl fullWidth sx={{ mb: 6 }}>
-            <Controller
-              name='details'
-              control={control}
-              rules={{ required: true }}
-              render={({ field }) => (
-                <TextField
-                  rows={4}
-                  multiline
-                  {...field}
-                  label='Bio'
-                  error={Boolean(errors.details)}
-                  aria-describedby='validation-basic-textarea'
-                />
-              )}
-            />
-            {errors.details && (
-              <FormHelperText sx={{ color: 'error.main' }} id='validation-basic-textarea'>
-                This field is required
-              </FormHelperText>
-            )}
-          </FormControl>
-
-          <FormControl fullWidth sx={{ mb: 6 }}>
-            <InputLabel id='category'>Test Type</InputLabel>
-            <Controller
-              name='category'
-              control={control}
-              rules={{ required: true }}
-              render={({ field: { value, onChange } }) => (
-                <Select
-                  fullWidth
-                  value={value}
-                  label='Category'
-                  labelId='categoryLabel'
-                  onChange={onChange}
-                  error={Boolean(errors.category)}
-                  inputProps={{ placeholder: 'Select Category' }}
-                >
-                  <MenuItem value='evaluated'>Evaluated</MenuItem>
-                  <MenuItem value='practice'>Practice</MenuItem>
-                  <MenuItem value='quiz'>Quiz</MenuItem>
-                </Select>
-              )}
-            />
-            {errors.category && (
-              <FormHelperText sx={{ color: 'error.main' }} id='validation-basic-select'>
-                This field is required
-              </FormHelperText>
-            )}
-          </FormControl>
-
-          <Box sx={{ display: 'flex', alignItems: 'center' }}>
-            <Button size='large' type='submit' variant='contained' disabled={loading ? true : false}>
-              {loading ? (
-                <CircularProgress
-                  sx={{
-                    color: 'common.white',
-                    width: '20px !important',
-                    height: '20px !important',
-                    mr: theme => theme.spacing(2)
-                  }}
-                />
-              ) : (
-                'Submit'
-              )}
-            </Button>
+          <Box sx={{ display: 'flex', alignItems: 'center', justifyContent: 'space-between' }}>
+            <LoadingButton
+              type='submit'
+              color='secondary'
+              loading={loading}
+              loadingPosition='start'
+              startIcon={loading ? <Icon icon='eos-icons:bubble-loading' /> : ''}
+              variant='contained'
+            >
+              <span>SUBMIT</span>
+            </LoadingButton>
             <Button size='large' variant='outlined' color='secondary' onClick={handleClose}>
               Cancel
             </Button>

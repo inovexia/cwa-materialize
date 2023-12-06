@@ -1,9 +1,10 @@
-import * as React from 'react'
-import { Menu, MenuItem, Button, Link } from '@mui/material'
+import { useState } from 'react'
+import { Menu, MenuItem, Link, IconButton } from '@mui/material'
+
 import Icon from 'src/@core/components/icon'
 
 export default function ActionMenu({ id, onDeleteClick, onArchiveClick }) {
-  const [anchorEl, setAnchorEl] = React.useState(null)
+  const [anchorEl, setAnchorEl] = useState(null)
   const open = Boolean(anchorEl)
   const handleClick = event => {
     setAnchorEl(event.currentTarget)
@@ -14,7 +15,7 @@ export default function ActionMenu({ id, onDeleteClick, onArchiveClick }) {
 
   return (
     <div>
-      <Button
+      <IconButton
         id='basic-button'
         aria-controls={open ? 'basic-menu' : undefined}
         aria-haspopup='true'
@@ -22,24 +23,34 @@ export default function ActionMenu({ id, onDeleteClick, onArchiveClick }) {
         onClick={handleClick}
       >
         <Icon icon='pepicons-pop:dots-y' />
-      </Button>
+      </IconButton>
       <Menu
-        id='basic-menu'
         anchorEl={anchorEl}
         open={open}
         onClose={handleClose}
-        MenuListProps={{
-          'aria-labelledby': 'basic-button'
-        }}
+        anchorOrigin={{ vertical: 'top', horizontal: 'right' }}
+        transformOrigin={{ vertical: 'top', horizontal: 'right' }}
       >
-        <Link href={`/users/${id}`} passHref style={{ textDecoration: 'none', color: 'inherit' }}>
-          <MenuItem onClick={handleClose}>View</MenuItem>
+        <Link href={`/users/${id}`} style={{ textDecoration: 'none', color: 'inherit' }}>
+          <MenuItem onClick={handleClose}>
+            <Icon icon='carbon:view' style={{ marginRight: '10px' }} />
+            View
+          </MenuItem>
         </Link>
-        <Link href={`/users/edit?id=${id}`} passHref style={{ textDecoration: 'none', color: 'inherit' }}>
-          <MenuItem onClick={handleClose}>Edit</MenuItem>
+        <Link href={`/users/edit?id=${id}`} style={{ textDecoration: 'none', color: 'inherit' }}>
+          <MenuItem onClick={handleClose}>
+            <Icon icon='tabler:edit' style={{ marginRight: '10px' }} />
+            Edit
+          </MenuItem>
         </Link>
-        <MenuItem onClick={() => onDeleteClick(id, handleClose)}>Delete</MenuItem>
-        <MenuItem onClick={() => onArchiveClick(id, handleClose)}>Archive</MenuItem>
+        <MenuItem onClick={() => onDeleteClick(id, handleClose)}>
+          <Icon icon='mdi:delete-outline' style={{ marginRight: '10px' }} />
+          Delete
+        </MenuItem>
+        <MenuItem onClick={() => onArchiveClick(id, handleClose)}>
+          <Icon icon='ic:outline-archive' style={{ marginRight: '10px' }} />
+          Archive
+        </MenuItem>
       </Menu>
     </div>
   )

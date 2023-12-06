@@ -8,23 +8,25 @@ import DialogContentText from '@mui/material/DialogContentText'
 import DialogTitle from '@mui/material/DialogTitle'
 import toast from 'react-hot-toast'
 // ** API
-import UserApi from 'src/pages/users/components/apis'
+import UserApi from 'src/pages/users/_components/apis'
 
-const DeleteUser = ({ mdOpen, handleClose, guidToDelete, onUserDeleted }) => {
+const ArchiveUser = ({ mdOpen, handleClose, guidToDelete, onUserArchived }) => {
   const [open, setOpen] = useState(mdOpen)
 
   useEffect(() => {
     setOpen(mdOpen)
   }, [mdOpen])
 
-  const handleDeleteUser = async () => {
+  const handleArchiveUser = async () => {
     try {
-      const res = await UserApi.deleteUser(guidToDelete)
+      const formData = new FormData()
+      formData.append('users[0]', guidToDelete)
+      const res = await UserApi.trashUser(formData)
       if (res.success === true) {
         setOpen(false)
         toast.success('User deleted successfully')
-        if (onUserDeleted) {
-          onUserDeleted()
+        if (onUserArchived) {
+          onUserArchived()
         }
       } else {
         setOpen(false)
@@ -48,15 +50,15 @@ const DeleteUser = ({ mdOpen, handleClose, guidToDelete, onUserDeleted }) => {
           aria-labelledby='alert-dialog-title'
           aria-describedby='alert-dialog-description'
         >
-          <DialogTitle id='alert-dialog-title'>{'Delete User'}</DialogTitle>
+          <DialogTitle id='alert-dialog-title'>{'Archive User'}</DialogTitle>
           <DialogContent>
-            <DialogContentText id='alert-dialog-description'>Confirm to delete User ?</DialogContentText>
+            <DialogContentText id='alert-dialog-description'>Confirm to archive User ?</DialogContentText>
           </DialogContent>
           <DialogActions>
             <Button onClick={handleClose} variant='outlined'>
               Cancel
             </Button>
-            <Button onClick={handleDeleteUser} autoFocus variant='contained'>
+            <Button onClick={handleArchiveUser} autoFocus variant='contained'>
               Confirm
             </Button>
           </DialogActions>
@@ -66,4 +68,4 @@ const DeleteUser = ({ mdOpen, handleClose, guidToDelete, onUserDeleted }) => {
   )
 }
 
-export default DeleteUser
+export default ArchiveUser
