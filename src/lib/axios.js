@@ -12,10 +12,13 @@ const axiosInstance = axios.create({
   }
 })
 
+axiosInstance.defaults.headers.post['Content-Type'] = 'multipart/form-data'
+
 // Request interceptor
 axiosInstance.interceptors.request.use(
   config => {
     // You can add headers, authentication tokens, or any other request-related logic here.
+
     return config
   },
   error => {
