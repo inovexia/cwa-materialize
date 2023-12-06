@@ -2,10 +2,8 @@ import React, { useState } from 'react'
 import { Box, TextField, MenuItem, Typography } from '@mui/material'
 import Icon from 'src/@core/components/icon'
 import { Pagination as MuiPagination } from '@mui/material'
-const ITEMS_PER_PAGE = 5
 
 const Pagination = ({ currentPage, onPageChange, itemPerPage, setItemPerPage, metaData }) => {
-  //const pageCount = Math.ceil(totalItems / ITEMS_PER_PAGE)
   const [selectedNum, setSelectedNum] = useState('')
 
   const handleChange = (event, value) => {
