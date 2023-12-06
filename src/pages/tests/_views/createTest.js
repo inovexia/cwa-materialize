@@ -15,6 +15,7 @@ import Box from '@mui/material/Box'
 import FormControl from '@mui/material/FormControl'
 import FormHelperText from '@mui/material/FormHelperText'
 import CircularProgress from '@mui/material/CircularProgress'
+import FormData from 'form-data'
 
 // ** Third Party Imports
 import * as yup from 'yup'
@@ -67,7 +68,7 @@ const SidebarAddTest = props => {
   const [type, setType] = useState('evaluated')
   const [loading, setLoading] = useState(false)
   const [category, setCategory] = useState('')
-  const [responseMessage, setResponseMessage] = useState('')
+  const [responseMessage, setResponseMessage] = useState(false)
 
   // ** Hooks
   const {
@@ -85,13 +86,19 @@ const SidebarAddTest = props => {
 
   const onSubmit = async data => {
     setLoading(true)
-    const response = await TestApis.addTest(data)
+    const formData = new FormData()
+    Object.entries(data).forEach(([key, value]) => {
+      formData.append(key, value)
+    })
+    const response = await TestApis.addTest(formData)
     setLoading(false)
-    if (response.success === true) {
-      toast.success(response.message)
-      toggle()
+    if (response.success) {
       reset()
+      toggle()
+      toast.success(response.message)
     } else {
+      const msg = response.message
+      setResponseMessage(true)
     }
   }
 
@@ -116,7 +123,9 @@ const SidebarAddTest = props => {
         </IconButton>
       </Header>
       <Box sx={{ p: 4 }}>
-        {responseMessage && <FormHelperText sx={{ color: 'error.main' }}>{responseMessage}</FormHelperText>}
+        {responseMessage && (
+          <FormHelperText sx={{ color: 'error.main' }}>Cannot submit due to server error </FormHelperText>
+        )}
       </Box>
       <Box sx={{ p: 5 }}>
         <form onSubmit={handleSubmit(onSubmit)}>
@@ -230,9 +239,8 @@ const SidebarAddTest = props => {
                     mr: theme => theme.spacing(2)
                   }}
                 />
-              ) : (
-                'Submit'
-              )}
+              ) : null}
+              Submit
             </Button>
             <Button size='large' variant='outlined' color='secondary' onClick={handleClose}>
               Cancel
