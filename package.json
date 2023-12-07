@@ -104,5 +104,8 @@
     "react-credit-cards": {
       "react": "$react"
     }
+  },
+  "browsers": {
+    "fs" : false
   }
 }

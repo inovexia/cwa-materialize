@@ -27,7 +27,7 @@ import { yupResolver } from '@hookform/resolvers/yup'
 import Icon from 'src/@core/components/icon'
 
 // ** Import Model
-import TestApis from 'src/pages/tests/_components/apis'
+import TestApis from 'src/pages/tests/_components/Apis'
 
 const Header = styled(Box)(({ theme }) => ({
   display: 'flex',

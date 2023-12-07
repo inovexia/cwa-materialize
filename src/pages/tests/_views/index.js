@@ -1,4 +1,5 @@
 import * as React from 'react'
+import { Button, Box, LinkStyled, Typography } from '@mui/material'
 import Table from '@mui/material/Table'
 import TableBody from '@mui/material/TableBody'
 import TableCell from '@mui/material/TableCell'
@@ -31,7 +32,13 @@ export default function BasicTable(props) {
                 <TableCell component='th' scope='row'>
                   {row.guid}
                 </TableCell>
-                <TableCell>{row.title}</TableCell>
+                <TableCell>
+                  <Box sx={{ display: 'flex', alignItems: 'flex-start', flexDirection: 'column' }}>
+                    <LinkStyled href='/src/pages/tests/manage'>{row.title}</LinkStyled>
+                    <Typography noWrap variant='caption'>
+                      {row.guid}</Typography>
+                  </Box>
+                </TableCell>
                 <TableCell>{row.details}</TableCell>
                 <TableCell>{row.type}</TableCell>
                 <TableCell>

@@ -141,6 +141,57 @@ const Page = () => {
       toast.error(res.message)
     }
   }
+<<<<<<< HEAD
+=======
+
+
+  // Delete Modal OPEN
+  const handleClickOpen = guid => {
+    setGuidToDelete(guid)
+    setOpenModal(true)
+  }
+
+  const handleDeleteClick = (guid, onClose) => {
+    handleClickOpen(guid)
+    onClose()
+  }
+
+  // Archive Modal OPEN
+  const handleClickArcOpen = guid => {
+    setGuidToDelete(guid)
+    setOpenArcModal(true)
+  }
+
+  const handleArchiveClick = (guid, onClose) => {
+    handleClickArcOpen(guid)
+    onClose()
+  }
+
+  const handleCloseModal = () => {
+    setOpenModal(false)
+    setOpenArcModal(false)
+  }
+
+
+  // Delete user
+  const handleUserDeleted = async () => {
+    const updatedUsers = await UserApi.getAllUsers()
+    if (!updatedUsers.success) return
+    setAllUsers(updatedUsers.payload.data)
+    setMetaData(updatedUsers.payload.meta)
+    setOpenModal(false)
+  }
+
+
+  // Archive User
+  const handleUserArchived = async () => {
+    const updatedUsers = await UserApi.getAllUsers()
+    if (updatedUsers.success === true) {
+      setAllUsers(updatedUsers.payload.data)
+    }
+    setOpenModal(false)
+  }
+>>>>>>> 4f12994 (Test module)
 
   //  Multiple Filter
   const handleFiltersChange = useCallback(async () => {
@@ -187,12 +238,48 @@ const Page = () => {
   }, [bulkAction, checkedIds])
 
   useEffect(() => {
+<<<<<<< HEAD
     handleBulkAction()
   }, [handleBulkAction, bulkAction, checkedIds])
 
   return (
     <>
       <Grid container spacing={6}>
+=======
+    getUsers()
+  }, [getUsers, currentPage])
+  console.log(checkedIds)
+  
+return (
+    <Grid container spacing={6}>
+      <Grid item xs={12}>
+        <Toolbar
+          setSearchTerm={setSearchTerm}
+          setLoader={setLoader}
+          onStatusFilterChange={setStatusFilter}
+          onRoleFilterChange={setRoleFilter}
+          onOrderFilterChange={setOrderFilter}
+          onSelectedBulkAction={handleSelectedBulkAction}
+          checkedLength={checkedIds}
+        />
+      </Grid>
+      {loader ? (
+        <Box
+          className='loader'
+          sx={{
+            width: '100%',
+            textAlign: 'center',
+            position: 'absolute',
+            top: '50%',
+            left: '50%',
+            right: '50%',
+            transform: 'translate(-50%,-50%)'
+          }}
+        >
+          <CircularProgress disableShrink sx={{ my: 5 }} />
+        </Box>
+      ) : (
+>>>>>>> 4f12994 (Test module)
         <Grid item xs={12}>
           <PageHeader
             title={<Typography variant='h5'>Users</Typography>}

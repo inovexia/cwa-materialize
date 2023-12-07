@@ -6,9 +6,8 @@ import MenuItem from '@mui/material/MenuItem'
 import Menu from '@mui/material/Menu'
 import IconButton from '@mui/material/IconButton'
 import Icon from 'src/@core/components/icon'
+import toast from 'react-hot-toast'
 
-// ** Store Imports
-import { useDispatch, useSelector } from 'react-redux'
 
 // ** Utils Import
 import { getInitials } from 'src/@core/utils/get-initials'
@@ -18,13 +17,12 @@ import CustomAvatar from 'src/@core/components/mui/avatar'
 import PageHeader from 'src/layouts/components/page-header'
 
 // ** Module Specific Imports
-import TestList from 'src/pages/tests/_views/index'
-import TestApis from 'src/pages/tests/_components/apis'
+import TestList from 'src/pages/tests/_views/tests'
 import CreateTest from 'src/pages/tests/_views/createTest'
-import Toolbar from 'src/pages/tests/_components/toolbar'
+import Toolbar from 'src/pages/tests/_components/Toolbar'
 
 // ** Actions Imports
-import { fetchData, deleteUser } from 'src/pages/tests/_models/index'
+import {getAllTests} from 'src/pages/tests/_models/TestModel'
 
 // ** renders client column
 const renderClient = row => {
@@ -40,8 +38,7 @@ const renderClient = row => {
 }
 
 const RowOptions = ({ id }) => {
-  // ** Hooks
-  const dispatch = useDispatch()
+
 
   // ** State
   const [anchorEl, setAnchorEl] = useState(null)
@@ -111,16 +108,21 @@ const Page = () => {
   const [loader, setLoader] = useState(true)
   const doReload = () => setReload(r => r + 1)
 
-  // view all listing Using API
+
+  // View all listing using model
   const getTests = useCallback(async () => {
     setLoader(true)
-    const response = await TestApis.getAllTests()
+    const response = await getAllTests()
     setLoader(false)
-    if (response.success === true) {
+    if (response.status === true ) {
       setDataList(response.payload.data)
+      setMetaData(response.payload.meta)
+    } else {
+      toast.error (response.message)
     }
     setResponseStatus(response.status)
     setResponseMessage(response.message)
+
   }, [])
 
   useEffect(() => {
@@ -143,7 +145,11 @@ const Page = () => {
           <CardContent>
             <Toolbar />
           </CardContent>
-          <TestList data={dataList} responseStatus={responseStatus} responseMessage={responseMessage} />
+          <TestList
+            rows={dataList}
+            responseStatus={responseStatus}
+            responseMessage={responseMessage}
+          />
         </Card>
       </Grid>
       <CreateTest open={drawerOpen} toggle={toggleCreateDrawer} />
