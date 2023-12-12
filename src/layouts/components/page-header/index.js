@@ -13,11 +13,13 @@ const PageHeader = props => {
         {title}
         {subtitle || null}
       </Box>
-      <Box className='actions-right' sx={{ display: 'flex', alignItems: 'center' }}>
-        <Button sx={{ mb: 2 }} onClick={toggleDrawer} variant='contained'>
-          {buttonTitle}
-        </Button>
-      </Box>
+      {buttonTitle && (
+        <Box className='actions-right' sx={{ display: 'flex', alignItems: 'center' }}>
+          <Button sx={{ mb: 2 }} onClick={toggleDrawer} variant='contained'>
+            {buttonTitle}
+          </Button>
+        </Box>
+      )}
     </Box>
   )
 }
