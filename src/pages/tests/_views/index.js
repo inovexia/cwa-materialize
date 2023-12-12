@@ -32,7 +32,7 @@ import Translations from 'src/layouts/components/Translations'
 import Icon from 'src/@core/components/icon'
 
 // ** Actions Imports
-import {changeStatus} from 'src/pages/tests/_models/TestModel'
+import {ChangeStatus} from 'src/pages/tests/_models/TestModel'
 
 const LinkStyled = styled(Link)(({ theme }) => ({
   fontWeight: 600,
@@ -311,7 +311,7 @@ const EnhancedTable = (props) => {
 
   const handleChangeStatus = (async (event, guid) => {
 
-    const response = await changeStatus(event.target.checked, guid)
+    const response = await ChangeStatus(event.target.checked, guid)
     if (response.status) {
       toast.success (response.message)
     } else {

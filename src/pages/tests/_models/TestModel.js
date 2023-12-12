@@ -41,10 +41,25 @@ export async function ChangeStatus (checked, guid) {
   } else {
     testStatus = 0
   }
-
   const formData = new FormData ()
   formData.append ('status', testStatus)
   const response = await API.changeStatus({guid, data: formData})
+  var responseMessage = await responseMessages (response.message)
+  response.message = await responseMessage
+
+  return response
+}
+
+
+/** GET CATEGORIES */
+export async function GetCategories () {
+  const formData = new FormData ()
+  if (typeof data === "object") {
+    Object.entries(data).forEach(([key, value]) => {
+        formData.append(key, value)
+    })
+  }
+  const response = await API.getCategories({data: formData})
   var responseMessage = await responseMessages (response.message)
   response.message = await responseMessage
 
