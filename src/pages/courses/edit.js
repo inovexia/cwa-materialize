@@ -110,102 +110,98 @@ const EditCourse = props => {
   }
 
   return (
-    <>
-      <Grid container spacing={6}>
-        <Grid item xs={12}>
-          <PageHeader
-            title={<Typography variant='h5'>Edit Courses</Typography>}
-            subtitle={<Typography variant='body2'>Edit your Courses</Typography>}
-          />
-        </Grid>
-        <Grid item xs={12}>
-          <Box sx={{ px: 4 }}>
-            {responseMessage && (
-              <FormHelperText sx={{ color: 'error.main' }}>Cannot submit due to server error </FormHelperText>
-            )}
-          </Box>
-          <Card>
-            <CardContent>
-              <form onSubmit={handleSubmit(onSubmit)}>
-                <Grid container spacing={5}>
-                  <Grid item xs={12}>
-                    <FormControl fullWidth>
-                      <Controller
-                        name='title'
-                        control={control}
-                        rules={{ required: true }}
-                        render={({ field: { value, onChange } }) => (
-                          <TextField
-                            value={value}
-                            label='Course Title'
-                            onChange={onChange}
-                            placeholder='Course title'
-                            error={Boolean(errors.title)}
-                            aria-describedby='validation-schema-title'
-                          />
-                        )}
-                      />
-                      {errors.title && (
-                        <FormHelperText sx={{ color: 'error.main' }} id='validation-schema-title'>
-                          {errors.title.message}
-                        </FormHelperText>
-                      )}
-                    </FormControl>
-                  </Grid>
-                  <Grid item xs={12}>
-                    <FormControl fullWidth>
-                      <Controller
-                        name='details'
-                        control={control}
-                        rules={{ required: true }}
-                        render={({ field }) => (
-                          <TextField
-                            rows={4}
-                            multiline
-                            {...field}
-                            label='Course Description'
-                            error={Boolean(errors.details)}
-                            aria-describedby='validation-basic-textarea'
-                          />
-                        )}
-                      />
-                      {errors.details && (
-                        <FormHelperText sx={{ color: 'error.main' }} id='validation-basic-textarea'>
-                          This field is required
-                        </FormHelperText>
-                      )}
-                    </FormControl>
-                  </Grid>
-                  <Grid item xs={12}>
-                    <FileUploaderSingle />
-                  </Grid>
-                  <Grid item xs={12}>
-                    <Button size='large' type='submit' variant='contained' disabled={isLoading ? true : false}>
-                      {isLoading ? (
-                        <CircularProgress
-                          sx={{
-                            color: 'common.white',
-                            width: '20px !important',
-                            height: '20px !important',
-                            mr: theme => theme.spacing(2)
-                          }}
-                        />
-                      ) : null}
-                      Submit
-                    </Button>
-                    <Button variant='contained' size='large' href='/courses' sx={{ ml: 3 }}>
-                      Cancel
-                    </Button>
-                  </Grid>
-                </Grid>
-              </form>
-            </CardContent>
-          </Card>
-        </Grid>
+    <Grid container spacing={6}>
+      <Grid item xs={12}>
+        <PageHeader
+          title={<Typography variant='h5'>Edit Courses</Typography>}
+          subtitle={<Typography variant='body2'>Edit your Courses</Typography>}
+        />
       </Grid>
-
-    </>
-
+      <Grid item xs={12}>
+        <Box sx={{ px: 4 }}>
+          {responseMessage && (
+            <FormHelperText sx={{ color: 'error.main' }}>Cannot submit due to server error </FormHelperText>
+          )}
+        </Box>
+        <Card>
+          <CardContent>
+            <form onSubmit={handleSubmit(onSubmit)}>
+              <Grid container spacing={5}>
+                <Grid item xs={12}>
+                  <FormControl fullWidth>
+                    <Controller
+                      name='title'
+                      control={control}
+                      rules={{ required: true }}
+                      render={({ field: { value, onChange } }) => (
+                        <TextField
+                          value={value}
+                          label='Course Title'
+                          onChange={onChange}
+                          placeholder='Course title'
+                          error={Boolean(errors.title)}
+                          aria-describedby='validation-schema-title'
+                        />
+                      )}
+                    />
+                    {errors.title && (
+                      <FormHelperText sx={{ color: 'error.main' }} id='validation-schema-title'>
+                        {errors.title.message}
+                      </FormHelperText>
+                    )}
+                  </FormControl>
+                </Grid>
+                <Grid item xs={12}>
+                  <FormControl fullWidth>
+                    <Controller
+                      name='details'
+                      control={control}
+                      rules={{ required: true }}
+                      render={({ field }) => (
+                        <TextField
+                          rows={4}
+                          multiline
+                          {...field}
+                          label='Course Description'
+                          error={Boolean(errors.details)}
+                          aria-describedby='validation-basic-textarea'
+                        />
+                      )}
+                    />
+                    {errors.details && (
+                      <FormHelperText sx={{ color: 'error.main' }} id='validation-basic-textarea'>
+                        This field is required
+                      </FormHelperText>
+                    )}
+                  </FormControl>
+                </Grid>
+                <Grid item xs={12}>
+                  <FileUploaderSingle />
+                </Grid>
+                <Grid item xs={12}>
+                  <Button size='large' type='submit' variant='contained' disabled={isLoading ? true : false}>
+                    {isLoading ? (
+                      <CircularProgress
+                        sx={{
+                          color: 'common.white',
+                          width: '20px !important',
+                          height: '20px !important',
+                          mr: theme => theme.spacing(2)
+                        }}
+                      />
+                    ) : null}
+                    Save
+                  </Button>
+                  <Button variant='contained' size='large' href='/courses' sx={{ ml: 3 }}>
+                    Cancel
+                  </Button>
+                </Grid>
+              </Grid>
+            </form>
+          </CardContent>
+        </Card>
+      </Grid>
+    </Grid>
   )
 }
 

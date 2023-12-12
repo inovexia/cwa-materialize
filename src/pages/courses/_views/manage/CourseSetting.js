@@ -4,7 +4,7 @@ import React, { useEffect, useState, useRef, useCallback } from 'react'
 import { Grid, Card, CardHeader, CardContent, Button, Box, Link, Typography, CircularProgress } from '@mui/material'
 import toast from 'react-hot-toast'
 import Icon from 'src/@core/components/icon'
-
+import Switch from '@mui/material/Switch'
 const CourseSetting = () => {
 
   return (
@@ -26,7 +26,7 @@ const CourseSetting = () => {
               <Typography variant='body1'>Publish</Typography>
             </div>
             <div>
-              <Icon icon='line-md:switch' />
+              <Switch />
             </div>
           </Box>
           <Box

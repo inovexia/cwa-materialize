@@ -89,14 +89,14 @@ const SidebarAddCourse = props => {
   })
 
   const onSubmit = async (data) => {
-    setLoading (true)
+    setLoading(true)
     const response = await AddTest(data)
-    setLoading (false)
+    setLoading(false)
     if (response.success === true) {
-      toast.success (response.message)
+      toast.success(response.message)
     } else {
       toggle()
-      toast.error (response.message)
+      toast.error(response.message)
     }
   }
 
@@ -126,7 +126,7 @@ const SidebarAddCourse = props => {
           <FormHelperText sx={{ color: 'error.main' }}>Cannot submit due to server error </FormHelperText>
         )}
       </Box>
-      <Card sx={{mx:5}}>
+      <Card sx={{ mx: 5 }}>
         <CardContent>
           <form onSubmit={handleSubmit(onSubmit)}>
             <Grid container spacing={5}>
@@ -179,7 +179,7 @@ const SidebarAddCourse = props => {
                 </FormControl>
               </Grid>
               <Grid item xs={12}>
-                <FileUploaderSingle/>
+                <FileUploaderSingle />
               </Grid>
               <Grid item xs={12}>
                 <Button size='large' type='submit' variant='contained' disabled={isLoading ? true : false}>
@@ -196,8 +196,8 @@ const SidebarAddCourse = props => {
                   Submit
                 </Button>
                 <Button variant='contained' size='large' href='/courses' sx={{ ml: 3 }}>
-                    Cancel
-                  </Button>
+                  Cancel
+                </Button>
               </Grid>
             </Grid>
           </form>
