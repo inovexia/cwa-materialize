@@ -355,7 +355,7 @@ const SidebarAddUser = props => {
               startIcon={loading ? <Icon icon='eos-icons:bubble-loading' /> : ''}
               variant='contained'
             >
-              <span>SUBMIT</span>
+              <span>SAVE</span>
             </LoadingButton>
             <Button size='large' variant='outlined' color='secondary' onClick={handleClose}>
               Cancel

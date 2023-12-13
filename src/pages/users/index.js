@@ -11,9 +11,6 @@ import toast from 'react-hot-toast'
 // ** Store Imports
 import { useDispatch, useSelector } from 'react-redux'
 
-// ** Utils Import
-import { getInitials } from 'src/@core/utils/get-initials'
-import CustomAvatar from 'src/@core/components/mui/avatar'
 
 // ** Core Imports
 import PageHeader from 'src/layouts/components/page-header'

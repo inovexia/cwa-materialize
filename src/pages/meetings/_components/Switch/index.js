@@ -5,7 +5,7 @@ import FormGroup from '@mui/material/FormGroup'
 import toast from 'react-hot-toast'
 
 // API
-import UserApi from 'src/pages/meetings/_components/apis'
+import MeetingApi from 'src/pages/meetings/_components/apis'
 
 const SwitchField = ({ id, status }) => {
   const [switchValue, setSwitchValue] = useState(false)
@@ -21,7 +21,7 @@ const SwitchField = ({ id, status }) => {
       const formData = new FormData()
       formData.append('users[0]', id)
       formData.append('status', newStatus)
-      const res = await UserApi.changeStatus(formData)
+      const res = await MeetingApi.changeStatus(formData)
       if (res.success) {
         toast.success('Status changed')
       } else {

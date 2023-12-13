@@ -1,192 +1,152 @@
-// ** React Imports
-import { useState } from 'react'
+import React, { useEffect, useState, useRef } from 'react'
+import { useForm, Controller } from 'react-hook-form'
+import toast from 'react-hot-toast'
+import { useRouter } from 'next/router'
 
 // ** MUI Imports
-import { Drawer, Select, Button, MenuItem, styled, TextField, IconButton, InputLabel, Typography, Box, FormControl, FormHelperText, CircularProgress, Card, Grid, CardHeader, CardContent } from '@mui/material'
+import { Grid, Card, TextField, Button, Link, CardHeader, CardContent, FormControl } from '@mui/material'
 
-import toast from 'react-hot-toast'
+// ** API
+import CourseApi from 'src/pages/courses/_components/Apis'
 
-// ** Third Party Imports
-import * as yup from 'yup'
-import { useForm, Controller } from 'react-hook-form'
-import { yupResolver } from '@hookform/resolvers/yup'
+// ** Component
+import FormEditorField from 'src/layouts/components/common/formEditorField'
 
-// ** Icon Imports
-import Icon from 'src/@core/components/icon'
-
-// ** Actions Imports
-import { AddTest } from 'src/pages/tests/_models/TestModel'
-
-// ** Module Specific Imports
-import FileUploaderSingle from './_components/Fileupload'
-
-// ** Component Imports
-import PageHeader from 'src/layouts/components/page-header'
-
-const Header = styled(Box)(({ theme }) => ({
-  display: 'flex',
-  alignItems: 'center',
-  padding: theme.spacing(3, 4),
-  justifyContent: 'space-between'
-}))
-
-const defaultValues = {
-  title: '',
-  type: '',
-  details: '',
-  category: ''
-}
-
-const showErrors = (field, valueLen, min) => {
-  if (valueLen === 0) {
-    return `${field} field is required`
-  } else if (valueLen > 0 && valueLen < min) {
-    return `${field} must be at least ${min} characters`
-  } else {
-    return ''
-  }
-}
-
-const schema = yup.object().shape({
-  title: yup.string().required().min(3),
-  type: yup.string().required(),
-  details: yup.string(),
-  category: yup.string()
-})
-
-
-const EditCourse = props => {
-  // ** Props
-  const { open, toggle } = props
-
-  // ** State
-  const [type, setType] = useState('evaluated')
-  const [isLoading, setLoading] = useState(false)
-  const [responseMessage, setResponseMessage] = useState(false)
-
-  // ** Hooks
+const EditCourse = () => {
+  const router = useRouter()
+  const { id } = router.query
   const {
-    reset,
     control,
     handleSubmit,
+    reset,
     formState: { errors }
   } = useForm({
-    defaultValues,
-    mode: 'onChange',
-    resolver: yupResolver(schema)
+    defaultValues: {
+      title: '',
+      description: '',
+      created_by: 'ASI8'
+    }
   })
+  // ** Get Current Meeting Details
+  useEffect(() => {
+    const fetchData = async () => {
+      if (id) {
+        const res = await CourseApi.viewCourse(id)
+        reset(res.payload)
+      }
+    }
+    fetchData()
+  }, [id])
 
-  const onSubmit = async (data) => {
-    setLoading(true)
-    const response = await AddTest(data)
-    setLoading(false)
-    if (response.success === true) {
-      toast.success(response.message)
+  const updateFormSubmit = async data => {
+    const formData = new FormData()
+    Object.entries(data).forEach(([key, value]) => {
+      formData.append(key, value)
+    })
+    const res = await CourseApi.updateCourse({ id, data })
+    if (res.success === true) {
+      toast.success('Course updated successfully')
+      setTimeout(() => {
+        router.push('/courses')
+      }, 3000)
     } else {
-      toggle()
-      toast.error(response.message)
+      toast.error('Failed to update course')
     }
   }
 
-
-  const handleClose = () => {
-    toggle()
-    reset()
+  const editorRef = useRef(null)
+  const log = () => {
+    if (editorRef.current) {
+      console.log(editorRef.current.getContent())
+    }
   }
 
   return (
-    <Grid container spacing={6}>
-      <Grid item xs={12}>
-        <PageHeader
-          title={<Typography variant='h5'>Edit Courses</Typography>}
-          subtitle={<Typography variant='body2'>Edit your Courses</Typography>}
-        />
-      </Grid>
-      <Grid item xs={12}>
-        <Box sx={{ px: 4 }}>
-          {responseMessage && (
-            <FormHelperText sx={{ color: 'error.main' }}>Cannot submit due to server error </FormHelperText>
-          )}
-        </Box>
-        <Card>
-          <CardContent>
-            <form onSubmit={handleSubmit(onSubmit)}>
-              <Grid container spacing={5}>
-                <Grid item xs={12}>
-                  <FormControl fullWidth>
+    <>
+      <Grid container spacing={6}>
+        <Grid item xs={12}>
+          <Card>
+            <CardHeader title='Edit Course' />
+            <CardContent>
+              <form onSubmit={handleSubmit(updateFormSubmit)}>
+                <Grid container spacing={2}>
+                  <FormControl fullWidth style={{ height: '0px', border: 'none', visibility: 'hidden' }}>
                     <Controller
-                      name='title'
-                      control={control}
-                      rules={{ required: true }}
-                      render={({ field: { value, onChange } }) => (
-                        <TextField
-                          value={value}
-                          label='Course Title'
-                          onChange={onChange}
-                          placeholder='Course title'
-                          error={Boolean(errors.title)}
-                          aria-describedby='validation-schema-title'
-                        />
-                      )}
-                    />
-                    {errors.title && (
-                      <FormHelperText sx={{ color: 'error.main' }} id='validation-schema-title'>
-                        {errors.title.message}
-                      </FormHelperText>
-                    )}
-                  </FormControl>
-                </Grid>
-                <Grid item xs={12}>
-                  <FormControl fullWidth>
-                    <Controller
-                      name='details'
-                      control={control}
-                      rules={{ required: true }}
+                      style={{ height: '0px', border: 'none' }}
                       render={({ field }) => (
                         <TextField
-                          rows={4}
-                          multiline
                           {...field}
-                          label='Course Description'
-                          error={Boolean(errors.details)}
-                          aria-describedby='validation-basic-textarea'
+                          style={{ height: '0px', border: 'none' }}
+                          type='hidden'
+                          variant='outlined'
                         />
                       )}
+                      control={control}
+                      name='created_by'
                     />
-                    {errors.details && (
-                      <FormHelperText sx={{ color: 'error.main' }} id='validation-basic-textarea'>
-                        This field is required
-                      </FormHelperText>
-                    )}
                   </FormControl>
-                </Grid>
-                <Grid item xs={12}>
-                  <FileUploaderSingle />
-                </Grid>
-                <Grid item xs={12}>
-                  <Button size='large' type='submit' variant='contained' disabled={isLoading ? true : false}>
-                    {isLoading ? (
-                      <CircularProgress
-                        sx={{
-                          color: 'common.white',
-                          width: '20px !important',
-                          height: '20px !important',
-                          mr: theme => theme.spacing(2)
+                  <Grid item xs={12} sx={{ mt: 3 }}>
+                    <FormControl fullWidth>
+                      <Controller
+                        render={({ field }) => (
+                          <TextField
+                            {...field}
+                            label='Title'
+                            variant='outlined'
+                            error={!!errors.title}
+                            helperText={errors.title && 'First name must be between 3 and 15 characters'}
+                          />
+                        )}
+                        control={control}
+                        name='title'
+                        rules={{
+                          required: 'Title is required',
+                          minLength: {
+                            value: 3,
+                            message: 'Title should be at least 3 characters'
+                          },
+                          maxLength: {
+                            value: 15,
+                            message: 'Title should not exceed 15 characters'
+                          }
                         }}
                       />
-                    ) : null}
-                    Save
+                    </FormControl>
+                  </Grid>
+                  <Grid item xs={12} sx={{ mt: 3 }}>
+                    <label
+                      htmlFor='description'
+                      style={{
+                        fontSize: 16,
+                        fontWeight: 500,
+                        fontFamily: 'Arial',
+                        marginBottom: '10px',
+                        display: "block"
+                      }}
+                    >
+                      Description
+                    </label>
+                    <FormEditorField
+                      control={control}
+                      name='description'
+                      onInit={(evt, editor) => (editorRef.current = editor)}
+                    />
+                  </Grid>
+                </Grid>
+                <Grid container spacing={2} style={{ marginTop: '20px' }}>
+                  <Button variant='contained' size='medium' type='submit' sx={{ mt: 5 }}>
+                    Update
                   </Button>
-                  <Button variant='outlined' color='secondary' size='large' href='/courses' sx={{ ml: 3 }}>
+                  <Button variant='contained' size='medium' component={Link} href='/meetings' sx={{ mt: 5, ml: 3 }}>
                     Cancel
                   </Button>
                 </Grid>
-              </Grid>
-            </form>
-          </CardContent>
-        </Card>
+              </form>
+            </CardContent>
+          </Card>
+        </Grid>
       </Grid>
-    </Grid>
+    </>
   )
 }
 

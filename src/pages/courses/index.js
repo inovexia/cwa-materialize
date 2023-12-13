@@ -1,7 +1,7 @@
 import React, { useEffect, useState, useRef, useCallback } from 'react'
 
 // ** MUI Imports
-import { Grid, Card, CardHeader, CardContent, Button, Box, Link, Typography,CircularProgress  } from '@mui/material'
+import { Grid, Card, CardHeader, CardContent, Button, Box, Link, Typography, CircularProgress } from '@mui/material'
 import toast from 'react-hot-toast'
 
 // ** Component Imports
@@ -13,24 +13,63 @@ import CreateTest from 'src/pages/courses/create'
 import Toolbar from 'src/pages/courses/_components/Toolbar'
 
 // ** Actions Imports
-import { ListTests } from 'src/pages/tests/_models/TestModel'
+import { ListCourses } from 'src/pages/courses/_models/CourseModel'
+
+// ** Course API
+import CourseApi from 'src/pages/courses/_components/Apis'
 
 
 
 
 const Page = () => {
+  const [currentPage, setCurrentPage] = useState('1')
+  const [itemPerPage, setItemPerPage] = useState('10')
+  const [checkedIds, setCheckedIds] = useState([])
   const [dataList, setDataList] = useState([])
-  const [metaData, setMetaData] = useState([])
+  const [metaData, setMetaData] = useState(undefined)
   const [responseStatus, setResponseStatus] = useState(false)
   const [responseMessage, setResponseMessage] = useState('')
   const [drawerOpen, setDrawerOpen] = useState(false)
-  const [isLoading, setLoading] = useState(true)
+  const [reload, setReload] = useState(0)
+  const [loader, setLoader] = useState(true)
   const [searchTerm, setSearchTerm] = useState('')
+  const [statusFilter, setStatusFilter] = useState('')
+  const [roleFilter, setRoleFilter] = useState('')
+  const [orderFilter, setOrderFilter] = useState('')
+  const [bulkAction, setBulkAction] = useState('')
+  const doReload = () => setReload(r => r + 1)
+
+  const [isLoading, setLoading] = useState(true)
   const [status, setStatus] = useState('')
-  const [type, setType] = useState('')
+  const [orderBy, setOrderBy] = useState('')
+
+  // Get All Courses
+  //  Multiple Filter
+  const handleFiltersChange = useCallback(async () => {
+    setLoader(true)
+    const formData = new FormData()
+    formData.append('search', searchTerm)
+    formData.append('status', status)
+    formData.append('order_by', orderBy)
+    formData.append('results_per_page', itemPerPage)
+    formData.append('page', currentPage)
+    setLoader(true)
+    const res = await CourseApi.filterCourse(formData)
+    setLoader(false)
+    if (!res.success) return
+    setDataList(res.payload.data)
+    setMetaData(res.payload.meta)
+    setResponseStatus(res.status)
+    setResponseMessage(res.message)
+  }, [searchTerm, statusFilter, roleFilter, orderFilter, reload, itemPerPage, currentPage])
+
+  useEffect(() => {
+    handleFiltersChange()
+  }, [handleFiltersChange])
+
 
   /** GET ALL TESTS */
-  const getTests = useCallback(async (searchTerm, status, type) => {
+  const getCourses = useCallback(async (searchTerm, status, orderBy) => {
     const data = {
     }
     if (status !== "")
@@ -39,46 +78,45 @@ const Page = () => {
     if (searchTerm !== "")
       data['search'] = searchTerm
 
-    if (type !== "")
-      data['test_type'] = type
+    if (orderBy !== "")
+      data['order_by'] = orderBy
 
-    const response = await ListTests(data)
+    const response = await ListCourses(data)
 
     return response
   }, [])
 
   useEffect(() => {
-    getTests(searchTerm, status, type)
-    .then((response) => {
-      if (response.success === true) {
-        setDataList(response.payload.data)
-        setMetaData(response.payload.meta)
-        setLoading(false)
-      } else {
-        toast.error (response.message)
-      }
-    })
-  }, [getTests, searchTerm, status, type, isLoading])
+    getCourses(searchTerm, status, orderBy)
+      .then((response) => {
+        if (response.success === true) {
+          setDataList(response.payload.data)
+          setMetaData(response.payload.meta)
+          setLoading(false)
+        } else {
+          toast.error(response.message)
+        }
+      })
+  }, [getCourses, searchTerm, status, orderBy, isLoading])
 
 
   /** HANDLE SEARCH */
   const handleSearch = useCallback(value => {
-    setSearchTerm (value)
+    setSearchTerm(value)
   }, [])
 
   /** HANDLE STATUS CHANGE */
   const handleStatus = useCallback(value => {
-    setStatus (value)
+    setStatus(value)
   }, [])
 
   /** HANDLE TEST_TYPE CHANGE */
   const handleType = useCallback(value => {
-    setType (value)
+    setOrderBy(value)
   }, [])
 
   /** HANDLE CREATE TEST DRAWER */
   const toggleCreateDrawer = () => setDrawerOpen(!drawerOpen)
-
   return (
     <>
       <Grid container spacing={6}>
@@ -88,34 +126,43 @@ const Page = () => {
             subtitle={<Typography variant='body2'>List all Courses</Typography>}
             toggleDrawer={toggleCreateDrawer}
             buttonTitle='Add Course'
-            />
-          <Card>
+            setReload={setReload}
+            doReload={doReload}
+          />
+          <Card style={{ marginTop: "20px" }}>
             {isLoading ?
-            (<CircularProgress />) :
-            (<form>
-              <CardContent>
-                <Toolbar
-                  searchTerm={searchTerm}
-                  handleSearch={handleSearch}
-                  status={status}
-                  handleStatus={handleStatus}
-                  type={type}
-                  handleType={handleType}
+              (
+                <Box fullWidth className="loader" style={{ textAlign: "center", padding: "50px 0px" }}>
+                  <CircularProgress />
+                </Box>) :
+              (<form>
+                <CardContent>
+                  <Toolbar
+                    searchTerm={searchTerm}
+                    handleSearch={handleSearch}
+                    status={status}
+                    handleStatus={handleStatus}
+                    orderBy={orderBy}
+                    handleType={handleType}
+                  />
+                </CardContent>
+                <CourseList
+                  rows={dataList}
+                  responseStatus={responseStatus}
+                  responseMessage={responseMessage}
+                  meta={metaData}
+                  doReload={doReload}
                 />
-              </CardContent>
-              <CourseList
-                rows={dataList}
-                responseStatus={responseStatus}
-                responseMessage={responseMessage}
-                meta={metaData}
-              />
-            </form>)}
+              </form>)}
           </Card>
         </Grid>
       </Grid>
       <CreateTest
         open={drawerOpen}
         toggle={toggleCreateDrawer}
+        setReload={setReload}
+        reload={reload}
+        doReload={doReload}
       />
     </>
   )
