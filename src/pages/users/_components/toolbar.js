@@ -11,7 +11,7 @@ import IconButton from '@mui/material/IconButton'
 import toast from 'react-hot-toast'
 
 // ** API
-// import UserApi from 'src/pages/users/_components/apis'
+import UserApi from 'src/pages/users/_components/apis'
 
 const Toolbar = ({
   searchTerm,
