@@ -56,9 +56,6 @@ if (themeConfig.routingLoader) {
   })
 }
 
-const Guard = ({ children }) => {
-  return <>{children}</>
-}
 
 // ** Configure JSS & ClassName
 const App = props => {

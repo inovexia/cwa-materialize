@@ -1,4 +1,4 @@
-import React, { useEffect, useState, useCallback } from 'react'
+import React, { useEffect, useState, useRef, useCallback } from 'react'
 
 // ** MUI Imports
 import { Grid, Card, CardHeader, CardContent, Button, Box, Link, Typography,CircularProgress  } from '@mui/material'
@@ -8,12 +8,14 @@ import toast from 'react-hot-toast'
 import PageHeader from 'src/layouts/components/page-header'
 
 // ** Module Specific Imports
-import TestList from 'src/pages/tests/_views'
-import CreateTest from 'src/pages/tests/create'
-import Toolbar from 'src/pages/tests/_components/Toolbar'
+import CourseList from 'src/pages/courses/_views'
+import CreateTest from 'src/pages/courses/create'
+import Toolbar from 'src/pages/courses/_components/Toolbar'
 
 // ** Actions Imports
 import { ListTests } from 'src/pages/tests/_models/TestModel'
+
+
 
 
 const Page = () => {
@@ -82,10 +84,10 @@ const Page = () => {
       <Grid container spacing={6}>
         <Grid item xs={12}>
           <PageHeader
-            title={<Typography variant='h5'>Tests</Typography>}
-            subtitle={<Typography variant='body2'>List all tests</Typography>}
+            title={<Typography variant='h5'>Courses</Typography>}
+            subtitle={<Typography variant='body2'>List all Courses</Typography>}
             toggleDrawer={toggleCreateDrawer}
-            buttonTitle='Add Test'
+            buttonTitle='Add Course'
             />
           <Card>
             {isLoading ?
@@ -101,7 +103,7 @@ const Page = () => {
                   handleType={handleType}
                 />
               </CardContent>
-              <TestList
+              <CourseList
                 rows={dataList}
                 responseStatus={responseStatus}
                 responseMessage={responseMessage}

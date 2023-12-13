@@ -38,6 +38,6 @@
   "search-node-modules.path": "node_modules",
   "markdown.extension.toc.updateOnSave": false,
   "[javascript]": {
-    "editor.defaultFormatter": "svipas.prettier-plus"
+    "editor.defaultFormatter": "vscode.typescript-language-features"
   }
 }

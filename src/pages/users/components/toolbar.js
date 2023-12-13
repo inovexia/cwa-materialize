@@ -11,10 +11,9 @@ import IconButton from '@mui/material/IconButton'
 import toast from 'react-hot-toast'
 
 // ** API
-// import UserApi from 'src/pages/users/_components/apis'
+import UserApi from 'src/pages/users/components/apis'
 
 const Toolbar = ({
-  searchTerm,
   setSearchTerm,
   setLoader,
   onStatusFilterChange,
@@ -22,14 +21,44 @@ const Toolbar = ({
   onOrderFilterChange,
   onSelectedBulkAction,
   checkedLength,
-  onSelectedBulkDelete,
-  bulkAction,
-  setBulkAction
+  onSelectedBulkDelete
 }) => {
+  const [searchInput, setSearchInput] = useState('')
   const [statusFilter, setStatusFilter] = useState('')
   const [roleFilter, setRoleFilter] = useState('')
   const [orderFilter, setOrderFilter] = useState('')
+  const [bulkAction, setBulkAction] = useState('')
   const [selectedBulkAct, setSelectedBulkAct] = useState('')
+
+  const handleSearchInputChange = event => {
+    setSearchTerm(event.target.value)
+  }
+
+
+  // Search
+  const handleSearch = async () => {
+    setLoader(true)
+    try {
+      const searchData = { search: searchInput }
+      const res = await UserApi.filterUsers(searchData)
+      if (res.success === true) {
+        if (setSearchTerm) {
+          setSearchTerm(searchInput) // Pass the search term to the parent
+        }
+      } else {
+        toast.error('Failed to fetch search results')
+      }
+    } catch (error) {
+      console.error(error)
+      toast.error('An error occurred while fetching search results')
+    }
+  }
+
+  const handleKeyPress = event => {
+    if (event.key === 'Enter') {
+      handleSearch()
+    }
+  }
 
   const handleSearchButtonClick = () => {
     handleSearch()
@@ -59,9 +88,11 @@ const Toolbar = ({
   // Bulk Action
   const handleBulkAction = event => {
     const selectedAction = event.target.value
-    setBulkAction(selectedAction) // Pass the selected bulk action to the parent
+    setSelectedBulkAct(selectedAction)
+    onSelectedBulkAction(selectedAction) // Pass the selected bulk action to the parent
   }
-  return (
+  
+return (
     <Grid container spacing={6}>
       <Grid
         item
@@ -78,8 +109,9 @@ const Toolbar = ({
           variant='outlined'
           size='small'
           fullWidth
-          value={searchTerm}
-          onChange={event => setSearchTerm(event.target.value)}
+          value={searchInput}
+          onChange={event => setSearchInput(event.target.value)}
+          onKeyPress={handleKeyPress}
           InputProps={{
             endAdornment: (
               <IconButton onClick={handleSearchButtonClick}>
@@ -142,6 +174,11 @@ const Toolbar = ({
             <MenuItem value='delete'>Delete</MenuItem>
             <MenuItem value='archive'>Archive</MenuItem>
           </TextField>
+        </Box>
+        <Box>
+          <Button variant='contained' color='primary' component={Link} href='/users/create'>
+            Create User
+          </Button>
         </Box>
       </Grid>
     </Grid>

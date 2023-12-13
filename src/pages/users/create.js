@@ -3,6 +3,8 @@ import { useForm, Controller } from 'react-hook-form'
 import toast, { Toaster } from 'react-hot-toast'
 import { useRouter } from 'next/router'
 
+//import serialize from 'serialize-javascript'
+
 // ** MUI Imports
 import {
   Grid,
@@ -10,7 +12,6 @@ import {
   TextField,
   Button,
   Link,
-  Box,
   CardHeader,
   CardContent,
   InputLabel,
@@ -20,19 +21,16 @@ import {
 } from '@mui/material'
 
 // ** API
-import UserApi from 'src/pages/users/_components/apis'
+import UserApi from 'src/pages/users/components/apis'
 import AuthApi from 'src/configs/commonConfig'
 
-const EditUser = () => {
+const CreateUser = () => {
   const router = useRouter()
-  const { id } = router.query
 
   const {
     control,
     register,
     handleSubmit,
-    reset,
-    watch,
     formState: { errors, isValid }
   } = useForm({
     defaultValues: {
@@ -46,23 +44,22 @@ const EditUser = () => {
     }
   })
 
+  const [settings, setSettings] = useState('')
   const [reqField, setReqField] = useState('')
 
-  // ** Get Current User Details
+  // ** Get Settings
   useEffect(() => {
     const fetchData = async () => {
       try {
-        if (id) {
-          const res = await UserApi.viewUser(id)
-          reset(res.payload)
-        }
+        const res = await AuthApi.regCommonSettings()
+        setSettings(res && res.payload)
       } catch (error) {
         console.error(error)
       }
     }
 
     fetchData()
-  }, [id])
+  }, [])
 
   // ** Get Required Field
   useEffect(() => {
@@ -78,20 +75,28 @@ const EditUser = () => {
     fetchData()
   }, [])
 
-  const updateFormSubmit = async data => {
+  const handleFormSubmit = async data => {
     if (isValid) {
-      const formData = new FormData()
-      Object.entries(data).forEach(([key, value]) => {
-        formData.append(key, value)
-      })
-      const res = await UserApi.updateUser({ id, data: formData })
-      if (res.success === true) {
-        toast.success('User updated successfully')
-        setTimeout(() => {
-          router.push('/users')
-        }, 3000)
-      } else {
-        toast.error('Failed to update user')
+      try {
+        const formData = new FormData()
+
+        Object.entries(data).forEach(([key, value]) => {
+          formData.append(key, value)
+        })
+        const res = await UserApi.createUser(formData)
+
+        if (res.success === true) {
+          toast.success('User created successfully')
+
+          // setTimeout(() => {
+          //   router.push('/users')
+          // }, 3000)
+        } else {
+          toast.error('Failed to create user')
+        }
+      } catch (error) {
+        console.error(error)
+        toast.error('An error occurred while creating the user')
       }
     } else {
       console.log('Form has validation errors')
@@ -103,10 +108,27 @@ const EditUser = () => {
       <Grid container spacing={6}>
         <Grid item xs={12}>
           <Card>
-            <CardHeader title='Update User' />
+            <CardHeader title='Create User' />
             <CardContent>
-              <form onSubmit={handleSubmit(updateFormSubmit)}>
+              <form onSubmit={handleSubmit(handleFormSubmit)}>
                 <Grid container spacing={2}>
+                  {settings && settings.auto_generate_username !== 'true' ? (
+                    <Grid item xs={12} sx={{ mt: 3 }}>
+                      <FormControl sx={{ width: '100%' }}>
+                        <TextField
+                          {...register('username')}
+                          label='Username'
+                          variant='outlined'
+                          name='username'
+                          pattern='[A-Za-z]{1,}'
+                          required
+                        />
+                      </FormControl>
+                    </Grid>
+                  ) : (
+                    ''
+                  )}
+
                   <Grid item xs={12} md={4} sx={{ mt: 3 }}>
                     <FormControl fullWidth>
                       <Controller
@@ -226,21 +248,21 @@ const EditUser = () => {
                     </FormControl>
                   </Grid>
                   <Grid item xs={12} md={6} sx={{ mt: 3 }}>
-                    <FormControl fullWidth>
+                    <FormControl sx={{ width: '100%' }}>
                       {reqField && reqField.email ? (
-                        <Controller
-                          render={({ field }) => <TextField {...field} label='Email' variant='outlined' required />}
-                          control={control}
+                        <TextField
+                          {...register('email')}
+                          label='Email'
+                          variant='outlined'
                           name='email'
                           pattern='[A-Za-z]{1,}'
-                          rules={{
-                            required: 'Email is required'
-                          }}
+                          required
                         />
                       ) : (
-                        <Controller
-                          render={({ field }) => <TextField {...field} label='Email' variant='outlined' />}
-                          control={control}
+                        <TextField
+                          {...register('email')}
+                          label='Email'
+                          variant='outlined'
                           name='email'
                           pattern='[A-Za-z]{1,}'
                         />
@@ -248,23 +270,21 @@ const EditUser = () => {
                     </FormControl>
                   </Grid>
                   <Grid item xs={12} md={6} sx={{ mt: 3 }}>
-                    <FormControl fullWidth>
+                    <FormControl sx={{ width: '100%' }}>
                       {reqField && reqField.mobile ? (
-                        <Controller
-                          render={({ field }) => (
-                            <TextField {...field} label='Mobile Number' variant='outlined' required />
-                          )}
-                          control={control}
+                        <TextField
+                          {...register('mobile')}
+                          label='Mobile Number'
+                          variant='outlined'
                           name='mobile'
                           pattern='[A-Za-z]{1,}'
-                          rules={{
-                            required: 'Mobile number name is required'
-                          }}
+                          required
                         />
                       ) : (
-                        <Controller
-                          render={({ field }) => <TextField {...field} label='Mobile Number' variant='outlined' />}
-                          control={control}
+                        <TextField
+                          {...register('mobile')}
+                          label='Mobile Number'
+                          variant='outlined'
                           name='mobile'
                           pattern='[A-Za-z]{1,}'
                         />
@@ -274,9 +294,9 @@ const EditUser = () => {
                 </Grid>
                 <Grid container spacing={2}>
                   <Button variant='contained' size='medium' type='submit' sx={{ mt: 5 }}>
-                    Update
+                    Create User
                   </Button>
-                  <Button variant='contained' size='medium' component={Link} href='/user' sx={{ mt: 5, ml: 3 }}>
+                  <Button variant='contained' size='medium' component={Link} href='/users' sx={{ mt: 5, ml: 3 }}>
                     Cancel
                   </Button>
                 </Grid>
@@ -289,4 +309,4 @@ const EditUser = () => {
   )
 }
 
-export default EditUser
+export default CreateUser
