@@ -29,6 +29,23 @@ const EnrolmentSetting = () => {
               <Icon icon='gg:check-o' />
             </div>
           </Box>
+          <Box
+            sx={{
+              gap: 2,
+              display: 'flex',
+              alignItems: 'center',
+              justifyContent: 'space-between',
+              '&:not(:last-of-type)': { mb: 4 },
+              color: theme => theme.palette.primary.main
+            }}
+          >
+            <div>
+              <Typography variant='body1'>New Enrolment </Typography>
+            </div>
+            <div>
+              <Icon icon='gg:check-o' />
+            </div>
+          </Box>
         </CardContent>
       </Card>
     </>

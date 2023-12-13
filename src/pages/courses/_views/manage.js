@@ -15,25 +15,24 @@ import MeetingSetting from './manage/MeetingSetting'
 const ManageCourse = () => {
 
   return (
-    <>
-      <Grid container spacing={6}>
-        <Grid item xs={12} md={6}>
-          <SubjectSetting />
-        </Grid>
-        <Grid item xs={12} md={6}>
-          <TestSetting />
-        </Grid>
-        <Grid item xs={12} md={6}>
-          <MeetingSetting />
-        </Grid>
-        <Grid item xs={12} md={6}>
-          <CourseSetting />
-        </Grid>
-        <Grid item xs={12} md={6}>
-          <EnrolmentSetting />
-        </Grid>
+    <Grid container spacing={6}>
+      <Grid item xs={12} md={6}>
+        <SubjectSetting />
       </Grid>
-    </>
+      <Grid item xs={12} md={6}>
+        <TestSetting />
+      </Grid>
+      <Grid item xs={12} md={6}>
+        <MeetingSetting />
+      </Grid>
+      <Grid item xs={12} md={6}>
+        <EnrolmentSetting />
+      </Grid>
+      <Grid item xs={12} md={6}>
+        <CourseSetting />
+      </Grid>
+
+    </Grid>
   )
 }
 

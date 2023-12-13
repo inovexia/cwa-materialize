@@ -2,7 +2,7 @@
 import { useState } from 'react'
 
 
-import { Drawer, styled, Select, Button, MenuItem, TextField, IconButton, InputLabel, Typography, Box, FormControl, FormHelperText, CircularProgress, Card, Grid, CardHeader, CardContent, Divider, Style } from '@mui/material'
+import { Drawer, styled, Select, Button, MenuItem, TextField, IconButton, InputLabel, Typography, Box, FormControl, FormHelperText, CircularProgress, Card, Grid, CardHeader, CardContent, Divider, Style, List, ListItem, ListItemIcon, ListItemText } from '@mui/material'
 
 import toast from 'react-hot-toast'
 import CustomChip from 'src/@core/components/mui/chip'
@@ -58,9 +58,7 @@ const LeftSide = () => {
   return (
     <Card>
       <CardContent>
-        <Box sx={{
-          pt: 1,
-        }}>
+        <Box sx={{ mb: 3 }}>
           <img
             src="https://images.unsplash.com/photo-1502657877623-f66bf489d236?auto=format&fit=crop&w=800"
             srcSet="https://images.unsplash.com/photo-1502657877623-f66bf489d236?auto=format&fit=crop&w=800&dpr=2 2x"
@@ -69,18 +67,13 @@ const LeftSide = () => {
             style={{ width: '100%', height: '300px' }}
           />
         </Box>
-        <Box sx={{
-          py: 5,
-        }}>
+        <Box sx={{ mb: 3 }}>
           <Typography variant='h6' sx={{ mb: 2 }}> Description</Typography>
           <Typography variant='p'>
             Lorem Ipsum is simply dummy text of the printing and typesetting industry. Lorem Ipsum has been the industry's standard dummy text ever since the 1500s, Lorem Ipsum is simply dummy text of the printing and typesetting industry. Lorem Ipsum has been the industry's standard dummy text ever since the 1500s,
           </Typography>
         </Box>
-        <Divider />
-        <Box sx={{
-          pt: 5,
-        }}>
+        <Box sx={{ mb: 3 }}>
           <video
             autoPlay
             loop
@@ -94,6 +87,61 @@ const LeftSide = () => {
 
             />
           </video>
+        </Box>
+        <Box sx={{ mb: 3 }}>
+          <List component='nav' aria-label='main mailbox'>
+            <ListItem disablePadding>
+              <ListItemIcon sx={{ mr: 1 }}>
+                <Icon icon="ph:dot-fill" fontSize={30} />
+              </ListItemIcon>
+              <ListItemText>Lorem ipsum dolor sit amet, </ListItemText>
+            </ListItem>
+            <ListItem disablePadding>
+              <ListItemIcon sx={{ mr: 1 }}>
+                <Icon icon="ph:dot-fill" fontSize={30} />
+              </ListItemIcon>
+              <ListItemText>Lorem ipsum dolor sit amet, </ListItemText>
+            </ListItem>
+            <ListItem disablePadding>
+              <ListItemIcon sx={{ mr: 1 }}>
+                <Icon icon="ph:dot-fill" fontSize={30} />
+              </ListItemIcon>
+              <ListItemText>Lorem ipsum dolor sit amet, </ListItemText>
+            </ListItem>
+            <ListItem disablePadding>
+              <ListItemIcon sx={{ mr: 1 }}>
+                <Icon icon="ph:dot-fill" fontSize={30} />
+              </ListItemIcon>
+              <ListItemText>Lorem ipsum dolor sit amet, </ListItemText>
+            </ListItem>
+            <ListItem disablePadding>
+              <ListItemIcon sx={{ mr: 1 }}>
+                <Icon icon="ph:dot-fill" fontSize={30} />
+              </ListItemIcon>
+              <ListItemText>Lorem ipsum dolor sit amet, </ListItemText>
+            </ListItem>
+          </List>
+        </Box>
+        <Box sx={{ mb: 3 }}>
+          <Typography variant='p'>
+            Lorem Ipsum is simply dummy text of the printing and typesetting industry. Lorem Ipsum has been the industry's standard dummy text ever since the 1500s, Lorem Ipsum is simply dummy text of the printing and typesetting industry. Lorem Ipsum has been the industry's standard dummy text ever since the 1500s,
+          </Typography>
+        </Box>
+        <Box sx={{ mb: 3 }}>
+          <Box sx={{ mb: 3 }}>
+            <Typography variant='p' sx={{ mb: 2 }}>English Grammer PDF</Typography>
+          </Box>
+          <Button component="label" variant="contained" color="primary" size="small" startIcon={<Icon icon="material-symbols:download" />}>
+            Download
+          </Button>
+        </Box>
+        <Box sx={{ mb: 3 }}>
+          <Box sx={{ mb: 3 }}>
+            <Typography variant='p' sx={{ mb: 2 }}>English Grammer PDF</Typography>
+          </Box>
+          <Button component="label" variant="contained" color="primary" size="small" startIcon={<Icon icon="material-symbols:download" />}>
+            Download
+          </Button>
         </Box>
       </CardContent>
     </Card>

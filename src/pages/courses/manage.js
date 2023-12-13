@@ -23,19 +23,17 @@ const Page = () => {
 
 
   return (
-    <>
-      <Grid container spacing={6}>
-        <Grid item xs={12}>
-          <PageHeader
-            title={<Typography variant='h5'>Manage Courses</Typography>}
-            subtitle={<Typography variant='body2'>List all Courses</Typography>}
-          />
-        </Grid>
-        <Grid item xs={12}>
-          <ManageCourse />
-        </Grid>
+    <Grid container spacing={6}>
+      <Grid item xs={12}>
+        <PageHeader
+          title={<Typography variant='h5'>Manage Courses</Typography>}
+          subtitle={<Typography variant='body2'>List all Courses</Typography>}
+        />
       </Grid>
-    </>
+      <Grid item xs={12}>
+        <ManageCourse />
+      </Grid>
+    </Grid>
   )
 }
 
