@@ -11,7 +11,7 @@ import IconButton from '@mui/material/IconButton'
 import toast from 'react-hot-toast'
 
 // ** API
-import MeetingApi from 'src/pages/users/_components/apis'
+import MeetingApi from 'src/pages/meetings/_components/apis'
 
 const Toolbar = ({
   searchTerm,

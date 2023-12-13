@@ -29,14 +29,10 @@ const Users = () => {
     const fetchData = async () => {
       const res = await MeetingApi.meetingUsers(id)
       console.log(res)
-      if (res.success == true) {
-        setDataList(res.payload)
-        setResponseMessage(res.message)
-        toast.success(res.message)
-        console.log(res.message)
-      } else {
-        toast.error(res.message)
-      }
+      if (!res.success) return toast.error(res.message), setResponseMessage(res.message)
+      setDataList(res.payload)
+      setResponseMessage(res.message)
+      toast.success(res.message)
     }
     fetchData()
   }, [id])

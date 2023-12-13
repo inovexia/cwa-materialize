@@ -106,7 +106,7 @@ export default function BasicTable({ dataList, responseMessage, checkedIds, setC
             ) : (
               <TableRow key='none' sx={{ '&:last-child td, &:last-child th': { border: 0 } }}>
                 <TableCell colSpan='5'>
-                  <Translations text={responseMessage} message='No user found' />
+                  <Translations text={responseMessage && responseMessage} message='No user found' />
                 </TableCell>
               </TableRow>
             )}

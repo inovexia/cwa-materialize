@@ -18,13 +18,8 @@ import CustomAvatar from 'src/@core/components/mui/avatar'
 // ** Utils Import
 import { getInitials } from 'src/@core/utils/get-initials'
 
-import SwitchField from 'src/pages/users/_components/Switch'
-import ActionMenu from 'src/pages/users/_components/actionMenu'
-import DeleteUser from 'src/pages/users/_views/deleteUser'
-import ArchiveUser from 'src/pages/users/_views/archiveUser'
-
 // APIs
-import MeetingApi from 'src/pages/users/_components/apis'
+import MeetingApi from 'src/pages/meetings/_components/apis'
 
 export default function BasicTable({
   dataList,
@@ -180,18 +175,6 @@ export default function BasicTable({
           </TableBody>
         </Table>
       </TableContainer>
-      <DeleteUser
-        mdOpen={openModal}
-        handleClose={handleCloseModal}
-        guidToDelete={guidToDelete}
-        onUserDeleted={handleUserDeleted}
-      />
-      <ArchiveUser
-        mdOpen={openArcModal}
-        handleClose={handleCloseModal}
-        guidToDelete={guidToDelete}
-        onUserArchived={handleUserArchived}
-      />
     </>
   )
 }
