@@ -8,64 +8,47 @@ import Icon from 'src/@core/components/icon'
 const MeetingSetting = () => {
 
   return (
-    <>
-      <Card>
-        <CardHeader title='Meeting Settings' />
-        <CardContent>
-          <Box
-            sx={{
-              gap: 2,
-              display: 'flex',
-              alignItems: 'center',
-              justifyContent: 'space-between',
-              '&:not(:last-of-type)': { mb: 4 },
-              color: theme => theme.palette.primary.main
-            }}
-          >
-            <div>
-              <Typography variant='body1'>All Meeting</Typography>
-            </div>
-            <div>
-              <Icon icon='gg:check-o' />
-            </div>
-          </Box>
-          <Box
-            sx={{
-              gap: 2,
-              display: 'flex',
-              alignItems: 'center',
-              justifyContent: 'space-between',
-              '&:not(:last-of-type)': { mb: 4 },
-              color: theme => theme.palette.primary.main
-            }}
-          >
-            <div>
-              <Typography variant='body1'>Add Meeting</Typography>
-            </div>
-            <div>
-              <Icon icon='icons8:plus' />
-            </div>
-          </Box>
-          <Box
-            sx={{
-              gap: 2,
-              display: 'flex',
-              alignItems: 'center',
-              justifyContent: 'space-between',
-              '&:not(:last-of-type)': { mb: 4 },
-              color: theme => theme.palette.primary.main
-            }}
-          >
-            <div>
-              <Typography variant='body1'>Delete Meeting</Typography>
-            </div>
-            <div>
-              <Icon icon='mdi:delete-outline' />
-            </div>
-          </Box>
-        </CardContent>
-      </Card>
-    </>
+
+    <Card>
+      <CardHeader title='Meeting Settings' />
+      <CardContent>
+        <Box
+          sx={{
+            gap: 2,
+            display: 'flex',
+            alignItems: 'center',
+            justifyContent: 'space-between',
+            '&:not(:last-of-type)': { mb: 4 },
+            color: theme => theme.palette.primary.main
+          }}
+        >
+          <div>
+            <Typography variant='body1'>All Meeting</Typography>
+          </div>
+          <div>
+            <Icon icon='gg:check-o' />
+          </div>
+        </Box>
+        <Box
+          sx={{
+            gap: 2,
+            display: 'flex',
+            alignItems: 'center',
+            justifyContent: 'space-between',
+            '&:not(:last-of-type)': { mb: 4 },
+            color: theme => theme.palette.primary.main
+          }}
+        >
+          <div>
+            <Typography variant='body1'>Add Meeting</Typography>
+          </div>
+          <div>
+            <Icon icon='icons8:plus' />
+          </div>
+        </Box>
+      </CardContent>
+    </Card>
+
   )
 }
 

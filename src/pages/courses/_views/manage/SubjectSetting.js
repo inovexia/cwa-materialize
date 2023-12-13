@@ -10,7 +10,7 @@ const SubjectSetting = () => {
   return (
     <>
       <Card>
-        <CardHeader title='Subject Settings' />
+        <CardHeader title='Course Outline' />
         <CardContent>
           <Box
             sx={{
@@ -46,28 +46,7 @@ const SubjectSetting = () => {
               <Icon icon='icons8:plus' />
             </div>
           </Box>
-          <Box
-            sx={{
-              gap: 2,
-              display: 'flex',
-              alignItems: 'center',
-              justifyContent: 'space-between',
-              '&:not(:last-of-type)': { mb: 4 },
-              color: theme => theme.palette.primary.main
-            }}
-          >
-            <div>
-              <Typography variant='body1'>Delete Subject</Typography>
-            </div>
-            <div>
-              <Icon
-                icon='mdi:delete-outline'
-                sx={{
-                  pr: 2
-                }}
-              />
-            </div>
-          </Box>
+
         </CardContent>
       </Card>
     </>
