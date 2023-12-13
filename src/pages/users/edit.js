@@ -20,7 +20,7 @@ import {
 } from '@mui/material'
 
 // ** API
-import UserApi from 'src/pages/users/components/apis'
+import UserApi from 'src/pages/users/_components/apis'
 import AuthApi from 'src/configs/commonConfig'
 
 const EditUser = () => {
@@ -79,23 +79,18 @@ const EditUser = () => {
 
   const updateFormSubmit = async data => {
     if (isValid) {
-      try {
-        const formData = new FormData()
-        Object.entries(data).forEach(([key, value]) => {
-          formData.append(key, value)
-        })
-        const res = await UserApi.updateUser({ id, data: formData })
-        if (res.success === true) {
-          toast.success('User updated successfully')
-          setTimeout(() => {
-            router.push('/users')
-          }, 3000)
-        } else {
-          toast.error('Failed to update user')
-        }
-      } catch (error) {
-        console.error(error)
-        toast.error('An error occurred while creating the user')
+      const formData = new FormData()
+      Object.entries(data).forEach(([key, value]) => {
+        formData.append(key, value)
+      })
+      const res = await UserApi.updateUser({ id, data: formData })
+      if (res.success === true) {
+        toast.success('User updated successfully')
+        setTimeout(() => {
+          router.push('/users')
+        }, 3000)
+      } else {
+        toast.error('Failed to update user')
       }
     } else {
       console.log('Form has validation errors')
@@ -107,7 +102,7 @@ const EditUser = () => {
       <Grid container spacing={6}>
         <Grid item xs={12}>
           <Card>
-            <CardHeader title='Create User' />
+            <CardHeader title='Update User' />
             <CardContent>
               <form onSubmit={handleSubmit(updateFormSubmit)}>
                 <Grid container spacing={2}>
