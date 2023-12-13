@@ -99,7 +99,7 @@ const ViewCourse = () => {
               py: 5,
             }}>
               <Typography variant='h6' sx={{ mb: 2 }}>Status</Typography>
-              <CustomChip circle label='Publish' skin='light' color='error' />
+              <CustomChip circle label='Publish' skin='light' color='success' />
             </Box>
             <Divider />
             <Box sx={{
