@@ -8,27 +8,27 @@ const navigation = () => {
     {
       title: 'Question Bank',
       path: '/qb',
-      icon: 'mdi:email-outline'
+      icon: 'ri:question-line'
     },
     {
       title: 'Tests',
       path: '/tests',
-      icon: 'mdi:email-outline'
+      icon: 'material-symbols:quiz-outline'
     },
     {
       title: 'Courses',
       path: '/courses',
-      icon: 'mdi:email-outline'
+      icon: 'lucide:book'
     },
     {
       title: 'Meetings',
       path: '/meetings',
-      icon: 'mdi:email-outline'
+      icon: 'healthicons:i-training-class'
     },
     {
       title: 'Users',
       path: '/users',
-      icon: 'mdi:email-outline'
+      icon: 'mdi:users-outline'
     }
   ]
 }

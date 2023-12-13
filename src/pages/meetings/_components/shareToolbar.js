@@ -11,54 +11,25 @@ import IconButton from '@mui/material/IconButton'
 import toast from 'react-hot-toast'
 
 // ** API
-import UserApi from 'src/pages/users/components/apis'
+import MeetingApi from 'src/pages/meetings/_components/apis'
 
-const Toolbar = ({
+const ShareToolbar = ({
+  searchTerm,
   setSearchTerm,
   setLoader,
   onStatusFilterChange,
   onRoleFilterChange,
   onOrderFilterChange,
   onSelectedBulkAction,
-  checkedLength,
-  onSelectedBulkDelete
+  checkedIds,
+  onSelectedBulkDelete,
+  bulkAction,
+  setBulkAction
 }) => {
-  const [searchInput, setSearchInput] = useState('')
   const [statusFilter, setStatusFilter] = useState('')
   const [roleFilter, setRoleFilter] = useState('')
   const [orderFilter, setOrderFilter] = useState('')
-  const [bulkAction, setBulkAction] = useState('')
   const [selectedBulkAct, setSelectedBulkAct] = useState('')
-
-  const handleSearchInputChange = event => {
-    setSearchTerm(event.target.value)
-  }
-
-
-  // Search
-  const handleSearch = async () => {
-    setLoader(true)
-    try {
-      const searchData = { search: searchInput }
-      const res = await UserApi.filterUsers(searchData)
-      if (res.success === true) {
-        if (setSearchTerm) {
-          setSearchTerm(searchInput) // Pass the search term to the parent
-        }
-      } else {
-        toast.error('Failed to fetch search results')
-      }
-    } catch (error) {
-      console.error(error)
-      toast.error('An error occurred while fetching search results')
-    }
-  }
-
-  const handleKeyPress = event => {
-    if (event.key === 'Enter') {
-      handleSearch()
-    }
-  }
 
   const handleSearchButtonClick = () => {
     handleSearch()
@@ -88,11 +59,9 @@ const Toolbar = ({
   // Bulk Action
   const handleBulkAction = event => {
     const selectedAction = event.target.value
-    setSelectedBulkAct(selectedAction)
-    onSelectedBulkAction(selectedAction) // Pass the selected bulk action to the parent
+    setBulkAction(selectedAction) // Pass the selected bulk action to the parent
   }
-  
-return (
+  return (
     <Grid container spacing={6}>
       <Grid
         item
@@ -109,9 +78,8 @@ return (
           variant='outlined'
           size='small'
           fullWidth
-          value={searchInput}
-          onChange={event => setSearchInput(event.target.value)}
-          onKeyPress={handleKeyPress}
+          value={searchTerm}
+          onChange={event => setSearchTerm(event.target.value)}
           InputProps={{
             endAdornment: (
               <IconButton onClick={handleSearchButtonClick}>
@@ -160,29 +128,9 @@ return (
             <MenuItem value='first_name_desc'>First Name DESC</MenuItem>
           </TextField>
         </Box>
-        <Box>
-          <TextField
-            select
-            label='Action'
-            size='small'
-            disabled={checkedLength.length === 0}
-            value={selectedBulkAct}
-            onChange={handleBulkAction}
-          >
-            <MenuItem value='1'>Active</MenuItem>
-            <MenuItem value='0'>Inactive</MenuItem>
-            <MenuItem value='delete'>Delete</MenuItem>
-            <MenuItem value='archive'>Archive</MenuItem>
-          </TextField>
-        </Box>
-        <Box>
-          <Button variant='contained' color='primary' component={Link} href='/users/create'>
-            Create User
-          </Button>
-        </Box>
       </Grid>
     </Grid>
   )
 }
 
-export default Toolbar
+export default ShareToolbar

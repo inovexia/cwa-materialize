@@ -11,7 +11,7 @@ import IconButton from '@mui/material/IconButton'
 import toast from 'react-hot-toast'
 
 // ** API
-import UserApi from 'src/pages/users/_components/apis'
+import MeetingApi from 'src/pages/meetings/_components/apis'
 
 const Toolbar = ({
   searchTerm,
@@ -24,7 +24,10 @@ const Toolbar = ({
   checkedLength,
   onSelectedBulkDelete,
   bulkAction,
-  setBulkAction
+  setBulkAction,
+  handleSearchChange,
+  searchQuery,
+  setSearchQuery
 }) => {
   const [statusFilter, setStatusFilter] = useState('')
   const [roleFilter, setRoleFilter] = useState('')
@@ -78,11 +81,12 @@ const Toolbar = ({
           variant='outlined'
           size='small'
           fullWidth
-          value={searchTerm}
-          onChange={event => setSearchTerm(event.target.value)}
+          value={searchQuery}
+          onChange={handleSearchChange}
+          //onChange={event => setSearchQuery(event.target.value)}
           InputProps={{
             endAdornment: (
-              <IconButton onClick={handleSearchButtonClick}>
+              <IconButton>
                 <Icon icon='ic:baseline-search' />
               </IconButton>
             )
@@ -101,34 +105,6 @@ const Toolbar = ({
         }}
       >
         <Box>
-          <TextField select label='By Status' size='small' value={statusFilter} onChange={handleStatusFilterChange}>
-            <MenuItem value=''>All</MenuItem>
-            <MenuItem value='1'>Active</MenuItem>
-            <MenuItem value='0'>Inactive</MenuItem>
-            <MenuItem value='2'>Pending</MenuItem>
-            <MenuItem value='3'>Archive</MenuItem>
-          </TextField>
-        </Box>
-        <Box>
-          <TextField select label='Filter By Role' size='small' value={roleFilter} onChange={handleRoleFilterChange}>
-            <MenuItem value=''>All</MenuItem>
-            <MenuItem value='admin'>Admin</MenuItem>
-            <MenuItem value='teacher'>Instructor</MenuItem>
-            <MenuItem value='student'>Student</MenuItem>
-          </TextField>
-        </Box>
-        <Box>
-          <TextField select label='Order By' size='small' value={orderFilter} onChange={handleOrderFilterChange}>
-            <MenuItem value=''>All</MenuItem>
-            <MenuItem value='newest_first'>Newest First</MenuItem>
-            <MenuItem value='newest_last'>Newest Last</MenuItem>
-            <MenuItem value='last_name_asc'>Last Name ASC</MenuItem>
-            <MenuItem value='last_name_desc'>Last Name DESC</MenuItem>
-            <MenuItem value='first_name_asc'>First Name ASC</MenuItem>
-            <MenuItem value='first_name_desc'>First Name DESC</MenuItem>
-          </TextField>
-        </Box>
-        <Box>
           <TextField
             select
             label='Action'
@@ -137,10 +113,7 @@ const Toolbar = ({
             value={selectedBulkAct}
             onChange={handleBulkAction}
           >
-            <MenuItem value='1'>Active</MenuItem>
-            <MenuItem value='0'>Inactive</MenuItem>
             <MenuItem value='delete'>Delete</MenuItem>
-            <MenuItem value='archive'>Archive</MenuItem>
           </TextField>
         </Box>
       </Grid>

@@ -11,9 +11,9 @@ import IconButton from '@mui/material/IconButton'
 import toast from 'react-hot-toast'
 
 // ** API
-import UserApi from 'src/pages/users/_components/apis'
+import MeetingApi from 'src/pages/users/_components/apis'
 
-const Toolbar = ({
+const ShareToolbar = ({
   searchTerm,
   setSearchTerm,
   setLoader,
@@ -21,7 +21,7 @@ const Toolbar = ({
   onRoleFilterChange,
   onOrderFilterChange,
   onSelectedBulkAction,
-  checkedLength,
+  checkedIds,
   onSelectedBulkDelete,
   bulkAction,
   setBulkAction
@@ -128,24 +128,9 @@ const Toolbar = ({
             <MenuItem value='first_name_desc'>First Name DESC</MenuItem>
           </TextField>
         </Box>
-        <Box>
-          <TextField
-            select
-            label='Action'
-            size='small'
-            disabled={checkedLength.length === 0}
-            value={selectedBulkAct}
-            onChange={handleBulkAction}
-          >
-            <MenuItem value='1'>Active</MenuItem>
-            <MenuItem value='0'>Inactive</MenuItem>
-            <MenuItem value='delete'>Delete</MenuItem>
-            <MenuItem value='archive'>Archive</MenuItem>
-          </TextField>
-        </Box>
       </Grid>
     </Grid>
   )
 }
 
-export default Toolbar
+export default ShareToolbar
