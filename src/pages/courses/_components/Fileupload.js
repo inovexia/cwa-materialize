@@ -5,9 +5,7 @@ import { useState } from 'react'
 import Link from 'next/link'
 
 // ** MUI Imports
-import Box from '@mui/material/Box'
-import { styled } from '@mui/material/styles'
-import Typography from '@mui/material/Typography'
+import { styled, Box, Typography } from '@mui/material'
 
 // ** Third Party Imports
 import { useDropzone } from 'react-dropzone'
@@ -72,8 +70,8 @@ const FileUploaderSingle = () => {
               width: '100%'
             }}
           >
-            <HeadingTypography variant='h5'>Drop files here or click to upload.</HeadingTypography>
-            <Typography color='textSecondary' sx={{ '& a': { color: 'primary.main', textDecoration: 'none' } }}>
+            <HeadingTypography variant='h6' sx={{ mb: 1 }}>Drop files here or click to upload.</HeadingTypography>
+            <Typography color='textSecondary' variant='p' sx={{ '& a': { color: 'primary.main', textDecoration: 'none' } }}>
               <Link href='/' onClick={e => e.preventDefault()}>
                 Browse Image
               </Link>{' '}

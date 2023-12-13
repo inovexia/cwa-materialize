@@ -2,30 +2,16 @@
 import { useState } from 'react'
 
 // ** MUI Imports
-import Drawer from '@mui/material/Drawer'
-import Select from '@mui/material/Select'
-import Button from '@mui/material/Button'
-import MenuItem from '@mui/material/MenuItem'
-import { styled } from '@mui/material/styles'
-import TextField from '@mui/material/TextField'
-import IconButton from '@mui/material/IconButton'
-import InputLabel from '@mui/material/InputLabel'
-import Typography from '@mui/material/Typography'
-import Box from '@mui/material/Box'
-import FormControl from '@mui/material/FormControl'
-import FormHelperText from '@mui/material/FormHelperText'
-import CircularProgress from '@mui/material/CircularProgress'
-import Card from '@mui/material/Card'
-import Grid from '@mui/material/Grid'
-import CardHeader from '@mui/material/CardHeader'
-import CardContent from '@mui/material/CardContent'
+import { Drawer, Select, Button, MenuItem, styled, TextField, IconButton, InputLabel, Typography, Box, FormControl, FormHelperText, CircularProgress, Card, Grid, CardHeader, CardContent, List, ListItem, ListItemIcon, ListItemText, ListItemButton, Divider } from '@mui/material'
+
 import toast from 'react-hot-toast'
 import CustomChip from 'src/@core/components/mui/chip'
+
 // ** Third Party Imports
 import * as yup from 'yup'
 import { useForm, Controller } from 'react-hook-form'
 import { yupResolver } from '@hookform/resolvers/yup'
-import Divider from '@mui/material/Divider';
+
 // ** Icon Imports
 import Icon from 'src/@core/components/icon'
 
@@ -74,35 +60,15 @@ const ViewCourse = () => {
     <Grid container spacing={6}>
       <Grid item xs={12}>
         <PageHeader
-          title={<Typography variant='h5'>Course Details</Typography>}
-          subtitle={<Typography variant='body2'>All Course Description</Typography>}
+          title={<Typography variant='h5'>English Grammer</Typography>}
+          subtitle={<Typography variant='body2'>Lorem lpsm lorem lorem</Typography>}
         />
       </Grid>
       <Grid item xs={12}>
         <Card>
           <CardContent>
             <Box sx={{
-              gap: 2,
-              display: 'flex',
-              alignItems: 'center',
-              justifyContent: 'space-between',
-            }}>
-              <Typography variant='h5'>English Grammer</Typography>
-              <CustomChip circle label='English Category' skin='light' color='error' />
-            </Box>
-            <Box sx={{
-              pt: 5,
-            }}>
-              <img
-                src="https://images.unsplash.com/photo-1502657877623-f66bf489d236?auto=format&fit=crop&w=800"
-                srcSet="https://images.unsplash.com/photo-1502657877623-f66bf489d236?auto=format&fit=crop&w=800&dpr=2 2x"
-                loading="lazy"
-                alt=""
-                style={{ width: '100%', height: '300px' }}
-              />
-            </Box>
-            <Box sx={{
-              py: 5,
+              pt: 1, pb: 4
             }}>
               <Typography variant='h6' sx={{ mb: 2 }}> Description</Typography>
               <Typography variant='p'>
@@ -113,50 +79,65 @@ const ViewCourse = () => {
             <Box sx={{
               py: 5,
             }}>
+              <img
+                src="https://images.unsplash.com/photo-1502657877623-f66bf489d236?auto=format&fit=crop&w=800"
+                srcSet="https://images.unsplash.com/photo-1502657877623-f66bf489d236?auto=format&fit=crop&w=800&dpr=2 2x"
+                loading="lazy"
+                alt=""
+                style={{ width: '100%', height: '300px' }}
+              />
+            </Box>
+            <Divider />
+            <Box sx={{
+              py: 5,
+            }}>
+              <Typography variant='h6' sx={{ mb: 2 }}>Category</Typography>
+              <CustomChip circle label='English Category' skin='light' color='error' />
+            </Box>
+            <Divider />
+            <Box sx={{
+              py: 5,
+            }}>
+              <Typography variant='h6' sx={{ mb: 2 }}>Status</Typography>
+              <CustomChip circle label='Publish' skin='light' color='error' />
+            </Box>
+            <Divider />
+            <Box sx={{
+              py: 5,
+            }}>
               <Typography variant='h6' sx={{ mb: 2 }}>By the numbers</Typography>
-              <Box sx={{ pt: 2, pb: 1 }}>
-                <Box sx={{ display: 'flex', alignItems: 'center', mb: 2.7 }}>
-                  <Typography variant='body1' sx={{ mr: 2, color: 'text.primary' }}>
-                    Subject:
-                  </Typography>
-                  <Typography variant='body2'>12</Typography>
-                </Box>
-                <Box sx={{ display: 'flex', alignItems: 'center', mb: 2.7 }}>
-                  <Typography variant='body1' sx={{ mr: 2, color: 'text.primary' }}>
-                    Lesson:
-                  </Typography>
-                  <Typography variant='body2'>12</Typography>
-                </Box>
-                <Box sx={{ display: 'flex', alignItems: 'center', mb: 2.7 }}>
-                  <Typography variant='body1' sx={{ mr: 2, color: 'text.primary' }}>
-                    Section:
-                  </Typography>
-                  <Typography variant='body2'>25</Typography>
-                </Box>
-                <Box sx={{ display: 'flex', alignItems: 'center', mb: 2.7 }}>
-                  <Typography variant='body1' sx={{ mr: 2, color: 'text.primary' }}>
-                    Created By:
-                  </Typography>
-                  <Typography variant='body2'>ASI5</Typography>
-                </Box>
-                <Box sx={{ display: 'flex', alignItems: 'center', mb: 2.7 }}>
-                  <Typography variant='body1' sx={{ mr: 2, color: 'text.primary' }}>
-                    Created On:
-                  </Typography>
-                  <Typography variant='body2'>2023-11-05</Typography>
-                </Box>
-                <Box sx={{ display: 'flex', alignItems: 'center', mb: 2.7 }}>
-                  <Typography variant='body1' sx={{ mr: 2, color: 'text.primary' }}>
-                    Status:
-                  </Typography>
-                  <CustomChip
-                    skin='light'
-                    size='small'
-                    label='Publish'
-                    color='success'
-                  />
-                </Box>
-              </Box>
+              <List component='nav' aria-label='main mailbox'>
+                <ListItem disablePadding sx={{ mb: 2 }}>
+                  <ListItemIcon>
+                    <Icon icon="solar:book-bold" fontSize={20} />
+                  </ListItemIcon>
+                  <ListItemText>Subject: 5</ListItemText>
+                </ListItem>
+                <ListItem disablePadding sx={{ mb: 2 }}>
+                  <ListItemIcon>
+                    <Icon icon="carbon:book" fontSize={20} />
+                  </ListItemIcon>
+                  <ListItemText>Lesson: 25</ListItemText>
+                </ListItem>
+                <ListItem disablePadding sx={{ mb: 2 }}>
+                  <ListItemIcon>
+                    <Icon icon="jam:book" fontSize={20} />
+                  </ListItemIcon>
+                  <ListItemText>Section: 40</ListItemText>
+                </ListItem>
+                <ListItem disablePadding sx={{ mb: 2 }}>
+                  <ListItemIcon>
+                    <Icon icon="mdi:user-outline" fontSize={20} />
+                  </ListItemIcon>
+                  <ListItemText>Created By: ASI5</ListItemText>
+                </ListItem>
+                <ListItem disablePadding sx={{ mb: 2 }}>
+                  <ListItemIcon>
+                    <Icon icon="fontisto:date" fontSize={20} />
+                  </ListItemIcon>
+                  <ListItemText>Created On: 2023-11-05</ListItemText>
+                </ListItem>
+              </List>
             </Box>
             <Divider />
           </CardContent>
