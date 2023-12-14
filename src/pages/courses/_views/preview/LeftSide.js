@@ -134,6 +134,9 @@ const LeftSide = () => {
           <Button component="label" variant="contained" color="primary" size="small" startIcon={<Icon icon="material-symbols:download" />}>
             Download
           </Button>
+          <Button component="label" variant="contained" color="success" size="small" sx={{ ml: 3 }} startIcon={<Icon icon="carbon:view" />}>
+            Preview
+          </Button>
         </Box>
         <Box sx={{ mb: 3 }}>
           <Box sx={{ mb: 3 }}>
@@ -142,9 +145,12 @@ const LeftSide = () => {
           <Button component="label" variant="contained" color="primary" size="small" startIcon={<Icon icon="material-symbols:download" />}>
             Download
           </Button>
+          <Button component="label" variant="contained" color="success" size="small" sx={{ ml: 3 }} startIcon={<Icon icon="carbon:view" />}>
+            Preview
+          </Button>
         </Box>
       </CardContent>
-    </Card>
+    </Card >
   )
 }
 

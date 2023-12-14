@@ -1,39 +1,45 @@
-import React, { useEffect, useState, useRef, useCallback } from 'react'
+// ** React Imports
+import { Fragment } from 'react'
 
 // ** MUI Imports
-import { Grid } from '@mui/material'
-import toast from 'react-hot-toast'
+import List from '@mui/material/List'
+import Divider from '@mui/material/Divider'
+import ListItem from '@mui/material/ListItem'
+import ListItemIcon from '@mui/material/ListItemIcon'
+import ListItemText from '@mui/material/ListItemText'
+import ListItemButton from '@mui/material/ListItemButton'
+
+// ** Icon Imports
 import Icon from 'src/@core/components/icon'
+import { Card, CardContent, CardHeader } from '@mui/material'
 
-// ** Module Specific Imports
+export function CardComponent(props) {
 
-import TestSetting from './manage/TestSetting'
-import EnrolmentSetting from './manage/EnrolmentSetting'
-import CourseSetting from './manage/CourseSetting'
-import SubjectSetting from './manage/SubjectSetting'
-import MeetingSetting from './manage/MeetingSetting'
-const ManageCourse = () => {
+  const { guid, CardTitle, Count, ListItems } = props
 
   return (
-    <Grid container spacing={6}>
-      <Grid item xs={12} md={6}>
-        <SubjectSetting />
-      </Grid>
-      <Grid item xs={12} md={6}>
-        <TestSetting />
-      </Grid>
-      <Grid item xs={12} md={6}>
-        <MeetingSetting />
-      </Grid>
-      <Grid item xs={12} md={6}>
-        <EnrolmentSetting />
-      </Grid>
-      <Grid item xs={12} md={6}>
-        <CourseSetting />
-      </Grid>
-
-    </Grid>
+    <Card>
+      <CardHeader
+        title={CardTitle}
+        action={Count}
+      />
+      <CardContent>
+        <Fragment>
+          <List component='nav' aria-label='main mailbox'>
+            {ListItems.length > 0 && ListItems.map((row, i) =>
+              <ListItem disablePadding key={i}>
+                <ListItemButton href={row.href}>
+                  <ListItemIcon>
+                    <Icon icon={row.icon} fontSize={20} />
+                  </ListItemIcon>
+                  <ListItemText primary={row.title} />
+                </ListItemButton>
+              </ListItem>
+            )}
+          </List>
+        </Fragment>
+      </CardContent>
+    </Card >
   )
 }
 
-export default ManageCourse
