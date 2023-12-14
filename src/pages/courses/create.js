@@ -1,24 +1,28 @@
 // ** React Imports
-import { useState } from 'react'
+import { useState, useEffect, useRef } from 'react'
 
 // ** MUI Imports
-import { Drawer, Select, Button, MenuItem, styled, TextField, IconButton, InputLabel, Typography, Box, FormControl, FormHelperText, CircularProgress, Card, Grid, CardHeader, CardContent } from '@mui/material'
-
-import toast from 'react-hot-toast'
+import { Drawer, Button, styled, TextField, IconButton, Typography } from '@mui/material'
+import Box from '@mui/material/Box'
+import FormControl from '@mui/material/FormControl'
+import FormHelperText from '@mui/material/FormHelperText'
+import LoadingButton from '@mui/lab/LoadingButton'
+import 'react-draft-wysiwyg/dist/react-draft-wysiwyg.css'
 
 // ** Third Party Imports
 import * as yup from 'yup'
+import toast from 'react-hot-toast'
 import { useForm, Controller } from 'react-hook-form'
 import { yupResolver } from '@hookform/resolvers/yup'
 
 // ** Icon Imports
 import Icon from 'src/@core/components/icon'
 
-// ** Actions Imports
-import { AddTest } from 'src/pages/tests/_models/TestModel'
-// ** Module Specific Imports
+// ** Component
+import FormEditorField from 'src/layouts/components/common/formEditorField'
 
-import FileUploaderSingle from './_components/Fileupload'
+// ** API
+import CourseApi from 'src/pages/courses/_components/Apis'
 
 const Header = styled(Box)(({ theme }) => ({
   display: 'flex',
@@ -27,40 +31,20 @@ const Header = styled(Box)(({ theme }) => ({
   justifyContent: 'space-between'
 }))
 
-const defaultValues = {
-  title: '',
-  type: '',
-  details: '',
-  category: ''
-}
-
-const showErrors = (field, valueLen, min) => {
-  if (valueLen === 0) {
-    return `${field} field is required`
-  } else if (valueLen > 0 && valueLen < min) {
-    return `${field} must be at least ${min} characters`
-  } else {
-    return ''
-  }
-}
 
 const schema = yup.object().shape({
-  title: yup.string().required().min(3),
-  type: yup.string().required(),
-  details: yup.string(),
-  category: yup.string()
+  title: yup.string(),
+  description: yup.string().required(),
+  created_by: yup.string().required()
 })
-
 
 const SidebarAddCourse = props => {
   // ** Props
-  const { open, toggle } = props
+  const { open, toggle, setReload, doReload } = props
 
   // ** State
-  const [type, setType] = useState('evaluated')
-  const [isLoading, setLoading] = useState(false)
-  const [responseMessage, setResponseMessage] = useState(false)
-
+  const [responseMessage, setResponseMessage] = useState('')
+  const [loading, setLoading] = useState(false)
   // ** Hooks
   const {
     reset,
@@ -68,126 +52,100 @@ const SidebarAddCourse = props => {
     handleSubmit,
     formState: { errors }
   } = useForm({
-    defaultValues,
+    defaultValues: {
+      title: '',
+      description: '',
+      created_by: 'ASI8'
+    },
     mode: 'onChange',
     resolver: yupResolver(schema)
   })
 
-  const onSubmit = async (data) => {
+  const handleFormSubmit = async data => {
     setLoading(true)
-    const response = await AddTest(data)
+    const response = await CourseApi.createCourse(data)
     setLoading(false)
-    if (response.success === true) {
-      toast.success(response.message)
-    } else {
-      toggle()
-      toast.error(response.message)
-    }
+    if (!response.success) return toast.success(response.message)
+    doReload(true)
+    toggle()
+    reset()
   }
-
 
   const handleClose = () => {
     toggle()
     reset()
   }
 
+  const editorRef = useRef(null)
   return (
     <Drawer
       open={open}
       anchor='right'
-      variant='temporary'
       onClose={handleClose}
-      ModalProps={{ keepMounted: true }}
       sx={{ '& .MuiDrawer-paper': { width: { xs: 300, sm: 400 } } }}
     >
       <Header>
-        <Typography variant='h6'>Add Course</Typography>
+        <Typography variant='h6'>Create Course</Typography>
         <IconButton size='small' onClick={handleClose} sx={{ color: 'text.primary' }}>
           <Icon icon='mdi:close' fontSize={20} />
         </IconButton>
       </Header>
-      <Box sx={{ p: 4 }}>
-        {responseMessage && (
-          <FormHelperText sx={{ color: 'error.main' }}>Cannot submit due to server error </FormHelperText>
-        )}
+      {responseMessage && responseMessage ? (
+        <Box sx={{ p: 4 }}>
+          {responseMessage && <FormHelperText sx={{ color: 'error.main' }}>{responseMessage}</FormHelperText>}
+        </Box>
+      ) : (
+        ''
+      )}
+      <Box sx={{ p: 5 }}>
+        <form onSubmit={handleSubmit(handleFormSubmit)}>
+          <FormControl fullWidth sx={{ mb: 6 }}>
+            <Controller
+              name='title'
+              control={control}
+              rules={{ required: true }}
+              render={({ field: { value, onChange } }) => (
+                <TextField
+                  label='Title'
+                  value={value}
+                  onChange={onChange}
+                  placeholder='Title'
+                  error={Boolean(errors.title)}
+                />
+              )}
+            />
+            {errors.title && <FormHelperText sx={{ color: 'error.main' }}>{errors.title.message}</FormHelperText>}
+          </FormControl>
+          <label
+            htmlFor='description'
+            style={{
+              fontSize: 16,
+              fontWeight: 500,
+              fontFamily: 'Arial',
+              marginBottom: '10px',
+              display: "block"
+            }}
+          >
+            Description
+          </label>
+          <FormEditorField control={control} name='description' onInit={(evt, editor) => (editorRef.current = editor)} />
+          <Box sx={{ display: 'flex', alignItems: 'center', justifyContent: 'space-between', marginTop: '30px' }}>
+            <LoadingButton
+              type='submit'
+              color='primary'
+              loading={loading}
+              loadingPosition='start'
+              startIcon={loading ? <Icon icon='eos-icons:bubble-loading' /> : ''}
+              variant='contained'
+            >
+              <span>SAVE</span>
+            </LoadingButton>
+            <Button size='large' variant='outlined' color='secondary' onClick={handleClose}>
+              Cancel
+            </Button>
+          </Box>
+        </form>
       </Box>
-      <Card sx={{ mx: 5 }}>
-        <CardContent>
-          <form onSubmit={handleSubmit(onSubmit)}>
-            <Grid container spacing={5}>
-              <Grid item xs={12}>
-                <FormControl fullWidth>
-                  <Controller
-                    name='title'
-                    control={control}
-                    rules={{ required: true }}
-                    render={({ field: { value, onChange } }) => (
-                      <TextField
-                        value={value}
-                        label='Course Title'
-                        onChange={onChange}
-                        placeholder='Course title'
-                        error={Boolean(errors.title)}
-                        aria-describedby='validation-schema-title'
-                      />
-                    )}
-                  />
-                  {errors.title && (
-                    <FormHelperText sx={{ color: 'error.main' }} id='validation-schema-title'>
-                      {errors.title.message}
-                    </FormHelperText>
-                  )}
-                </FormControl>
-              </Grid>
-              <Grid item xs={12}>
-                <FormControl fullWidth>
-                  <Controller
-                    name='details'
-                    control={control}
-                    rules={{ required: true }}
-                    render={({ field }) => (
-                      <TextField
-                        rows={4}
-                        multiline
-                        {...field}
-                        label='Course Description'
-                        error={Boolean(errors.details)}
-                        aria-describedby='validation-basic-textarea'
-                      />
-                    )}
-                  />
-                  {errors.details && (
-                    <FormHelperText sx={{ color: 'error.main' }} id='validation-basic-textarea'>
-                      This field is required
-                    </FormHelperText>
-                  )}
-                </FormControl>
-              </Grid>
-              <Grid item xs={12}>
-                <FileUploaderSingle />
-              </Grid>
-              <Grid item xs={12}>
-                <Button size='large' type='submit' variant='contained' disabled={isLoading ? true : false}>
-                  {isLoading ? (
-                    <CircularProgress
-                      sx={{
-                        color: 'common.white',
-                        width: '20px !important',
-                        height: '20px !important',
-                        mr: theme => theme.spacing(2)
-                      }}
-                    />
-                  ) : null}
-                  Submit
-                </Button>
-                <Button variant='outlined' color='secondary' size='large' href='/courses' sx={{ ml: 3 }}>
-                  Cancel
-                </Button>
-              </Grid>
-            </Grid>
-          </form>
-        </CardContent>
-      </Card>
     </Drawer>
   )
 }

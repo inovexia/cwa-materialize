@@ -145,7 +145,8 @@ const SidebarAddMeeting = props => {
               fontSize: 16,
               fontWeight: 500,
               fontFamily: 'Arial',
-              marginBottom: '10px'
+              marginBottom: '10px',
+              display: "block"
             }}
           >
             Class Details
@@ -160,7 +161,7 @@ const SidebarAddMeeting = props => {
               startIcon={loading ? <Icon icon='eos-icons:bubble-loading' /> : ''}
               variant='contained'
             >
-              <span>SUBMIT</span>
+              <span>SAVE</span>
             </LoadingButton>
             <Button size='large' variant='outlined' color='secondary' onClick={handleClose}>
               Cancel

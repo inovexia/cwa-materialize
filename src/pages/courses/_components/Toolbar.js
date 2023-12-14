@@ -8,13 +8,13 @@ import toast, { Toaster } from 'react-hot-toast'
 import { useForm, Controller } from 'react-hook-form'
 
 // ** Actions Imports
-import { listTests } from 'src/pages/tests/_models/TestModel'
+import { ListCourses } from 'src/pages/courses/_models/CourseModel'
 
 
 const Toolbar = (props) => {
 
   // ** Props
-  const { searchTerm, handleSearch, status, handleStatus, type, handleType } = props
+  const { searchTerm, handleSearch, status, handleStatus, orderBy, handleType } = props
 
   return (
     <Grid container spacing={6}>
@@ -25,7 +25,7 @@ const Toolbar = (props) => {
             label='Search'
             value={searchTerm}
             onChange={e => handleSearch(e.target.value)}
-            placeholder='Search (Title, Details)'
+            placeholder='Search (Title, Description)'
           />
         </FormControl>
       </Grid>
@@ -49,19 +49,23 @@ const Toolbar = (props) => {
       </Grid>
       <Grid item sm={4} xs={12}>
         <FormControl fullWidth>
-          <InputLabel id='type-select'>Filter By</InputLabel>
+          <InputLabel id='type-select'>Order By</InputLabel>
           <Select
             fullWidth
-            value={type}
+            value={orderBy}
             id='select-type'
-            label='Select Type'
+            label='Select Order'
             labelId='type-select'
             onChange={e => handleType(e.target.value)}
-            inputProps={{ placeholder: 'Select Type' }}
+            inputProps={{ placeholder: 'Select Order' }}
           >
-            <MenuItem value=''>Select Type</MenuItem>
-            <MenuItem value='evaluated'>Ascending</MenuItem>
-            <MenuItem value='practice'>Descending</MenuItem>
+            <MenuItem value=''>Select Order</MenuItem>
+            <MenuItem value='newest_first'>Newest First</MenuItem>
+            <MenuItem value='newest_last'>Newest Last</MenuItem>
+            <MenuItem value='last_name_asc'>Last Name ASC</MenuItem>
+            <MenuItem value='last_name_desc'>Last Name DESC</MenuItem>
+            <MenuItem value='first_name_asc'>First Name ASC</MenuItem>
+            <MenuItem value='first_name_desc'>First Name DESC</MenuItem>
           </Select>
         </FormControl>
       </Grid>
