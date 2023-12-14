@@ -7,16 +7,19 @@ import { styled } from '@mui/material/styles'
 import IconButton from '@mui/material/IconButton'
 import Typography from '@mui/material/Typography'
 import Box from '@mui/material/Box'
+import Grid from '@mui/material/Grid'
 import Card from '@mui/material/Card'
 import CardContent from '@mui/material/CardContent'
+import CardHeader from '@mui/material/CardHeader'
 import toast from 'react-hot-toast'
 import FormHelperText from '@mui/material/FormHelperText'
+import PageHeader from 'src/layouts/components/page-header'
 
 // ** Icon Imports
 import Icon from 'src/@core/components/icon'
 
 // ** Icon Imports
-import CreateTestForm from 'src/pages/tests/_views/create'
+import CreateQuestionForm from 'src/pages/qb/_views/add_question'
 
 // ** Actions Imports
 import { AddTest, GetCategories } from 'src/pages/tests/_models/TestModel'
@@ -29,7 +32,7 @@ const Header = styled(Box)(({ theme }) => ({
 }))
 
 
-const SidebarAddTest = props => {
+const Page = props => {
   // ** Props
   const { open, toggle } = props
 
@@ -67,38 +70,30 @@ const SidebarAddTest = props => {
   }
 
   return (
-    <Drawer
-      open={open}
-      anchor='right'
-      variant='temporary'
-      onClose={toggle}
-      ModalProps={{ keepMounted: true }}
-      sx={{ '& .MuiDrawer-paper': { width: { xs: 300, sm: 400 } } }}
-    >
-      <Header>
-        <Typography variant='h6'>Add Test</Typography>
-        <IconButton size='small' onClick={toggle} sx={{ color: 'text.primary' }}>
-          <Icon icon='mdi:close' fontSize={20} />
-        </IconButton>
-      </Header>
-      <Box sx={{ p: 4 }}>
-        {responseMessage && (
-          <FormHelperText sx={{ color: 'error.main' }}>Cannot submit due to server error </FormHelperText>
-        )}
-      </Box>
-      <Card>
-        <CardContent>
-          <CreateTestForm
-            onSubmit={onSubmit}
-            isLoading={isLoading}
-            toggle={toggle}
-            categories={categories}
-          />
-        </CardContent>
-      </Card>
+    <Grid container spacing={6}>
+      <Grid item xs={12}>
+        <PageHeader
+          title={<Typography variant='h5'>Manage Test</Typography>}
+          subtitle={<Typography variant='body2'></Typography>}
+        />
+      </Grid>
+      <Grid item xs={12} md={12}>
 
-    </Drawer>
+        <Card>
+          <CardContent>
+            <CreateQuestionForm
+              onSubmit={onSubmit}
+              isLoading={isLoading}
+              toggle={toggle}
+              categories={categories}
+            />
+          </CardContent>
+        </Card>
+
+      </Grid>
+    </Grid>
+
   )
 }
 
-export default SidebarAddTest
+export default Page

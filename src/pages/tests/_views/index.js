@@ -1,8 +1,9 @@
 // ** React Imports
-import React, {  useState, useCallback } from 'react'
+import React, { useState, useCallback } from 'react'
 
 // ** MUI Imports
-import { Button,
+import {
+  Button,
   Box,
   Table,
   TableRow,
@@ -32,7 +33,7 @@ import Translations from 'src/layouts/components/Translations'
 import Icon from 'src/@core/components/icon'
 
 // ** Actions Imports
-import {ChangeStatus} from 'src/pages/tests/_models/TestModel'
+import { ChangeStatus } from 'src/pages/tests/_models/TestModel'
 
 const LinkStyled = styled(Link)(({ theme }) => ({
   fontWeight: 600,
@@ -227,7 +228,7 @@ const RowOptions = ({ guid }) => {
           component={Link}
           sx={{ '& svg': { mr: 2 } }}
           onClick={handleRowOptionsClose}
-          href='/tests/manage'
+          href={`/tests/${guid}/manage`}
         >
           <Icon icon='mdi:pencil-outline' fontSize={20} />
           Manage
@@ -236,7 +237,7 @@ const RowOptions = ({ guid }) => {
           component={Link}
           sx={{ '& svg': { mr: 2 } }}
           onClick={handleRowOptionsClose}
-          href='/tests/manage'
+          href={`/tests/manage`}
         >
           <Icon icon='mdi:eye-outline' fontSize={20} />
           Preview
@@ -267,7 +268,7 @@ const EnhancedTable = (props) => {
   const [checked, setChecked] = useState(false)
 
   // ** Props
-  const {rows, responseStatus, responseMessage, meta} = props
+  const { rows, responseStatus, responseMessage, meta } = props
 
   const handleRequestSort = (event, property) => {
     const isAsc = orderBy === property && order === 'asc'
@@ -313,9 +314,9 @@ const EnhancedTable = (props) => {
 
     const response = await ChangeStatus(event.target.checked, guid)
     if (response.status) {
-      toast.success (response.message)
+      toast.success(response.message)
     } else {
-      toast.error (response.message)
+      toast.error(response.message)
     }
   })
 
@@ -328,65 +329,65 @@ const EnhancedTable = (props) => {
     <>
       <EnhancedTableToolbar numSelected={selected.length} />
 
-        <TableContainer component={Paper}>
-          <Table sx={{ minWidth: 750 }} aria-labelledby='tableTitle'>
-            <EnhancedTableHead
-              order={order}
-              orderBy={orderBy}
-              rowCount={rows.length}
-              numSelected={selected.length}
-              onRequestSort={handleRequestSort}
-              onSelectAllClick={handleSelectAllClick}
-            />
-            <TableBody>
+      <TableContainer component={Paper}>
+        <Table sx={{ minWidth: 750 }} aria-labelledby='tableTitle'>
+          <EnhancedTableHead
+            order={order}
+            orderBy={orderBy}
+            rowCount={rows.length}
+            numSelected={selected.length}
+            onRequestSort={handleRequestSort}
+            onSelectAllClick={handleSelectAllClick}
+          />
+          <TableBody>
 
-                {/* if you don't need to support IE11, you can replace the `stableSort` call with: rows.slice().sort(getComparator(order, orderBy)) */}
-                {stableSort(rows, getComparator(order, orderBy))
-                  .slice(page * rowsPerPage, page * rowsPerPage + rowsPerPage)
-                  .map((row, index) => {
-                    const isItemSelected = isSelected(row.guid)
-                    const labelId = `enhanced-table-checkbox-${index}`
+            {/* if you don't need to support IE11, you can replace the `stableSort` call with: rows.slice().sort(getComparator(order, orderBy)) */}
+            {stableSort(rows, getComparator(order, orderBy))
+              .slice(page * rowsPerPage, page * rowsPerPage + rowsPerPage)
+              .map((row, index) => {
+                const isItemSelected = isSelected(row.guid)
+                const labelId = `enhanced-table-checkbox-${index}`
 
-                    return (
-                      <TableRow
-                        hover
-                        tabIndex={-1}
-                        key={row.guid}
-                        role='checkbox'
-                        selected={isItemSelected}
-                        aria-checked={isItemSelected}
-                        onClick={event => handleClick(event, row.guid)}
-                      >
-                        <TableCell padding='checkbox'>
-                          <Checkbox checked={isItemSelected} inputProps={{ 'aria-labelledby': labelId }} />
-                        </TableCell>
-                        <TableCell component='th' id={labelId} scope='row' padding='none'>
-                          <Box sx={{ display: 'flex', alignItems: 'flex-start', flexDirection: 'column' }}>
-                            <LinkStyled href='/tests/manage'>{row.title}</LinkStyled>
-                            <Typography noWrap variant='caption'>{row.guid}</Typography>
-                          </Box>
-                        </TableCell>
-                        <TableCell >{row.details}</TableCell>
-                        <TableCell >{row.type}</TableCell>
-                        <TableCell ><Switch defaultChecked={row.status === '1' ? true : false}  onChange={event => handleChangeStatus(event, row.guid)}  /></TableCell>
-                        <TableCell><RowOptions guid={row.guid}/></TableCell>
-                      </TableRow>
-                    )
-                  })}
-                {emptyRows > 0 && (
+                return (
                   <TableRow
-                    sx={{
-                      height: 53 * emptyRows
-                    }}
+                    hover
+                    tabIndex={-1}
+                    key={row.guid}
+                    role='checkbox'
+                    selected={isItemSelected}
+                    aria-checked={isItemSelected}
+                    onClick={event => handleClick(event, row.guid)}
                   >
-                    <TableCell colSpan={6}>
-                      <Translations text={responseMessage} message='No test found' />
+                    <TableCell padding='checkbox'>
+                      <Checkbox checked={isItemSelected} inputProps={{ 'aria-labelledby': labelId }} />
                     </TableCell>
+                    <TableCell component='th' id={labelId} scope='row' padding='none'>
+                      <Box sx={{ display: 'flex', alignItems: 'flex-start', flexDirection: 'column' }}>
+                        <LinkStyled href='/tests/manage'>{row.title}</LinkStyled>
+                        <Typography noWrap variant='caption'>{row.guid}</Typography>
+                      </Box>
+                    </TableCell>
+                    <TableCell >{row.details}</TableCell>
+                    <TableCell >{row.type}</TableCell>
+                    <TableCell ><Switch defaultChecked={row.status === '1' ? true : false} onChange={event => handleChangeStatus(event, row.guid)} /></TableCell>
+                    <TableCell><RowOptions guid={row.guid} /></TableCell>
                   </TableRow>
-                )}
-            </TableBody>
-          </Table>
-        </TableContainer>
+                )
+              })}
+            {emptyRows > 0 && (
+              <TableRow
+                sx={{
+                  height: 53 * emptyRows
+                }}
+              >
+                <TableCell colSpan={6}>
+                  <Translations text={responseMessage} message='No test found' />
+                </TableCell>
+              </TableRow>
+            )}
+          </TableBody>
+        </Table>
+      </TableContainer>
       <TablePagination
         page={page}
         component='div'
