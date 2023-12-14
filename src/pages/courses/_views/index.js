@@ -34,6 +34,10 @@ import Icon from 'src/@core/components/icon'
 
 // ** Actions Imports
 import { changeStatus } from 'src/pages/courses/_models/CourseModel'
+import DeleteCourse from './deleteCourse'
+
+// APIs
+import CourseApi from 'src/pages/courses/_components/Apis'
 
 const LinkStyled = styled(Link)(({ theme }) => ({
   fontWeight: 600,
@@ -182,7 +186,7 @@ const EnhancedTableToolbar = props => {
   )
 }
 
-const RowOptions = ({ guid }) => {
+const RowOptions = ({ guid, onDelete }) => {
 
   // ** State
   const [anchorEl, setAnchorEl] = useState(null)
@@ -196,10 +200,15 @@ const RowOptions = ({ guid }) => {
     setAnchorEl(null)
   }
 
+  // New function that calls both functions
+  const handleItemClick = () => {
+    handleRowOptionsClose();
+    handleDelete();
+  };
+
   const handleDelete = () => {
-    dispatch(deleteUser(id))
-    handleRowOptionsClose()
-  }
+    onDelete(guid);
+  };
 
   return (
     <>
@@ -227,7 +236,7 @@ const RowOptions = ({ guid }) => {
           onClick={handleRowOptionsClose}
           href='/courses/manage'
         >
-          <Icon icon='mdi:pencil-outline' fontSize={20} />
+          <Icon icon='carbon:gui-management' fontSize={20} />
           Manage
         </MenuItem>
         <MenuItem
@@ -254,12 +263,12 @@ const RowOptions = ({ guid }) => {
           onClick={handleRowOptionsClose}
           href='/courses/manage'
         >
-          <Icon icon='mdi:pencil-outline' fontSize={20} />
+          <Icon icon='lets-icons:setting-line' fontSize={20} />
           Settings
         </MenuItem>
         <MenuItem
           sx={{ '& svg': { mr: 2 } }}
-          onClick={handleRowOptionsClose}
+          onClick={handleItemClick}
         >
           <Icon icon='material-symbols-light:delete' fontSize={20} />
           Delete
@@ -279,9 +288,12 @@ const EnhancedTable = (props) => {
   const [guid, setGuid] = useState('')
   const [testStatus, setTestStatus] = useState(0)
   const [checked, setChecked] = useState(false)
+  const [guidToDelete, setGuidToDelete] = useState('')
+  const [openModal, setOpenModal] = useState(false)
+  const [openArcModal, setOpenArcModal] = useState(false)
 
   // ** Props
-  const { rows, responseStatus, responseMessage, meta } = props
+  const { dataList, setDataList, responseStatus, responseMessage, meta } = props
 
   const handleRequestSort = (event, property) => {
     const isAsc = orderBy === property && order === 'asc'
@@ -291,7 +303,7 @@ const EnhancedTable = (props) => {
 
   const handleSelectAllClick = event => {
     if (event.target.checked) {
-      const newSelecteds = rows.map(n => n.guid)
+      const newSelecteds = dataList.map(n => n.guid)
       setSelected(newSelecteds)
 
       return
@@ -330,8 +342,27 @@ const EnhancedTable = (props) => {
   const isSelected = guid => selected.indexOf(guid) !== -1
 
   // Avoid a layout jump when reaching the last page with empty rows.
-  const emptyRows = page > 0 ? Math.max(0, (1 + page) * rowsPerPage - rows.length) : 0
+  const emptyRows = page > 0 ? Math.max(0, (1 + page) * rowsPerPage - dataList.length) : 0
 
+  // Close Modal
+  const handleCloseModal = () => {
+    setOpenModal(false)
+    setOpenArcModal(false)
+  }
+
+  // Delete course
+  const handleItemDeleted = async () => {
+    const updatedData = await CourseApi.getAllCourses()
+    if (!updatedData.success) return
+    setDataList(updatedData.payload.data)
+    //setMetaData(updatedData.payload.meta)
+    setOpenModal(false)
+  }
+
+  const handleDelete = (guid) => {
+    setGuidToDelete(guid);
+    setOpenModal(true);
+  };
   return (
     <>
       <EnhancedTableToolbar numSelected={selected.length} />
@@ -341,7 +372,7 @@ const EnhancedTable = (props) => {
           <EnhancedTableHead
             order={order}
             orderBy={orderBy}
-            rowCount={rows.length}
+            rowCount={dataList.length}
             numSelected={selected.length}
             onRequestSort={handleRequestSort}
             onSelectAllClick={handleSelectAllClick}
@@ -349,7 +380,7 @@ const EnhancedTable = (props) => {
           <TableBody>
 
             {/* if you don't need to support IE11, you can replace the `stableSort` call with: rows.slice().sort(getComparator(order, orderBy)) */}
-            {stableSort(rows, getComparator(order, orderBy))
+            {stableSort(dataList, getComparator(order, orderBy))
               .slice(page * rowsPerPage, page * rowsPerPage + rowsPerPage)
               .map((row, index) => {
                 const isItemSelected = isSelected(row.guid)
@@ -377,7 +408,7 @@ const EnhancedTable = (props) => {
                     <TableCell >{ReactHtmlParser(row.description)}</TableCell>
                     {/* <TableCell >{row.type}</TableCell> */}
                     <TableCell ><Switch defaultChecked={row.status === '1' ? true : false} onChange={event => handleChangeStatus(event, row.guid)} /></TableCell>
-                    <TableCell><RowOptions guid={row.guid} /></TableCell>
+                    <TableCell><RowOptions guid={row.guid} onDelete={handleDelete} /></TableCell>
                   </TableRow>
                 )
               })}
@@ -398,11 +429,17 @@ const EnhancedTable = (props) => {
       <TablePagination
         page={page}
         component='div'
-        count={rows.length}
+        count={dataList.length}
         rowsPerPage={rowsPerPage}
         onPageChange={handleChangePage}
         rowsPerPageOptions={[10, 25, 50, 100]}
         onRowsPerPageChange={handleChangeRowsPerPage}
+      />
+      <DeleteCourse
+        mdOpen={openModal}
+        handleClose={handleCloseModal}
+        guidToDelete={guidToDelete}
+        onItemDeleted={handleItemDeleted}
       />
     </>
   )

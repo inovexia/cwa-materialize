@@ -147,7 +147,8 @@ const Page = () => {
                   />
                 </CardContent>
                 <CourseList
-                  rows={dataList}
+                  dataList={dataList}
+                  setDataList={setDataList}
                   responseStatus={responseStatus}
                   responseMessage={responseMessage}
                   meta={metaData}

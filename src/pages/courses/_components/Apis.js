@@ -5,7 +5,7 @@ export default class CourseApi {
   static getAllCourses = async data => await ApiRequest('/course/list', 'GET')
 
   // Single Delete Course
-  static deleteCourse = async guidToDelete => await ApiRequest(`/course/delete/${guidToDelete}`, 'POST', guidToDelete)
+  static deleteCourse = async guidToDelete => await ApiRequest(`/course/delete/${guidToDelete}`, 'DELETE')
 
   // Update Course
   static updateCourse = async ({ id, data }) => await ApiRequest(`/course/update/${id}`, 'POST', { data })

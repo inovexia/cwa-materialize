@@ -33,6 +33,7 @@ export default function BasicTable({
   dataList,
   responseStatus,
   responseMessage,
+  setResponseMessage,
   setDataList,
   setMetaData,
   checkedIds,
@@ -106,6 +107,7 @@ export default function BasicTable({
     const match = htmlContent.match(urlPattern)
     return match ? match[0] : ''
   }
+  console.log(responseMessage)
   return (
     <>
       <TableContainer component={Paper}>
@@ -194,7 +196,7 @@ export default function BasicTable({
                         <ActionMenu
                           id={item.guid}
                           onDeleteClick={handleDeleteClick}
-                          //onArchiveClick={handleArchiveClick}
+                        //onArchiveClick={handleArchiveClick}
                         />
                       </Grid>
                     </TableCell>
@@ -204,7 +206,7 @@ export default function BasicTable({
             ) : (
               <TableRow key='none' sx={{ '&:last-child td, &:last-child th': { border: 0 } }}>
                 <TableCell colSpan='5'>
-                  <Translations text={responseMessage} message='No test found' />
+                  <Translations text={responseMessage} message='Meeting not found' />
                 </TableCell>
               </TableRow>
             )}
