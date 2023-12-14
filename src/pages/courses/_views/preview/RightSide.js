@@ -86,7 +86,7 @@ const RightSide = () => {
             </ListItem>
             <ListItem disablePadding sx={{ display: 'flex', alignItems: 'start', mb: 3 }}>
               <ListItemIcon>
-                <Icon icon="charm:circle-tick" fontSize={19} />
+                <Icon icon="material-symbols:circle-outline" fontSize={19} />
               </ListItemIcon>
               <Box sx={{ width: '100%', ml: 2 }}>
                 <ListItemText sx={{ mt: 0 }}>Vue.js is the Progressive JavaScript Framework

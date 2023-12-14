@@ -104,7 +104,7 @@ const ViewSubject = () => {
                   <ListItemIcon>
                     <Icon icon="carbon:book" fontSize={20} />
                   </ListItemIcon>
-                  <ListItemText>Lesson: 25</ListItemText>
+                  <ListItemText>Lesson: 80</ListItemText>
                 </ListItem>
                 <ListItem disablePadding sx={{ mb: 2 }}>
                   <ListItemIcon>

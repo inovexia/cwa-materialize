@@ -1,4 +1,4 @@
-import { ApiRequest } from 'src/lib/axios'
+import { ApiRequest } from 'src/lib/apis/axios'
 
 export default class AuthApi {
   static getTokenDetails = async () => await ApiRequest('/auth/token_details', 'GET')

@@ -1,3 +1,4 @@
+import { useState } from 'react'
 import Grid from '@mui/material/Grid'
 import Select from '@mui/material/Select'
 import Button from '@mui/material/Button'
@@ -7,6 +8,7 @@ import InputLabel from '@mui/material/InputLabel'
 import FormControl from '@mui/material/FormControl'
 import FormHelperText from '@mui/material/FormHelperText'
 import CircularProgress from '@mui/material/CircularProgress'
+import Repeater from 'src/@core/components/repeater'
 
 // ** Third Party Imports
 import * as yup from 'yup'
@@ -14,8 +16,7 @@ import { useForm, Controller } from 'react-hook-form'
 import { yupResolver } from '@hookform/resolvers/yup'
 
 const defaultValues = {
-  title: '',
-  type: 'evaluated',
+  question: '',
   details: '',
   category_guid: ''
 }
@@ -32,6 +33,7 @@ const schema = yup.object().shape({
 const CreateTestForm = props => {
 
   const { onSubmit, isLoading, toggle, categories } = props
+  const [count, setCount] = useState(1)
 
   // ** Hooks
   const {
@@ -50,12 +52,101 @@ const CreateTestForm = props => {
     reset()
   }
 
-  console.log(categories)
-
   return (
 
     <form onSubmit={handleSubmit(onSubmit)}>
       <Grid container spacing={5}>
+
+        <Grid item xs={12}>
+          <FormControl fullWidth sx={{ mb: 6 }}>
+            <Controller
+              name='question'
+              control={control}
+              rules={{ required: true }}
+              render={({ field }) => (
+                <TextField
+                  rows={4}
+                  multiline
+                  {...field}
+                  label='Question'
+                  error={Boolean(errors.question)}
+                  aria-describedby='validation-test-details'
+                />
+              )}
+            />
+            {errors.question && (
+              <FormHelperText sx={{ color: 'error.main' }} id='validation-question'>
+                {errors.question.message}
+              </FormHelperText>
+            )}
+          </FormControl>
+        </Grid>
+
+        <Grid item xs={12}>
+          <FormControl fullWidth sx={{ mb: 6 }}>
+            <InputLabel id='test-type'>Question Type</InputLabel>
+            <Controller
+              name='question_type'
+              control={control}
+              rules={{ required: true }}
+              render={({ field: { value, onChange } }) => (
+                <Select
+                  fullWidth
+                  value={value}
+                  defaultValue=''
+                  label='Question Type'
+                  labelId='typeLabel'
+                  onChange={onChange}
+                  error={Boolean(errors.question_type)}
+                  inputProps={{ placeholder: 'Select Type' }}
+                >
+                  <MenuItem value='evaluated'>Evaluated</MenuItem>
+                  <MenuItem value='practice'>Practice</MenuItem>
+                  <MenuItem value='quiz'>Quiz</MenuItem>
+                </Select>
+              )}
+            />
+            {errors.question_type && (
+              <FormHelperText sx={{ color: 'error.main' }} id='validation-question_type'>
+                {errors.question_type.message}
+              </FormHelperText>
+            )}
+          </FormControl>
+        </Grid>
+
+
+        <Grid item xs={12}>
+          <Repeater count={count}>
+            {i =>
+              <FormControl fullWidth sx={{ mb: 6 }} key={i}>
+                <Controller
+                  name={`choice[${i}]`}
+                  control={control}
+                  rules={{ required: true }}
+                  render={({ field }) => (
+                    <TextField
+                      rows={4}
+                      multiline
+                      {...field}
+                      label={`Choice ${i + 1}`}
+                      error={Boolean(errors.choice)}
+                      aria-describedby='validation-test-details'
+                    />
+                  )}
+                />
+                {errors.choice && (
+                  <FormHelperText sx={{ color: 'error.main' }} id='validation-choice' >
+                    {errors.choice.message}
+                  </FormHelperText>
+                )}
+              </FormControl>
+            }
+          </Repeater>
+          <Button onClick={() => setCount(count + 1)}>Add 1 More Choice</Button>
+
+        </Grid>
+
+
         <Grid item xs={12}>
           <FormControl fullWidth>
             <Controller
@@ -76,38 +167,6 @@ const CreateTestForm = props => {
             {errors.title && (
               <FormHelperText sx={{ color: 'error.main' }} id='validation-schema-title'>
                 {errors.title.message}
-              </FormHelperText>
-            )}
-          </FormControl>
-        </Grid>
-
-        <Grid item xs={12}>
-          <FormControl fullWidth sx={{ mb: 6 }}>
-            <InputLabel id='test-type'>Test Type</InputLabel>
-            <Controller
-              name='type'
-              control={control}
-              rules={{ required: true }}
-              render={({ field: { value, onChange } }) => (
-                <Select
-                  fullWidth
-                  value={value || ''}
-                  defaultValue=''
-                  label='Test Type'
-                  labelId='typeLabel'
-                  onChange={onChange}
-                  error={Boolean(errors.type)}
-                  inputProps={{ placeholder: 'Select Type' }}
-                >
-                  <MenuItem value='evaluated'>Evaluated</MenuItem>
-                  <MenuItem value='practice'>Practice</MenuItem>
-                  <MenuItem value='quiz'>Quiz</MenuItem>
-                </Select>
-              )}
-            />
-            {errors.type && (
-              <FormHelperText sx={{ color: 'error.main' }} id='validation-test-type'>
-                {errors.type.message}
               </FormHelperText>
             )}
           </FormControl>
@@ -191,7 +250,7 @@ const CreateTestForm = props => {
           </Button>
         </Grid>
       </Grid>
-    </form>
+    </form >
   )
 }
 
