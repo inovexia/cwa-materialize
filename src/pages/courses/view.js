@@ -139,11 +139,10 @@ const ViewCourse = () => {
                 </ListItem>
               </List>
             </Box>
-            <Divider />
           </CardContent>
         </Card>
       </Grid>
-    </Grid >
+    </Grid>
   )
 }
 

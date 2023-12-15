@@ -126,11 +126,10 @@ const ViewSubject = () => {
                 </ListItem>
               </List>
             </Box>
-            <Divider />
           </CardContent>
         </Card>
       </Grid>
-    </Grid >
+    </Grid>
   )
 }
 
