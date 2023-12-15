@@ -53,7 +53,7 @@ const schema = yup.object().shape({
 })
 
 
-const PreviewSubject = () => {
+const PreviewCourse = () => {
 
 
   return (
@@ -74,4 +74,4 @@ const PreviewSubject = () => {
   )
 }
 
-export default PreviewSubject
+export default PreviewCourse

@@ -9,7 +9,7 @@ import PageHeader from 'src/layouts/components/page-header'
 
 // ** Module Specific Imports
 import SubjectList from 'src/pages/courses/_views/subjects'
-import CreateSubject from 'src/pages/courses/subjects/create'
+import CreateSubject from 'src/pages/courses/[guid]/subjects/create'
 import Toolbar from 'src/pages/courses/_components/subjects/Toolbar'
 
 // ** Actions Imports
@@ -21,7 +21,7 @@ import CourseApi from 'src/pages/courses/_components/Apis'
 
 
 
-const Page = () => {
+const Enrollments = () => {
   const [currentPage, setCurrentPage] = useState('1')
   const [itemPerPage, setItemPerPage] = useState('10')
   const [checkedIds, setCheckedIds] = useState([])
@@ -168,4 +168,4 @@ const Page = () => {
   )
 }
 
-export default Page
+export default Enrollments

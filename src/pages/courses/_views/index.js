@@ -234,7 +234,7 @@ const RowOptions = ({ guid, onDelete }) => {
           component={Link}
           sx={{ '& svg': { mr: 2 } }}
           onClick={handleRowOptionsClose}
-          href='/courses/manage'
+          href={`/courses/${guid}/manage`}
         >
           <Icon icon='carbon:gui-management' fontSize={20} />
           Manage
@@ -243,7 +243,7 @@ const RowOptions = ({ guid, onDelete }) => {
           component={Link}
           sx={{ '& svg': { mr: 2 } }}
           onClick={handleRowOptionsClose}
-          href='/courses/manage'
+          href={`/courses/${guid}/preview`}
         >
           <Icon icon='mdi:eye-outline' fontSize={20} />
           Preview
@@ -252,20 +252,20 @@ const RowOptions = ({ guid, onDelete }) => {
           component={Link}
           sx={{ '& svg': { mr: 2 } }}
           onClick={handleRowOptionsClose}
-          href={`/courses/edit?id=${guid}`}
+          href={`/courses/${guid}/edit`}
         >
           <Icon icon='mdi:pencil-outline' fontSize={20} />
           Edit
         </MenuItem>
-        <MenuItem
+        {/* <MenuItem
           component={Link}
           sx={{ '& svg': { mr: 2 } }}
           onClick={handleRowOptionsClose}
-          href='/courses/manage'
+          href={`/courses/${guid}/manage`}
         >
           <Icon icon='lets-icons:setting-line' fontSize={20} />
           Settings
-        </MenuItem>
+        </MenuItem> */}
         <MenuItem
           sx={{ '& svg': { mr: 2 } }}
           onClick={handleItemClick}
@@ -401,7 +401,7 @@ const EnhancedTable = (props) => {
                     </TableCell>
                     <TableCell component='th' id={labelId} scope='row' padding='none'>
                       <Box sx={{ display: 'flex', alignItems: 'flex-start', flexDirection: 'column' }}>
-                        <LinkStyled href='/tests/manage'>{row.title}</LinkStyled>
+                        <LinkStyled href={`/courses/${row.guid}/manage`}>{row.title}</LinkStyled>
                         <Typography noWrap variant='caption'>{row.guid}</Typography>
                       </Box>
                     </TableCell>

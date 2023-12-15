@@ -14,7 +14,7 @@ import FormEditorField from 'src/layouts/components/common/formEditorField'
 
 const EditCourse = () => {
   const router = useRouter()
-  const { id } = router.query
+  const { guid } = router.query
   const {
     control,
     handleSubmit,
@@ -30,20 +30,20 @@ const EditCourse = () => {
   // ** Get Current Meeting Details
   useEffect(() => {
     const fetchData = async () => {
-      if (id) {
-        const res = await CourseApi.viewCourse(id)
+      if (guid) {
+        const res = await CourseApi.viewCourse(guid)
         reset(res.payload)
       }
     }
     fetchData()
-  }, [id])
+  }, [guid])
 
   const updateFormSubmit = async data => {
     const formData = new FormData()
     Object.entries(data).forEach(([key, value]) => {
       formData.append(key, value)
     })
-    const res = await CourseApi.updateCourse({ id, data })
+    const res = await CourseApi.updateCourse({ guid, data })
     if (res.success === true) {
       toast.success('Course updated successfully')
       setTimeout(() => {

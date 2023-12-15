@@ -3,31 +3,32 @@ import Box from '@mui/material/Box'
 import Switch from '@mui/material/Switch'
 import FormGroup from '@mui/material/FormGroup'
 import toast from 'react-hot-toast'
+import { useRouter } from 'next/router';
 
 // API
-import MeetingApi from 'src/pages/meetings/_components/apis'
+import CourseApi from 'src/pages/courses/_components/Apis'
 
-const SwitchField = ({ id, status }) => {
+const SwitchField = ({ id, status, doReload }) => {
+  const router = useRouter();
   const [switchValue, setSwitchValue] = useState(false)
 
   useEffect(() => {
-    setSwitchValue(status === '1')
+    setSwitchValue(status && status === '1')
   }, [status])
 
   const handleSwitchChange = async () => {
     setSwitchValue(prevValue => !prevValue)
     const newStatus = switchValue ? '0' : '1'
     const formData = new FormData()
-    formData.append('users[0]', id)
     formData.append('status', newStatus)
-    const res = await MeetingApi.changeStatus(formData)
+    const res = await CourseApi.statusCourse({ id, data: formData })
     if (res.success) {
       toast.success('Status changed')
+      doReload(true)
     } else {
       toast.error('Status not changed')
     }
   }
-
   return (
     <Box>
       <FormGroup row>
