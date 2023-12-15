@@ -120,6 +120,7 @@ const Page = () => {
       const res = await MeetingApi.meetingList()
       setDataList(res && res.payload.data)
       setMetaData(res && res.payload.meta)
+      setResponseMessage(res.message)
     }
     fetchData()
   }, [])
@@ -173,7 +174,6 @@ const Page = () => {
     const newSearchQuery = e.target.value
     setSearchQuery(newSearchQuery)
   }
-
   return (
     <>
       <Grid container spacing={6}>
@@ -209,6 +209,7 @@ const Page = () => {
               setCheckedIds={setCheckedIds}
               responseStatus={responseStatus}
               responseMessage={responseMessage}
+              setResponseMessage={setResponseMessage}
               loader={loader}
               dataList={dataList}
               setDataList={setDataList}
