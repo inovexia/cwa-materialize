@@ -1,24 +1,16 @@
 import API from 'src/pages/courses/_components/Apis'
 import toast from 'react-hot-toast'
 
-/** GET COURSES */
-export async function ListCourses(data) {
+/** GET SUBJECTS */
 
-  const formData = new FormData()
-  if (typeof data === "object") {
-    Object.entries(data).forEach(([key, val]) => {
-      formData.append(key, val)
-    })
-  }
-  const response = await API.filterCourse(formData)
-  var responseMessage = await responseMessages(response.message)
-  response.message = await responseMessage
-
+export async function ListSubjects(id) {
+  const response = await API.getSubjects({ id })
+  if (!response.success) return toast.error(response.message)
   return response
 }
 
 
-/** CREATE COURSE */
+/** CREATE SUBJECT */
 export async function AddTest(data) {
 
   const formData = new FormData()

@@ -37,7 +37,7 @@ export default function ActionMenu({ id, onDeleteClick, onArchiveClick }) {
             View
           </MenuItem>
         </Link>
-        <Link href={`/users/edit?id=${id}`} style={{ textDecoration: 'none', color: 'inherit' }}>
+        <Link href={`/users/${id}/edit`} style={{ textDecoration: 'none', color: 'inherit' }}>
           <MenuItem onClick={handleClose}>
             <Icon icon='tabler:edit' style={{ marginRight: '10px' }} />
             Edit
