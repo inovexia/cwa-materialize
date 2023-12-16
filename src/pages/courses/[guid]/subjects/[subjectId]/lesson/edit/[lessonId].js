@@ -12,9 +12,9 @@ import CourseApi from 'src/pages/courses/_components/Apis'
 // ** Component
 import FormEditorField from 'src/layouts/components/common/formEditorField'
 
-const EditSubject = () => {
+const EditLesson = () => {
   const router = useRouter()
-  const { id } = router.query
+  const { lessonId, subjectId } = router.query
   const {
     control,
     handleSubmit,
@@ -24,33 +24,33 @@ const EditSubject = () => {
     defaultValues: {
       title: '',
       description: '',
-      created_by: 'ASI8'
     }
   })
-  // ** Get Current Meeting Details
+  // ** Get Current lesson Details
   useEffect(() => {
     const fetchData = async () => {
-      if (id) {
-        const res = await CourseApi.viewCourse(id)
+      if (lessonId) {
+        const res = await CourseApi.previewLesson(lessonId)
         reset(res.payload)
       }
     }
     fetchData()
-  }, [id])
+  }, [lessonId])
+
 
   const updateFormSubmit = async data => {
     const formData = new FormData()
     Object.entries(data).forEach(([key, value]) => {
       formData.append(key, value)
     })
-    const res = await CourseApi.updateCourse({ id, data })
+    const res = await CourseApi.editLesson({ lessonId, data })
     if (res.success === true) {
-      toast.success('Course updated successfully')
-      setTimeout(() => {
-        router.push('/courses')
-      }, 3000)
+      toast.success('Lesson updated successfully')
+      // setTimeout(() => {
+      //   router.push(`/courses/${guid}/subjects`)
+      // }, 500)
     } else {
-      toast.error('Failed to update course')
+      toast.error('Failed to update lesson')
     }
   }
 
@@ -66,7 +66,7 @@ const EditSubject = () => {
       <Grid container spacing={6}>
         <Grid item xs={12}>
           <Card>
-            <CardHeader title='Edit Subject' />
+            <CardHeader title='Edit Lesson' />
             <CardContent>
               <form onSubmit={handleSubmit(updateFormSubmit)}>
                 <Grid container spacing={2}>
@@ -106,7 +106,7 @@ const EditSubject = () => {
                             message: 'Title should be at least 3 characters'
                           },
                           maxLength: {
-                            value: 15,
+                            value: 50,
                             message: 'Title should not exceed 15 characters'
                           }
                         }}
@@ -150,4 +150,4 @@ const EditSubject = () => {
   )
 }
 
-export default EditSubject
+export default EditLesson

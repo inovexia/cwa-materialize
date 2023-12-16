@@ -6,40 +6,52 @@ import { useRouter } from 'next/router'
 // ** MUI Imports
 import { Grid, Card, TextField, Button, Link, CardHeader, CardContent, FormControl } from '@mui/material'
 
-// ** Course API
+// ** API
 import CourseApi from 'src/pages/courses/_components/Apis'
 
 // ** Component
 import FormEditorField from 'src/layouts/components/common/formEditorField'
 
-const CreateSubject = () => {
+const EditSubject = () => {
   const router = useRouter()
-  const { guid } = router.query
+  const { guid, subjectId } = router.query
   const {
     control,
     handleSubmit,
+    reset,
     formState: { errors }
   } = useForm({
     defaultValues: {
       title: '',
-      description: ''
+      description: '',
+      created_by: 'ASI8'
     }
   })
+  // ** Get Current Meeting Details
+  useEffect(() => {
+    const fetchData = async () => {
+      if (subjectId) {
+        const res = await CourseApi.viewSubject(subjectId)
+        reset(res.payload)
+      }
+    }
+    fetchData()
+  }, [subjectId])
 
 
-  const handleFormSubmit = async data => {
+  const updateFormSubmit = async data => {
     const formData = new FormData()
     Object.entries(data).forEach(([key, value]) => {
       formData.append(key, value)
     })
-    const res = await CourseApi.createSubject({ guid, data })
+    const res = await CourseApi.editSubject({ subjectId, data })
     if (res.success === true) {
-      toast.success('Subject created successfully')
+      toast.success('Subject updated successfully')
       setTimeout(() => {
         router.push(`/courses/${guid}/subjects`)
       }, 500)
     } else {
-      toast.error('Failed to create subject')
+      toast.error('Failed to update subject')
     }
   }
 
@@ -55,9 +67,9 @@ const CreateSubject = () => {
       <Grid container spacing={6}>
         <Grid item xs={12}>
           <Card>
-            <CardHeader title='Create Subject' />
+            <CardHeader title='Edit Subject' />
             <CardContent>
-              <form onSubmit={handleSubmit(handleFormSubmit)}>
+              <form onSubmit={handleSubmit(updateFormSubmit)}>
                 <Grid container spacing={2}>
                   <FormControl fullWidth style={{ height: '0px', border: 'none', visibility: 'hidden' }}>
                     <Controller
@@ -124,9 +136,9 @@ const CreateSubject = () => {
                 </Grid>
                 <Grid container spacing={2} style={{ marginTop: '20px' }}>
                   <Button variant='contained' size='medium' type='submit' sx={{ mt: 5 }}>
-                    Create
+                    Update
                   </Button>
-                  <Button variant='contained' size='medium' component={Link} href={`/courses/${guid}/subjects`} sx={{ mt: 5, ml: 3 }}>
+                  <Button variant='outlined' size='medium' component={Link} href='/meetings' sx={{ mt: 5, ml: 3 }}>
                     Cancel
                   </Button>
                 </Grid>
@@ -139,4 +151,4 @@ const CreateSubject = () => {
   )
 }
 
-export default CreateSubject
+export default EditSubject

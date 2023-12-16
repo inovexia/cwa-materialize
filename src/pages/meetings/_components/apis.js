@@ -1,4 +1,4 @@
-import { ApiRequest } from 'src/lib/axios'
+import { ApiRequest } from 'src/lib/apis/axios'
 
 export default class MeetingApi {
   // Get All Users

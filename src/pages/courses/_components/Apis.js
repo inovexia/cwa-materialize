@@ -33,4 +33,25 @@ export default class CourseApi {
 
   // Get All Enrolled Users
   static enrolledUsers = async ({ guid, data }) => await ApiRequest(`/course/enrolments/${guid}`, 'POST', { data })
+
+  // Create Subject
+  static createSubject = async ({ guid, data }) => await ApiRequest(`/course/${guid}/subject/create`, 'POST', { data })
+
+  // View Subject
+  static viewSubject = async subjectId => await ApiRequest(`/course/subject/${subjectId}/view`, 'POST')
+
+  // Edit Subject
+  static editSubject = async ({ subjectId, data }) => await ApiRequest(`/course/subject/${subjectId}/edit`, 'POST', { data })
+
+  // Delete Subject
+  static deleteSubject = async subjectId => await ApiRequest(`/course/subject/${subjectId}/delete`, 'DELETE')
+
+  // Create Lesson
+  static createLesson = async ({ subjectId, data }) => await ApiRequest(`/course/subject/${subjectId}/lesson/create`, 'POST', { data })
+
+  // Edit Lesson
+  static previewLesson = async lessonId => await ApiRequest(`/course/lesson/${lessonId}/preview`, 'POST')
+
+  // Edit Lesson
+  static editLesson = async ({ lessonId, data }) => await ApiRequest(`/course/lesson/${lessonId}/edit`, 'POST', { data })
 }
