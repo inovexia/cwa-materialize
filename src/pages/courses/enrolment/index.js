@@ -8,9 +8,9 @@ import toast from 'react-hot-toast'
 import PageHeader from 'src/layouts/components/page-header'
 
 // ** Module Specific Imports
-import LessonsList from 'src/pages/courses/_views/outline/lessons'
-import CreateLesson from 'src/pages/courses/lessons/create'
-import Toolbar from 'src/pages/courses/_components/Outline/subjects/Toolbar'
+import EnrolList from 'src/pages/courses/_views/outline/enrolment'
+import CreateEnrol from 'src/pages/courses/lessons/create'
+import Toolbar from 'src/pages/courses/_components/Outline/enrolment/Toolbar'
 
 // ** Actions Imports
 import { ListCourses } from 'src/pages/courses/_models/CourseModel'
@@ -122,10 +122,10 @@ const Page = () => {
       <Grid container spacing={6}>
         <Grid item xs={12}>
           <PageHeader
-            title={<Typography variant='h5'>Lessons</Typography>}
-            subtitle={<Typography variant='body2'>List all Lessons</Typography>}
+            title={<Typography variant='h5'>Enrolment</Typography>}
+            subtitle={<Typography variant='body2'>List all Enrolment</Typography>}
             toggleDrawer={toggleCreateDrawer}
-            buttonTitle='Add Lessons'
+            buttonTitle='Add Enrolment'
             setReload={setReload}
             doReload={doReload}
           />
@@ -146,7 +146,7 @@ const Page = () => {
                     handleType={handleType}
                   />
                 </CardContent>
-                <LessonsList
+                <EnrolList
                   rows={dataList}
                   responseStatus={responseStatus}
                   responseMessage={responseMessage}
@@ -157,7 +157,7 @@ const Page = () => {
           </Card>
         </Grid>
       </Grid>
-      <CreateLesson
+      <CreateEnrol
         open={drawerOpen}
         toggle={toggleCreateDrawer}
         setReload={setReload}

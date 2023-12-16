@@ -8,9 +8,9 @@ import toast from 'react-hot-toast'
 import PageHeader from 'src/layouts/components/page-header'
 
 // ** Module Specific Imports
-import LessonsList from 'src/pages/courses/_views/outline/lessons'
-import CreateLesson from 'src/pages/courses/lessons/create'
-import Toolbar from 'src/pages/courses/_components/Outline/subjects/Toolbar'
+import SectionList from 'src/pages/courses/_views/outline/sections'
+import CreateSection from 'src/pages/courses/sections/create'
+import Toolbar from 'src/pages/courses/_components/Outline/sections/Toolbar'
 
 // ** Actions Imports
 import { ListCourses } from 'src/pages/courses/_models/CourseModel'
@@ -122,13 +122,14 @@ const Page = () => {
       <Grid container spacing={6}>
         <Grid item xs={12}>
           <PageHeader
-            title={<Typography variant='h5'>Lessons</Typography>}
-            subtitle={<Typography variant='body2'>List all Lessons</Typography>}
+            title={<Typography variant='h5'>Sections</Typography>}
+            subtitle={<Typography variant='body2'>List all Sections</Typography>}
             toggleDrawer={toggleCreateDrawer}
-            buttonTitle='Add Lessons'
+            buttonTitle='Add Section'
             setReload={setReload}
             doReload={doReload}
           />
+
           <Card style={{ marginTop: "20px" }}>
             {isLoading ?
               (
@@ -146,7 +147,7 @@ const Page = () => {
                     handleType={handleType}
                   />
                 </CardContent>
-                <LessonsList
+                <SectionList
                   rows={dataList}
                   responseStatus={responseStatus}
                   responseMessage={responseMessage}
@@ -157,7 +158,7 @@ const Page = () => {
           </Card>
         </Grid>
       </Grid>
-      <CreateLesson
+      <CreateSection
         open={drawerOpen}
         toggle={toggleCreateDrawer}
         setReload={setReload}

@@ -18,8 +18,7 @@ import { AddTest } from 'src/pages/tests/_models/TestModel'
 
 // ** Component Imports
 import PageHeader from 'src/layouts/components/page-header'
-import RightSide from '../_views/outline/lessons/preview/RightSide'
-import LeftSide from '../_views/outline/lessons/preview/LeftSide'
+import PreviewSection from '../_views/outline/sections/preview'
 
 const Header = styled(Box)(({ theme }) => ({
   display: 'flex',
@@ -53,25 +52,22 @@ const schema = yup.object().shape({
 })
 
 
-const PreviewLesson = () => {
+const SectionPreview = () => {
 
 
   return (
     <Grid container spacing={6}>
       <Grid item xs={12}>
         <PageHeader
-          title={<Typography variant='h5'>Preview Lesson</Typography>}
+          title={<Typography variant='h5'>Preview Subject</Typography>}
           subtitle={<Typography variant='body2'>All Subject Description</Typography>}
         />
       </Grid>
-      <Grid item xs={12} md={8.5}>
-        <LeftSide />
-      </Grid>
-      <Grid item xs={12} md={3.5}>
-        <RightSide />
+      <Grid item xs={12}>
+        <PreviewSection />
       </Grid>
     </Grid >
   )
 }
 
-export default PreviewLesson
+export default SectionPreview

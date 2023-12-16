@@ -52,7 +52,7 @@ const schema = yup.object().shape({
 })
 
 
-const LeftSide = () => {
+const SectionContent = () => {
 
 
   return (
@@ -154,4 +154,4 @@ const LeftSide = () => {
   )
 }
 
-export default LeftSide
+export default SectionContent

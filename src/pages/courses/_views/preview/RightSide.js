@@ -20,6 +20,7 @@ import { AddTest } from 'src/pages/tests/_models/TestModel'
 
 // ** Component Imports
 import PageHeader from 'src/layouts/components/page-header'
+import SidebarSectionList from '../SidebarSectionList'
 
 
 const Header = styled(Box)(({ theme }) => ({
@@ -73,38 +74,7 @@ const RightSide = () => {
           <Typography>Lesson 1</Typography>
         </AccordionSummary>
         <AccordionDetails>
-          <List component='nav' aria-label='main mailbox'>
-            <ListItem disablePadding sx={{ display: 'flex', alignItems: 'start', mb: 3 }}>
-              <ListItemIcon>
-                <Icon icon="charm:circle-tick" fontSize={19} />
-              </ListItemIcon>
-              <Box sx={{ width: '100%', ml: 2 }}>
-                <ListItemText sx={{ mt: 0 }}>Vue.js is the Progressive JavaScript Framework
-                </ListItemText>
-                <LinearProgress color='success' value={85} sx={{ height: 3, mt: 2 }} variant='determinate' />
-              </Box>
-            </ListItem>
-            <ListItem disablePadding sx={{ display: 'flex', alignItems: 'start', mb: 3 }}>
-              <ListItemIcon>
-                <Icon icon="material-symbols:circle-outline" fontSize={19} />
-              </ListItemIcon>
-              <Box sx={{ width: '100%', ml: 2 }}>
-                <ListItemText sx={{ mt: 0 }}>Vue.js is the Progressive JavaScript Framework
-                </ListItemText>
-                <LinearProgress color='warning' value={55} sx={{ height: 3, mt: 2 }} variant='determinate' />
-              </Box>
-            </ListItem>
-            <ListItem disablePadding sx={{ display: 'flex', alignItems: 'start', mb: 3 }}>
-              <ListItemIcon>
-                <Icon icon="charm:circle-tick" fontSize={19} />
-              </ListItemIcon>
-              <Box sx={{ width: '100%', ml: 2 }}>
-                <ListItemText sx={{ mt: 0 }}>Vue.js is the Progressive JavaScript Framework
-                </ListItemText>
-                <LinearProgress color='error' value={15} sx={{ height: 3, mt: 2 }} variant='determinate' />
-              </Box>
-            </ListItem>
-          </List>
+          <SidebarSectionList />
         </AccordionDetails>
       </Accordion>
 
@@ -117,10 +87,7 @@ const RightSide = () => {
           <Typography>Lesson 2</Typography>
         </AccordionSummary>
         <AccordionDetails>
-          <Typography>
-            Sugar plum sesame snaps caramels. Cake pie tart fruitcake sesame snaps donut cupcake macaroon. Gingerbread
-            pudding cheesecake pie ice cream.
-          </Typography>
+          <SidebarSectionList />
         </AccordionDetails>
       </Accordion>
 
@@ -133,10 +100,7 @@ const RightSide = () => {
           <Typography>Lesson 3</Typography>
         </AccordionSummary>
         <AccordionDetails>
-          <Typography>
-            Gingerbread lemon drops bear claw gummi bears bonbon wafer jujubes tiramisu. Jelly pie cake. Sweet roll
-            dessert sweet pastry powder.
-          </Typography>
+          <SidebarSectionList />
         </AccordionDetails>
       </Accordion>
     </div>
