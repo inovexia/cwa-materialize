@@ -5,7 +5,7 @@ import Button from '@mui/material/Button'
 
 const PageHeader = props => {
   // ** Props
-  const { title, subtitle, toggleDrawer, buttonTitle } = props
+  const { title, subtitle, toggleDrawer, buttonTitle, buttonHref } = props
 
   return (
     <Box sx={{ width: '100%', display: 'flex', alignItems: 'left', justifyContent: 'space-between' }}>
@@ -13,9 +13,16 @@ const PageHeader = props => {
         {title}
         {subtitle || null}
       </Box>
-      {buttonTitle && (
+      {toggleDrawer && (
         <Box className='actions-right' sx={{ display: 'flex', alignItems: 'center' }}>
           <Button sx={{ mb: 2 }} onClick={toggleDrawer} variant='contained'>
+            {buttonTitle}
+          </Button>
+        </Box>
+      )}
+      {buttonHref && (
+        <Box className='actions-right' sx={{ display: 'flex', alignItems: 'center' }}>
+          <Button sx={{ mb: 2 }} href={buttonHref} variant='contained'>
             {buttonTitle}
           </Button>
         </Box>
