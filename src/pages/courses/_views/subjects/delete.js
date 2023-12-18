@@ -1,9 +1,9 @@
 import React from 'react'
 
-const delete = () => {
+const Delete = () => {
   return (
     <div>delete</div>
   )
 }
 
-export default delete
+export default Delete
