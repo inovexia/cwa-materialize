@@ -8,12 +8,32 @@ const navigation = () => {
     {
       title: 'Question Bank',
       path: '/qb',
-      icon: 'ri:question-line'
+      icon: 'ri:question-line',
+      children: [
+        {
+          title: 'All Questions',
+          path: '/qb'
+        },
+        {
+          title: 'Create Question',
+          path: '/qb/create_question'
+        }
+      ]
     },
     {
       title: 'Tests',
       path: '/tests',
-      icon: 'material-symbols:quiz-outline'
+      icon: 'material-symbols:quiz-outline',
+      children: [
+        {
+          title: 'All Tests',
+          path: '/tests'
+        },
+        {
+          title: 'Create Test',
+          path: '/qb/create_test'
+        }
+      ]
     },
     {
       title: 'Courses',

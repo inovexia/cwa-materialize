@@ -1,19 +1,20 @@
 import React, { useEffect, useState, useCallback } from 'react'
 
 // ** MUI Imports
-import { Grid, Card, CardHeader, CardContent, Button, Box, Link, Typography, CircularProgress } from '@mui/material'
+import { Grid, Card, CardHeader, CardContent, Button, Box, Link, Typography, CircularProgress, Divider } from '@mui/material'
 import toast from 'react-hot-toast'
 
 // ** Component Imports
 import PageHeader from 'src/layouts/components/page-header'
 
 // ** Module Specific Imports
-import TestList from 'src/pages/tests/_views'
-import CreateTest from 'src/pages/tests/create_test'
-import Toolbar from 'src/pages/tests/_components/Toolbar'
+import SingleQuestion from 'src/pages/qb/_views/singleQuestion'
+
+//import CreateQuestion from 'src/pages/qb/create'
+import Toolbar from 'src/pages/qb/_components/Toolbar'
 
 // ** Actions Imports
-import { ListTests } from 'src/pages/tests/_models/TestModel'
+import { ListQuestions } from 'src/pages/qb/_models/QuestionModel'
 
 
 const Page = () => {
@@ -40,7 +41,7 @@ const Page = () => {
     if (type !== "")
       data['test_type'] = type
 
-    const response = await ListTests(data)
+    const response = await ListQuestions(data)
 
     return response
   }, [])
@@ -56,7 +57,7 @@ const Page = () => {
           toast.error(response.message)
         }
       })
-  }, [getTests, searchTerm, status, type, isLoading])
+  }, [getTests, searchTerm, status, type])
 
 
   /** HANDLE SEARCH */
@@ -82,10 +83,10 @@ const Page = () => {
       <Grid container spacing={6}>
         <Grid item xs={12}>
           <PageHeader
-            title={<Typography variant='h5'>Tests</Typography>}
-            subtitle={<Typography variant='body2'>List all tests</Typography>}
-            toggleDrawer={toggleCreateDrawer}
-            buttonTitle='Add Test'
+            title={<Typography variant='h5'>Question Bank</Typography>}
+            subtitle={<Typography variant='body2'>List All Questions</Typography>}
+            buttonTitle='Add Question'
+            buttonHref='/qb/create_question'
           />
           <Card>
             {isLoading ?
@@ -101,20 +102,30 @@ const Page = () => {
                     handleType={handleType}
                   />
                 </CardContent>
-                <TestList
-                  rows={dataList}
-                  responseStatus={responseStatus}
-                  responseMessage={responseMessage}
-                  meta={metaData}
-                />
+                <Card>
+                  <CardContent>
+                    {dataList && dataList.length > 0 && dataList.map((row, i) =>
+                    (
+                      <>
+                        <SingleQuestion
+                          key={i}
+                          count={i + 1}
+                          question={row}
+                          responseStatus={responseStatus}
+                          responseMessage={responseMessage}
+                          meta={metaData}
+                        />
+                        <Divider />
+                      </>
+                    )
+                    )}
+                  </CardContent>
+                </Card>
+
               </form>)}
           </Card>
         </Grid>
       </Grid>
-      <CreateTest
-        open={drawerOpen}
-        toggle={toggleCreateDrawer}
-      />
     </>
   )
 }

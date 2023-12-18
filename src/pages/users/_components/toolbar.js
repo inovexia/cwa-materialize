@@ -12,10 +12,9 @@ import toast from 'react-hot-toast'
 
 // ** API
 import UserApi from 'src/pages/users/_components/apis'
+import { useUserContextApi, useUserContextData } from '../_context/UserContext'
 
 const Toolbar = ({
-  searchTerm,
-  setSearchTerm,
   setLoader,
   onStatusFilterChange,
   onRoleFilterChange,
@@ -30,6 +29,8 @@ const Toolbar = ({
   const [roleFilter, setRoleFilter] = useState('')
   const [orderFilter, setOrderFilter] = useState('')
   const [selectedBulkAct, setSelectedBulkAct] = useState('')
+  const { searchTerm } = useUserContextData()
+  const { setSearchTerm } = useUserContextApi()
 
   const handleSearchButtonClick = () => {
     handleSearch()
@@ -61,6 +62,7 @@ const Toolbar = ({
     const selectedAction = event.target.value
     setBulkAction(selectedAction) // Pass the selected bulk action to the parent
   }
+
   return (
     <Grid container spacing={6}>
       <Grid
