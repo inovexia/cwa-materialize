@@ -89,12 +89,12 @@ const headCells = [
     disablePadding: false,
     label: 'Start Date'
   },
-  // {
-  //   id: 'enddate',
-  //   numeric: false,
-  //   disablePadding: false,
-  //   label: 'End Date'
-  // },
+  {
+    id: 'enddate',
+    numeric: false,
+    disablePadding: false,
+    label: 'End Date'
+  },
   {
     id: 'status',
     numeric: false,
@@ -227,7 +227,7 @@ const RowOptions = ({ guid }) => {
         }}
         PaperProps={{ style: { minWidth: '8rem' } }}
       >
-        <MenuItem
+        {/* <MenuItem
           component={Link}
           sx={{ '& svg': { mr: 2 } }}
           onClick={handleRowOptionsClose}
@@ -235,8 +235,8 @@ const RowOptions = ({ guid }) => {
         >
           <Icon icon='mdi:pencil-outline' fontSize={20} />
           Manage
-        </MenuItem>
-        <MenuItem
+        </MenuItem> */}
+        {/* <MenuItem
           component={Link}
           sx={{ '& svg': { mr: 2 } }}
           onClick={handleRowOptionsClose}
@@ -244,7 +244,7 @@ const RowOptions = ({ guid }) => {
         >
           <Icon icon='mdi:eye-outline' fontSize={20} />
           Preview
-        </MenuItem>
+        </MenuItem> */}
         <MenuItem
           component={Link}
           sx={{ '& svg': { mr: 2 } }}
@@ -254,7 +254,7 @@ const RowOptions = ({ guid }) => {
           <Icon icon='mdi:pencil-outline' fontSize={20} />
           Edit
         </MenuItem>
-        <MenuItem
+        {/* <MenuItem
           component={Link}
           sx={{ '& svg': { mr: 2 } }}
           onClick={handleRowOptionsClose}
@@ -262,7 +262,7 @@ const RowOptions = ({ guid }) => {
         >
           <Icon icon='mdi:pencil-outline' fontSize={20} />
           Settings
-        </MenuItem>
+        </MenuItem> */}
         <MenuItem
           sx={{ '& svg': { mr: 2 } }}
           onClick={handleRowOptionsClose}
@@ -380,8 +380,8 @@ const EnhancedTable = (props) => {
                         <Typography noWrap variant='caption'>{row.guid}</Typography>
                       </Box>
                     </TableCell>
-                    <TableCell >Start Date</TableCell>
-                    <TableCell >End Date</TableCell>
+                    <TableCell >25 Dec 2023</TableCell>
+                    <TableCell >30 Dec 2023</TableCell>
                     {/* <TableCell >{row.type}</TableCell> */}
                     <TableCell ><Switch defaultChecked={row.status === '1' ? true : false} onChange={event => handleChangeStatus(event, row.guid)} /></TableCell>
                     <TableCell><RowOptions guid={row.guid} /></TableCell>

@@ -9,7 +9,7 @@ import PageHeader from 'src/layouts/components/page-header'
 
 // ** Module Specific Imports
 import EnrolList from 'src/pages/courses/_views/outline/enrolment'
-import CreateEnrol from 'src/pages/courses/lessons/create'
+
 import Toolbar from 'src/pages/courses/_components/Outline/enrolment/Toolbar'
 
 // ** Actions Imports
@@ -124,8 +124,9 @@ const Page = () => {
           <PageHeader
             title={<Typography variant='h5'>Enrolment</Typography>}
             subtitle={<Typography variant='body2'>List all Enrolment</Typography>}
-            toggleDrawer={toggleCreateDrawer}
-            buttonTitle='Add Enrolment'
+            buttonHref='./create'
+            // toggleDrawer={toggleCreateDrawer}
+            buttonTitle='Add All Enrolment'
             setReload={setReload}
             doReload={doReload}
           />
@@ -146,24 +147,24 @@ const Page = () => {
                     handleType={handleType}
                   />
                 </CardContent>
-                <EnrolList
+                {/* <EnrolList
                   rows={dataList}
                   responseStatus={responseStatus}
                   responseMessage={responseMessage}
                   meta={metaData}
                   doReload={doReload}
-                />
+                /> */}
               </form>)}
           </Card>
         </Grid>
       </Grid>
-      <CreateEnrol
+      {/* <CreateEnrol
         open={drawerOpen}
         toggle={toggleCreateDrawer}
         setReload={setReload}
         reload={reload}
         doReload={doReload}
-      />
+      /> */}
     </>
   )
 }
