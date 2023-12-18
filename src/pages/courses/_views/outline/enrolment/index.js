@@ -20,20 +20,20 @@ import {
   Tooltip,
   Checkbox,
   Switch,
-  Menu, MenuItem
+  Menu, MenuItem, styled
 } from '@mui/material'
 import { visuallyHidden } from '@mui/utils'
 import { alpha } from '@mui/material/styles'
-import toast from 'react-hot-toast'
 import Link from 'next/link'
-import { styled } from '@mui/material/styles'
+import ReactHtmlParser from 'react-html-parser'
+
 import Translations from 'src/layouts/components/Translations'
 
 // ** Icon Imports
 import Icon from 'src/@core/components/icon'
 
 // ** Actions Imports
-import { ChangeStatus } from 'src/pages/tests/_models/TestModel'
+import { changeStatus } from 'src/pages/courses/_models/CourseModel'
 
 const LinkStyled = styled(Link)(({ theme }) => ({
   fontWeight: 600,
@@ -84,16 +84,16 @@ const headCells = [
     label: 'Title'
   },
   {
-    id: 'details',
+    id: 'startdate',
     numeric: false,
     disablePadding: false,
-    label: 'Details'
+    label: 'Start Date'
   },
   {
-    id: 'type',
+    id: 'enddate',
     numeric: false,
     disablePadding: false,
-    label: 'Type'
+    label: 'End Date'
   },
   {
     id: 'status',
@@ -159,29 +159,32 @@ const EnhancedTableToolbar = props => {
   const { numSelected } = props
 
   return (
-    <Toolbar
-      sx={{
-        px: theme => `${theme.spacing(5)} !important`,
-        ...(numSelected > 0 && {
-          bgcolor: theme => alpha(theme.palette.primary.main, theme.palette.action.activatedOpacity)
-        })
-      }}
-    >
-      {numSelected > 0 ? (
-        <Typography sx={{ flex: '1 1 100%' }} color='inherit' variant='subtitle1' component='div'>
-          {numSelected} selected
-        </Typography>
-      ) : (
-        ''
-      )}
-      {numSelected > 0 ? (
-        <Tooltip title='Delete'>
-          <IconButton sx={{ color: 'text.secondary' }}>
-            <Icon icon='mdi:delete-outline' />
-          </IconButton>
-        </Tooltip>
-      ) : null}
-    </Toolbar>
+    numSelected !== 0 ?
+      <Toolbar
+        sx={{
+          px: theme => `${theme.spacing(5)} !important`,
+          ...(numSelected > 0 && {
+            bgcolor: theme => alpha(theme.palette.primary.main, theme.palette.action.activatedOpacity)
+          })
+        }}
+      >
+        {numSelected > 0 ? (
+          <Typography sx={{ flex: '1 1 100%' }} color='inherit' variant='subtitle1' component='div'>
+            {numSelected} selected
+          </Typography>
+        ) : (
+          ''
+        )}
+        {numSelected > 0 ? (
+          <Tooltip title='Delete'>
+            <IconButton sx={{ color: 'text.secondary' }}>
+              <Icon icon='mdi:delete-outline' />
+            </IconButton>
+          </Tooltip>
+        ) : null}
+      </Toolbar>
+      : ""
+
   )
 }
 
@@ -224,32 +227,48 @@ const RowOptions = ({ guid }) => {
         }}
         PaperProps={{ style: { minWidth: '8rem' } }}
       >
-        <MenuItem
+        {/* <MenuItem
           component={Link}
           sx={{ '& svg': { mr: 2 } }}
           onClick={handleRowOptionsClose}
-          href={`/tests/${guid}/manage`}
+          href='/courses/manage'
         >
           <Icon icon='mdi:pencil-outline' fontSize={20} />
           Manage
-        </MenuItem>
-        <MenuItem
+        </MenuItem> */}
+        {/* <MenuItem
           component={Link}
           sx={{ '& svg': { mr: 2 } }}
           onClick={handleRowOptionsClose}
-          href={`/tests/manage`}
+          href='/courses/manage'
         >
           <Icon icon='mdi:eye-outline' fontSize={20} />
           Preview
-        </MenuItem>
+        </MenuItem> */}
         <MenuItem
           component={Link}
           sx={{ '& svg': { mr: 2 } }}
           onClick={handleRowOptionsClose}
-          href='/tests/manage'
+          href={`/courses/edit?id=${guid}`}
+        >
+          <Icon icon='mdi:pencil-outline' fontSize={20} />
+          Edit
+        </MenuItem>
+        {/* <MenuItem
+          component={Link}
+          sx={{ '& svg': { mr: 2 } }}
+          onClick={handleRowOptionsClose}
+          href='/courses/manage'
         >
           <Icon icon='mdi:pencil-outline' fontSize={20} />
           Settings
+        </MenuItem> */}
+        <MenuItem
+          sx={{ '& svg': { mr: 2 } }}
+          onClick={handleRowOptionsClose}
+        >
+          <Icon icon='material-symbols-light:delete' fontSize={20} />
+          Delete
         </MenuItem>
       </Menu>
     </>
@@ -260,7 +279,7 @@ const EnhancedTable = (props) => {
   // ** States
   const [page, setPage] = useState(0)
   const [order, setOrder] = useState('asc')
-  const [rowsPerPage, setRowsPerPage] = useState(5)
+  const [rowsPerPage, setRowsPerPage] = useState('10')
   const [orderBy, setOrderBy] = useState('calories')
   const [selected, setSelected] = useState([])
   const [guid, setGuid] = useState('')
@@ -310,14 +329,8 @@ const EnhancedTable = (props) => {
     setPage(0)
   }
 
-  const handleChangeStatus = (async (event, guid) => {
-
-    const response = await ChangeStatus(event.target.checked, guid)
-    if (response.status) {
-      toast.success(response.message)
-    } else {
-      toast.error(response.message)
-    }
+  const handleChangeStatus = (async (event, id) => {
+    const response = await changeStatus(event.target.checked, id)
   })
 
   const isSelected = guid => selected.indexOf(guid) !== -1
@@ -363,12 +376,13 @@ const EnhancedTable = (props) => {
                     </TableCell>
                     <TableCell component='th' id={labelId} scope='row' padding='none'>
                       <Box sx={{ display: 'flex', alignItems: 'flex-start', flexDirection: 'column' }}>
-                        <LinkStyled href={`/tests/${guid}/manage`}>{row.title}</LinkStyled>
+                        <LinkStyled href='/tests/manage'>{row.title}</LinkStyled>
                         <Typography noWrap variant='caption'>{row.guid}</Typography>
                       </Box>
                     </TableCell>
-                    <TableCell >{row.details}</TableCell>
-                    <TableCell >{row.type}</TableCell>
+                    <TableCell >25 Dec 2023</TableCell>
+                    <TableCell >30 Dec 2023</TableCell>
+                    {/* <TableCell >{row.type}</TableCell> */}
                     <TableCell ><Switch defaultChecked={row.status === '1' ? true : false} onChange={event => handleChangeStatus(event, row.guid)} /></TableCell>
                     <TableCell><RowOptions guid={row.guid} /></TableCell>
                   </TableRow>
@@ -394,7 +408,7 @@ const EnhancedTable = (props) => {
         count={rows.length}
         rowsPerPage={rowsPerPage}
         onPageChange={handleChangePage}
-        rowsPerPageOptions={[5, 10, 25, 50, 100]}
+        rowsPerPageOptions={[10, 25, 50, 100]}
         onRowsPerPageChange={handleChangeRowsPerPage}
       />
     </>

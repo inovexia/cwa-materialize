@@ -24,6 +24,7 @@ import Toolbar from 'src/pages/users/_components/toolbar'
 // ** Actions Imports
 //import { fetchData, deleteUser } from 'src/pages/tests/_models/index'
 import Pagination from 'src/pages/users/_components/pagination'
+import UserContextProvider, { useUserContextData } from './_context/UserContext'
 
 // ** renders client column
 
@@ -119,6 +120,8 @@ const Page = () => {
       setCheckedIds([...checkedIds, userId])
     }
   }
+
+
   //  Bulk activate user
   const handleSelectedBulkAction = async selectedBulkAct => {
     setLoader(true)
@@ -188,7 +191,8 @@ const Page = () => {
   }, [handleBulkAction, bulkAction, checkedIds])
 
   return (
-    <>
+    <UserContextProvider>
+      <UserContent />
       <Grid container spacing={6}>
         <Grid item xs={12}>
           <PageHeader
@@ -204,11 +208,12 @@ const Page = () => {
                 checkedIds={checkedIds}
                 setCheckedIds={setCheckedIds}
                 setSearchTerm={setSearchTerm}
-                searchTerm={searchTerm}
-                setLoader={setLoader}
+/*                 searchTerm={searchTerm}
+ */                setLoader={setLoader}
                 onStatusFilterChange={setStatusFilter}
                 onRoleFilterChange={setRoleFilter}
                 onOrderFilterChange={setOrderFilter}
+
                 //onSelectedBulkAction={setBulkAction}
                 checkedLength={checkedIds}
                 bulkAction={bulkAction}
@@ -237,8 +242,14 @@ const Page = () => {
         </Grid>
       </Grid>
       <CreateUser open={drawerOpen} toggle={toggleCreateDrawer} setReload={setReload} />
-    </>
+    </UserContextProvider>
   )
+}
+
+const UserContent = () => {
+  const { searchTerm } = useUserContextData()
+
+  return <div>'Hello'</div>
 }
 
 export default Page

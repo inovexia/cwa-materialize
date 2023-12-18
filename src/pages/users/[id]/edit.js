@@ -26,6 +26,7 @@ import AuthApi from 'src/configs/commonConfig'
 const EditUser = () => {
   const router = useRouter()
   const { id } = router.query
+
   const {
     control,
     register,

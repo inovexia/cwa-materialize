@@ -8,9 +8,9 @@ import toast from 'react-hot-toast'
 import PageHeader from 'src/layouts/components/page-header'
 
 // ** Module Specific Imports
-import LessonsList from 'src/pages/courses/_views/outline/lessons'
-import CreateLesson from 'src/pages/courses/lessons/create'
-import Toolbar from 'src/pages/courses/_components/Outline/subjects/Toolbar'
+import EnrolList from 'src/pages/courses/_views/outline/enrolment'
+
+import Toolbar from 'src/pages/courses/_components/Outline/enrolment/Toolbar'
 
 // ** Actions Imports
 import { ListCourses } from 'src/pages/courses/_models/CourseModel'
@@ -122,10 +122,11 @@ const Page = () => {
       <Grid container spacing={6}>
         <Grid item xs={12}>
           <PageHeader
-            title={<Typography variant='h5'>Lessons</Typography>}
-            subtitle={<Typography variant='body2'>List all Lessons</Typography>}
-            toggleDrawer={toggleCreateDrawer}
-            buttonTitle='Add Lessons'
+            title={<Typography variant='h5'>Enrolment</Typography>}
+            subtitle={<Typography variant='body2'>List all Enrolment</Typography>}
+            buttonHref='./create'
+            // toggleDrawer={toggleCreateDrawer}
+            buttonTitle='Add All Enrolment'
             setReload={setReload}
             doReload={doReload}
           />
@@ -146,24 +147,24 @@ const Page = () => {
                     handleType={handleType}
                   />
                 </CardContent>
-                <LessonsList
+                {/* <EnrolList
                   rows={dataList}
                   responseStatus={responseStatus}
                   responseMessage={responseMessage}
                   meta={metaData}
                   doReload={doReload}
-                />
+                /> */}
               </form>)}
           </Card>
         </Grid>
       </Grid>
-      <CreateLesson
+      {/* <CreateEnrol
         open={drawerOpen}
         toggle={toggleCreateDrawer}
         setReload={setReload}
         reload={reload}
         doReload={doReload}
-      />
+      /> */}
     </>
   )
 }
