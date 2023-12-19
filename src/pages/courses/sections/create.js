@@ -1,9 +1,9 @@
 // ** React Imports
-import { useState, useEffect, useRef } from 'react'
+import React, { useEffect, useState, useRef } from 'react'
 
+import { useRouter } from 'next/router'
 // ** MUI Imports
-import { Drawer, Button, styled, TextField, IconButton, Typography } from '@mui/material'
-import Box from '@mui/material/Box'
+import { Grid, Card, Fragment, Link, ListItemButton, Box, List, CardHeader, ListItem, ListItemIcon, ListItemText, Drawer, Button, styled, TextField, IconButton, Typography, CardContent } from '@mui/material'
 import FormControl from '@mui/material/FormControl'
 import FormHelperText from '@mui/material/FormHelperText'
 import LoadingButton from '@mui/lab/LoadingButton'
@@ -24,117 +24,287 @@ import FormEditorField from 'src/layouts/components/common/formEditorField'
 // ** API
 import CourseApi from 'src/pages/courses/_components/Apis'
 
-const Header = styled(Box)(({ theme }) => ({
-  display: 'flex',
-  alignItems: 'center',
-  padding: theme.spacing(3, 4),
-  justifyContent: 'space-between'
-}))
+// ** Component Imports
+import PageHeader from 'src/layouts/components/page-header'
 
-
-const schema = yup.object().shape({
-  title: yup.string(),
-  description: yup.string().required(),
-  created_by: yup.string().required()
-})
 
 const SidebarAddSection = props => {
-  // ** Props
-  const { open, toggle, setReload, doReload } = props
-
-  // ** State
-  const [responseMessage, setResponseMessage] = useState('')
-  const [loading, setLoading] = useState(false)
-  // ** Hooks
+  const router = useRouter()
+  const { id } = router.query
   const {
-    reset,
     control,
     handleSubmit,
+    reset,
     formState: { errors }
   } = useForm({
     defaultValues: {
       title: '',
       description: '',
       created_by: 'ASI8'
-    },
-    mode: 'onChange',
-    resolver: yupResolver(schema)
+    }
   })
+  // ** Get Current Meeting Details
+  useEffect(() => {
+    const fetchData = async () => {
+      if (id) {
+        const res = await CourseApi.viewCourse(id)
+        reset(res.payload)
+      }
+    }
+    fetchData()
+  }, [id])
 
-  const handleFormSubmit = async data => {
-    setLoading(true)
-    const response = await CourseApi.createCourse(data)
-    setLoading(false)
-    if (!response.success) return toast.success(response.message)
-    doReload(true)
-    toggle()
-    reset()
-  }
-
-  const handleClose = () => {
-    toggle()
-    reset()
+  const updateFormSubmit = async data => {
+    const formData = new FormData()
+    Object.entries(data).forEach(([key, value]) => {
+      formData.append(key, value)
+    })
+    const res = await CourseApi.updateCourse({ id, data })
+    if (res.success === true) {
+      toast.success('Course updated successfully')
+      setTimeout(() => {
+        router.push('/courses')
+      }, 3000)
+    } else {
+      toast.error('Failed to update course')
+    }
   }
 
   const editorRef = useRef(null)
+  const log = () => {
+    if (editorRef.current) {
+      console.log(editorRef.current.getContent())
+    }
+  }
+
   return (
     <>
-      <Drawer
-        open={open}
-        anchor='right'
-        onClose={handleClose}
-        sx={{ '& .MuiDrawer-paper': { width: { xs: 300, sm: 400 } } }}
-      >
-        <Header>
-          <Typography variant='h6'>Create Section</Typography>
-          <IconButton size='small' onClick={handleClose} sx={{ color: 'text.primary' }}>
-            <Icon icon='mdi:close' fontSize={20} />
-          </IconButton>
-        </Header>
-        {responseMessage && responseMessage ? (
-          <Box sx={{ p: 4 }}>
-            {responseMessage && <FormHelperText sx={{ color: 'error.main' }}>{responseMessage}</FormHelperText>}
-          </Box>
-        ) : (
-          ''
-        )}
-        <Box sx={{ p: 5 }}>
-          <form onSubmit={handleSubmit(handleFormSubmit)}>
-            <FormControl fullWidth sx={{ mb: 6 }}>
-              <Controller
-                name='title'
-                control={control}
-                rules={{ required: true }}
-                render={({ field: { value, onChange } }) => (
-                  <TextField
-                    label='Title'
-                    value={value}
-                    onChange={onChange}
-                    placeholder='Title'
-                    error={Boolean(errors.title)}
-                  />
-                )}
-              />
-              {errors.title && <FormHelperText sx={{ color: 'error.main' }}>{errors.title.message}</FormHelperText>}
-            </FormControl>
-            <Box sx={{ display: 'flex', alignItems: 'center', justifyContent: 'space-between', marginTop: '30px' }}>
-              <LoadingButton
-                type='submit'
-                color='primary'
-                loading={loading}
-                loadingPosition='start'
-                startIcon={loading ? <Icon icon='eos-icons:bubble-loading' /> : ''}
-                variant='contained'
-              >
-                <span>SAVE</span>
-              </LoadingButton>
-              <Button size='large' variant='outlined' color='secondary' onClick={handleClose}>
-                Cancel
-              </Button>
-            </Box>
-          </form>
-        </Box>
-      </Drawer>
+      <Grid container spacing={6}>
+        <Grid item xs={12}>
+          <PageHeader
+            title={<Typography variant='h5'>Create Content</Typography>}
+            subtitle={<Typography variant='body2'>All Subject Description</Typography>}
+          />
+        </Grid>
+      </Grid>
+      <Grid container spacing={6} sx={{ mt: 2 }}>
+        <Grid item xs={12} md={8.5}>
+          <Card>
+            <CardContent>
+              <form onSubmit={handleSubmit(updateFormSubmit)}>
+                <Grid container spacing={2}>
+                  <FormControl fullWidth style={{ height: '0px', border: 'none', visibility: 'hidden' }}>
+                    <Controller
+                      style={{ height: '0px', border: 'none' }}
+                      render={({ field }) => (
+                        <TextField
+                          {...field}
+                          style={{ height: '0px', border: 'none' }}
+                          type='hidden'
+                          variant='outlined'
+                        />
+                      )}
+                      control={control}
+                      name='created_by'
+                    />
+                  </FormControl>
+                  <Grid item xs={12} sx={{ mt: 3 }}>
+                    <FormControl fullWidth>
+                      <Controller
+                        render={({ field }) => (
+                          <TextField
+                            {...field}
+                            label='Title'
+                            variant='outlined'
+                            error={!!errors.title}
+                            helperText={errors.title && 'First name must be between 3 and 15 characters'}
+                          />
+                        )}
+                        control={control}
+                        name='title'
+                        rules={{
+                          required: 'Title is required',
+                          minLength: {
+                            value: 3,
+                            message: 'Title should be at least 3 characters'
+                          },
+                          maxLength: {
+                            value: 15,
+                            message: 'Title should not exceed 15 characters'
+                          }
+                        }}
+                      />
+                    </FormControl>
+                  </Grid>
+                  <Grid item xs={12} sx={{ mt: 3 }}>
+                    <label
+                      htmlFor='description'
+                      style={{
+                        fontSize: 16,
+                        fontWeight: 500,
+                        fontFamily: 'Arial',
+                        marginBottom: '10px',
+                        display: "block"
+                      }}
+                    >
+                      Description
+                    </label>
+                    <FormEditorField
+                      control={control}
+                      name='description'
+                      onInit={(evt, editor) => (editorRef.current = editor)}
+                    />
+                  </Grid>
+                </Grid>
+                <Grid container spacing={2} style={{ marginTop: '20px' }}>
+                  <Button variant='contained' size='medium' type='submit' sx={{ mt: 5 }}>
+                    Update
+                  </Button>
+                  <Button variant='outlined' size='medium' component={Link} href='/meetings' sx={{ mt: 5, ml: 3 }}>
+                    Cancel
+                  </Button>
+                </Grid>
+              </form>
+            </CardContent>
+          </Card>
+        </Grid>
+        <Grid item xs={12} md={3.5}>
+          <Card>
+            <CardHeader title='Toolbar' />
+            <CardContent>
+              <Grid container spacing={1} sx={{ justifyContent: 'center' }}>
+                <Grid item xs={6}>
+                  <Button
+                    variant='text'
+                    className='no-radius'
+                    //onClick={handleAddEditorField}
+                    onClick={() => addContentBlock('Text')}
+                    sx={{ display: 'block', width: '100%' }}
+                  >
+                    <Icon icon="gala:editor" />
+                    <Typography
+                      variant='body2'
+                      sx={{
+                        width: '100%',
+                        display: 'block',
+                        textAlign: 'center',
+                      }}
+                    >
+                      HTML Code
+                    </Typography>
+                  </Button>
+                </Grid>
+                <Grid item xs={6}>
+                  <Button
+                    variant='text'
+                    className='no-radius'
+                    //onClick={handleAddMediaField}
+                    onClick={() => addContentBlock('Image')}
+                    sx={{ display: 'block', width: '100%' }}
+                  >
+                    <Icon icon="ph:image" />
+                    <Typography
+                      variant='body2'
+                      sx={{
+                        width: '100%',
+                        display: 'block',
+                        textAlign: 'center',
+                      }}
+                    >
+                      Image
+                    </Typography>
+                  </Button>
+                </Grid>
+                <Grid item xs={6}>
+                  <Button
+                    variant='text'
+                    className='no-radius'
+                    //onClick={handleAddMediaField}
+                    onClick={() => addContentBlock('Video')}
+                    sx={{ display: 'block', width: '100%', backgroundColor: 'backgroundColor' }}
+                  >
+                    <Icon icon="ph:video-bold" />
+                    <Typography
+                      variant='body2'
+                      sx={{
+                        width: '100%',
+                        display: 'block',
+                        textAlign: 'center',
+                      }}
+                    >
+                      Video
+                    </Typography>
+                  </Button>
+                </Grid>
+                <Grid item xs={6}>
+                  <Button
+                    variant='text'
+                    className='no-radius'
+                    //onClick={handleAddMediaField}
+                    onClick={() => addContentBlock('File')}
+                    sx={{ display: 'block', width: '100%' }}
+                  >
+                    <Icon icon="mingcute:pdf-line" />
+                    <Typography
+                      variant='body2'
+                      sx={{
+                        width: '100%',
+                        display: 'block',
+                        textAlign: 'center',
+                      }}
+                    >
+                      PDF
+                    </Typography>
+                  </Button>
+                </Grid>
+                <Grid item xs={6}>
+                  <Button
+                    variant='text'
+                    className='no-radius'
+                    //onClick={handleAddUrlField}
+                    onClick={() => addContentBlock('Link')}
+                    sx={{ display: 'block', width: '100%' }}
+
+                  >
+                    <Icon icon="material-symbols:link" />
+                    <Typography
+                      variant='body2'
+                      sx={{
+                        width: '100%',
+                        display: 'block',
+                        textAlign: 'center',
+                      }}
+                    >
+                      URL
+                    </Typography>
+                  </Button>
+                </Grid>
+                <Grid item xs={6}>
+                  <Button
+                    variant='text'
+                    className='no-radius'
+                    //onClick={handleAddUrlField}
+                    onClick={() => addContentBlock('YoutubeLink')}
+                    sx={{ display: 'block', width: '100%' }}
+                  >
+                    <Icon icon="ant-design:youtube-outlined" />
+                    <Typography
+                      variant='body2'
+                      sx={{
+                        width: '100%',
+                        display: 'block',
+                        textAlign: 'center',
+                      }}
+                    >
+                      Youtube URL
+                    </Typography>
+                  </Button>
+                </Grid>
+              </Grid>
+            </CardContent>
+          </Card>
+        </Grid>
+      </Grid >
     </>
   )
 }

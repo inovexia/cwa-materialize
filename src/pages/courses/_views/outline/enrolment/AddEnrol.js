@@ -84,29 +84,29 @@ const headCells = [
     label: 'Title'
   },
   {
-    id: 'startdate',
+    id: 'useremail',
     numeric: false,
     disablePadding: false,
-    label: 'Start Date'
+    label: 'User Email'
   },
   {
-    id: 'enddate',
+    id: 'userphone',
     numeric: false,
     disablePadding: false,
-    label: 'End Date'
+    label: 'User Phone No.'
+  },
+  {
+    id: 'status',
+    numeric: false,
+    disablePadding: false,
+    label: 'Status'
   },
   // {
-  //   id: 'status',
+  //   id: 'actions',
   //   numeric: false,
   //   disablePadding: false,
-  //   label: 'Status'
-  // },
-  {
-    id: 'actions',
-    numeric: false,
-    disablePadding: false,
-    label: 'Actions'
-  }
+  //   label: 'Actions'
+  // }
 ]
 
 function EnhancedTableHead(props) {
@@ -380,10 +380,14 @@ const EnhancedTable = (props) => {
                         <Typography noWrap variant='caption'>{row.guid}</Typography>
                       </Box>
                     </TableCell>
-                    <TableCell >25 Dec 2023</TableCell>
-                    <TableCell >30 Dec 2023</TableCell>
-                    {/* <TableCell >{row.type}</TableCell> */}
-                    {/* <TableCell ><Switch defaultChecked={row.status === '1' ? true : false} onChange={event => handleChangeStatus(event, row.guid)} /></TableCell> */}
+                    <TableCell >
+                      <Box sx={{ display: 'flex', alignItems: 'flex-start', flexDirection: 'column' }}>
+                        <Typography variant='body1'>ash@gmail.com</Typography>
+                      </Box>
+                    </TableCell>
+                    <TableCell >
+                      <Typography variant='body2'>+91 9766488525</Typography>
+                    </TableCell>
                     <TableCell><RowOptions guid={row.guid} /></TableCell>
                   </TableRow>
                 )
