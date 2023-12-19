@@ -8,6 +8,7 @@ import ListItem from '@mui/material/ListItem'
 import ListItemIcon from '@mui/material/ListItemIcon'
 import ListItemText from '@mui/material/ListItemText'
 import ListItemButton from '@mui/material/ListItemButton'
+import NextLink from 'next/link'
 
 // ** Icon Imports
 import Icon from 'src/@core/components/icon'
@@ -31,7 +32,7 @@ export function CardComponent(props) {
           <List component='nav' aria-label='main mailbox'>
             {ListItems.length > 0 && ListItems.map((row, i) =>
               <ListItem disablePadding key={i}>
-                {row.href && row.href !== "" ? (<ListItemButton href={row.href}>
+                {row.href && row.href !== "" ? (<ListItemButton href={row.href} component={NextLink}>
                   <ListItemIcon>
                     <Icon icon={row.icon} fontSize={20} />
                   </ListItemIcon>

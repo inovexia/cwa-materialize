@@ -1,5 +1,6 @@
 import { useState } from 'react'
-import { Menu, MenuItem, Link, IconButton } from '@mui/material'
+import { Menu, MenuItem, IconButton } from '@mui/material'
+import NextLink from 'next/link'
 
 import Icon from 'src/@core/components/icon'
 
@@ -15,34 +16,25 @@ export default function ActionMenu({ id, onDeleteClick, onArchiveClick }) {
 
   return (
     <div>
-      <IconButton
-        id='basic-button'
-        aria-controls={open ? 'basic-menu' : undefined}
-        aria-haspopup='true'
-        aria-expanded={open ? 'true' : undefined}
-        onClick={handleClick}
-      >
+      <IconButton onClick={handleClick}>
         <Icon icon='pepicons-pop:dots-y' />
       </IconButton>
       <Menu
-        anchorEl={anchorEl}
         open={open}
+        anchorEl={anchorEl}
         onClose={handleClose}
+        onClick={handleClose}
         anchorOrigin={{ vertical: 'top', horizontal: 'right' }}
         transformOrigin={{ vertical: 'top', horizontal: 'right' }}
       >
-        <Link href={`/users/${id}`} style={{ textDecoration: 'none', color: 'inherit' }}>
-          <MenuItem onClick={handleClose}>
-            <Icon icon='carbon:view' style={{ marginRight: '10px' }} />
-            View
-          </MenuItem>
-        </Link>
-        <Link href={`/users/${id}/edit`} style={{ textDecoration: 'none', color: 'inherit' }}>
-          <MenuItem onClick={handleClose}>
-            <Icon icon='tabler:edit' style={{ marginRight: '10px' }} />
-            Edit
-          </MenuItem>
-        </Link>
+        <MenuItem href={`/users/${id}`} style={{ textDecoration: 'none', color: 'inherit' }} component={NextLink}>
+          <Icon icon='carbon:view' style={{ marginRight: '10px' }} />
+          View
+        </MenuItem>
+        <MenuItem href={`/users/${id}/edit`} style={{ textDecoration: 'none', color: 'inherit' }} component={NextLink}>
+          <Icon icon='tabler:edit' style={{ marginRight: '10px' }} />
+          Edit
+        </MenuItem>
         <MenuItem onClick={() => onDeleteClick(id, handleClose)}>
           <Icon icon='mdi:delete-outline' style={{ marginRight: '10px' }} />
           Delete

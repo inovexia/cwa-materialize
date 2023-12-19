@@ -3,8 +3,8 @@ import toast from 'react-hot-toast'
 
 /** GET SUBJECTS */
 
-export async function ListSubjects(id) {
-  const response = await API.getSubjects({ id })
+export async function ListSubjects(guid) {
+  const response = await API.getSubjects(guid)
   if (!response.success) return toast.error(response.message)
   return response
 }

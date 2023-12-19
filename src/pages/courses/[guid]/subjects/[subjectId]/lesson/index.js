@@ -3,14 +3,15 @@ import React, { useEffect, useState, useRef, useCallback } from 'react'
 // ** MUI Imports
 import { Grid, Card, CardHeader, CardContent, Button, Box, Link, Typography, CircularProgress } from '@mui/material'
 import toast from 'react-hot-toast'
+import { useRouter } from 'next/router'
 
 // ** Component Imports
 import PageHeader from 'src/layouts/components/page-header'
 
 // ** Module Specific Imports
-import CourseList from 'src/pages/courses/_views'
-import CreateTest from 'src/pages/courses/create'
-import Toolbar from 'src/pages/courses/_components/Toolbar'
+import SubjectList from 'src/pages/courses/_views/subjects'
+import CreateLesson from 'src/pages/courses/[guid]/subjects/[subjectId]/lesson/createDrawer'
+import Toolbar from 'src/pages/courses/_components/subjects/Toolbar'
 
 // ** Actions Imports
 import { ListCourses } from 'src/pages/courses/_models/CourseModel'
@@ -22,6 +23,8 @@ import CourseApi from 'src/pages/courses/_components/Apis'
 
 
 const Page = () => {
+  const router = useRouter()
+  const { subjectId } = router.query
   const [currentPage, setCurrentPage] = useState('1')
   const [itemPerPage, setItemPerPage] = useState('10')
   const [checkedIds, setCheckedIds] = useState([])
@@ -68,7 +71,7 @@ const Page = () => {
   }, [handleFiltersChange])
 
 
-  /** GET ALL COURSES */
+  /** GET ALL TESTS */
   const getCourses = useCallback(async (searchTerm, status, orderBy) => {
     const data = {
     }
@@ -122,10 +125,10 @@ const Page = () => {
       <Grid container spacing={6}>
         <Grid item xs={12}>
           <PageHeader
-            title={<Typography variant='h5'>Courses</Typography>}
-            subtitle={<Typography variant='body2'>List all Courses</Typography>}
+            title={<Typography variant='h5'>Lessons</Typography>}
+            subtitle={<Typography variant='body2'>List all Lessons</Typography>}
             toggleDrawer={toggleCreateDrawer}
-            buttonTitle='Add Course'
+            buttonTitle='Add Lesson'
             setReload={setReload}
             doReload={doReload}
           />
@@ -146,9 +149,8 @@ const Page = () => {
                     handleType={handleType}
                   />
                 </CardContent>
-                <CourseList
-                  dataList={dataList}
-                  setDataList={setDataList}
+                <SubjectList
+                  rows={dataList}
                   responseStatus={responseStatus}
                   responseMessage={responseMessage}
                   meta={metaData}
@@ -158,12 +160,13 @@ const Page = () => {
           </Card>
         </Grid>
       </Grid>
-      <CreateTest
+      <CreateLesson
         open={drawerOpen}
         toggle={toggleCreateDrawer}
         setReload={setReload}
         reload={reload}
         doReload={doReload}
+        subjectId={subjectId}
       />
     </>
   )
