@@ -34,10 +34,6 @@ import Icon from 'src/@core/components/icon'
 
 // ** Actions Imports
 import { changeStatus } from 'src/pages/courses/_models/CourseModel'
-import DeleteCourse from './deleteCourse'
-
-// APIs
-import CourseApi from 'src/pages/courses/_components/Apis'
 
 const LinkStyled = styled(Link)(({ theme }) => ({
   fontWeight: 600,
@@ -82,29 +78,41 @@ function stableSort(array, comparator) {
 
 const headCells = [
   {
-    id: 'title',
+    id: 'username',
     numeric: false,
     disablePadding: true,
-    label: 'Title'
+    label: 'User Name'
   },
   {
-    id: 'description',
+    id: 'useremail',
     numeric: false,
     disablePadding: false,
-    label: 'Description'
+    label: 'User Email'
   },
   {
-    id: 'status',
+    id: 'userphone',
     numeric: false,
     disablePadding: false,
-    label: 'Status'
+    label: 'User Phone No.'
   },
-  {
-    id: 'actions',
-    numeric: false,
-    disablePadding: false,
-    label: 'Actions'
-  }
+  // {
+  //   id: 'userid',
+  //   numeric: false,
+  //   disablePadding: true,
+  //   label: 'User ID'
+  // }
+  // {
+  //   id: 'status',
+  //   numeric: false,
+  //   disablePadding: false,
+  //   label: 'Status'
+  // },
+  // {
+  //   id: 'actions',
+  //   numeric: false,
+  //   disablePadding: false,
+  //   label: 'Actions'
+  // }
 ]
 
 function EnhancedTableHead(props) {
@@ -174,11 +182,14 @@ const EnhancedTableToolbar = props => {
           ''
         )}
         {numSelected > 0 ? (
-          <Tooltip title='Delete'>
-            <IconButton sx={{ color: 'text.secondary' }}>
-              <Icon icon='mdi:delete-outline' />
-            </IconButton>
-          </Tooltip>
+          <>
+            <Tooltip title='Delete'>
+              <IconButton sx={{ color: 'text.secondary' }}>
+                <Icon icon='mdi:user' fontSize={20} />
+              </IconButton>
+            </Tooltip>
+          </>
+
         ) : null}
       </Toolbar>
       : ""
@@ -186,14 +197,13 @@ const EnhancedTableToolbar = props => {
   )
 }
 
-const RowOptions = ({ guid, onDelete }) => {
+const RowOptions = ({ guid }) => {
 
   // ** State
   const [anchorEl, setAnchorEl] = useState(null)
   const rowOptionsOpen = Boolean(anchorEl)
 
   const handleRowOptionsClick = event => {
-    event.stopPropagation()
     setAnchorEl(event.currentTarget)
   }
 
@@ -201,19 +211,14 @@ const RowOptions = ({ guid, onDelete }) => {
     setAnchorEl(null)
   }
 
-  // New function that calls both functions
-  const handleItemClick = () => {
-    handleRowOptionsClose();
-    handleDelete();
-  };
-
   const handleDelete = () => {
-    onDelete(guid);
-  };
+    dispatch(deleteUser(id))
+    handleRowOptionsClose()
+  }
 
   return (
     <>
-      <IconButton size='small' onClick={handleRowOptionsClick} >
+      <IconButton size='small' onClick={handleRowOptionsClick}>
         <Icon icon='mdi:dots-vertical' />
       </IconButton>
       <Menu
@@ -231,29 +236,29 @@ const RowOptions = ({ guid, onDelete }) => {
         }}
         PaperProps={{ style: { minWidth: '8rem' } }}
       >
-        <MenuItem
+        {/* <MenuItem
           component={Link}
           sx={{ '& svg': { mr: 2 } }}
           onClick={handleRowOptionsClose}
-          href={`/courses/${guid}/manage`}
+          href='/courses/manage'
         >
-          <Icon icon='carbon:gui-management' fontSize={20} />
+          <Icon icon='mdi:pencil-outline' fontSize={20} />
           Manage
-        </MenuItem>
-        <MenuItem
+        </MenuItem> */}
+        {/* <MenuItem
           component={Link}
           sx={{ '& svg': { mr: 2 } }}
           onClick={handleRowOptionsClose}
-          href={`/courses/view/${guid}`}
+          href='/courses/manage'
         >
           <Icon icon='mdi:eye-outline' fontSize={20} />
           Preview
-        </MenuItem>
+        </MenuItem> */}
         <MenuItem
           component={Link}
           sx={{ '& svg': { mr: 2 } }}
           onClick={handleRowOptionsClose}
-          href={`/courses/${guid}/edit`}
+          href={`/courses/edit?id=${guid}`}
         >
           <Icon icon='mdi:pencil-outline' fontSize={20} />
           Edit
@@ -262,14 +267,14 @@ const RowOptions = ({ guid, onDelete }) => {
           component={Link}
           sx={{ '& svg': { mr: 2 } }}
           onClick={handleRowOptionsClose}
-          href={`/courses/${guid}/manage`}
+          href='/courses/manage'
         >
-          <Icon icon='lets-icons:setting-line' fontSize={20} />
+          <Icon icon='mdi:pencil-outline' fontSize={20} />
           Settings
         </MenuItem> */}
         <MenuItem
           sx={{ '& svg': { mr: 2 } }}
-          onClick={handleItemClick}
+          onClick={handleRowOptionsClose}
         >
           <Icon icon='material-symbols-light:delete' fontSize={20} />
           Delete
@@ -289,12 +294,9 @@ const EnhancedTable = (props) => {
   const [guid, setGuid] = useState('')
   const [testStatus, setTestStatus] = useState(0)
   const [checked, setChecked] = useState(false)
-  const [guidToDelete, setGuidToDelete] = useState('')
-  const [openModal, setOpenModal] = useState(false)
-  const [openArcModal, setOpenArcModal] = useState(false)
 
   // ** Props
-  const { dataList, setDataList, responseStatus, responseMessage, meta } = props
+  const { rows, responseStatus, responseMessage, meta } = props
 
   const handleRequestSort = (event, property) => {
     const isAsc = orderBy === property && order === 'asc'
@@ -304,7 +306,7 @@ const EnhancedTable = (props) => {
 
   const handleSelectAllClick = event => {
     if (event.target.checked) {
-      const newSelecteds = dataList.map(n => n.guid)
+      const newSelecteds = rows.map(n => n.guid)
       setSelected(newSelecteds)
 
       return
@@ -343,28 +345,7 @@ const EnhancedTable = (props) => {
   const isSelected = guid => selected.indexOf(guid) !== -1
 
   // Avoid a layout jump when reaching the last page with empty rows.
-  const emptyRows = page > 0 ? Math.max(0, (1 + page) * rowsPerPage - dataList.length) : 0
-
-  // Close Modal
-  const handleCloseModal = () => {
-    setOpenModal(false)
-    setOpenArcModal(false)
-  }
-
-  // Delete course
-  const handleItemDeleted = async () => {
-    const updatedData = await CourseApi.getAllCourses()
-    if (!updatedData.success) return
-    setDataList(updatedData.payload.data)
-
-    //setMetaData(updatedData.payload.meta)
-    setOpenModal(false)
-  }
-
-  const handleDelete = (guid) => {
-    setGuidToDelete(guid);
-    setOpenModal(true);
-  };
+  const emptyRows = page > 0 ? Math.max(0, (1 + page) * rowsPerPage - rows.length) : 0
 
   return (
     <>
@@ -375,7 +356,7 @@ const EnhancedTable = (props) => {
           <EnhancedTableHead
             order={order}
             orderBy={orderBy}
-            rowCount={dataList.length}
+            rowCount={rows.length}
             numSelected={selected.length}
             onRequestSort={handleRequestSort}
             onSelectAllClick={handleSelectAllClick}
@@ -383,7 +364,7 @@ const EnhancedTable = (props) => {
           <TableBody>
 
             {/* if you don't need to support IE11, you can replace the `stableSort` call with: rows.slice().sort(getComparator(order, orderBy)) */}
-            {stableSort(dataList, getComparator(order, orderBy))
+            {stableSort(rows, getComparator(order, orderBy))
               .slice(page * rowsPerPage, page * rowsPerPage + rowsPerPage)
               .map((row, index) => {
                 const isItemSelected = isSelected(row.guid)
@@ -404,16 +385,20 @@ const EnhancedTable = (props) => {
                     </TableCell>
                     <TableCell component='th' id={labelId} scope='row' padding='none'>
                       <Box sx={{ display: 'flex', alignItems: 'flex-start', flexDirection: 'column' }}>
-                        <LinkStyled href={`/courses/view/${row.guid}`}>{row.title}</LinkStyled>
-                        <Typography noWrap variant='caption'>{row.guid}</Typography>
+                        <LinkStyled href='/tests/manage'>{row.title}</LinkStyled>
+                        <Typography variant='body2'>{row.guid}</Typography>
                       </Box>
                     </TableCell>
-                    <TableCell >{ReactHtmlParser(row.description)}</TableCell>
-                    {/* <TableCell >{row.type}</TableCell> */}
+
                     <TableCell >
-                      <Switch defaultChecked={row.status === '1' ? true : false} onChange={event => { handleChangeStatus(event, row.guid) }} onClick={e => { e.stopPropagation() }} />
+                      <Box sx={{ display: 'flex', alignItems: 'flex-start', flexDirection: 'column' }}>
+                        <Typography variant='body1'>ash@gmail.com</Typography>
+                      </Box>
                     </TableCell>
-                    <TableCell><RowOptions guid={row.guid} onDelete={handleDelete} /></TableCell>
+                    <TableCell >
+                      <Typography variant='body2'>+91 9766488525</Typography>
+                    </TableCell>
+                    {/* <TableCell><RowOptions guid={row.guid} /></TableCell> */}
                   </TableRow>
                 )
               })}
@@ -434,17 +419,11 @@ const EnhancedTable = (props) => {
       <TablePagination
         page={page}
         component='div'
-        count={dataList.length}
+        count={rows.length}
         rowsPerPage={rowsPerPage}
         onPageChange={handleChangePage}
         rowsPerPageOptions={[10, 25, 50, 100]}
         onRowsPerPageChange={handleChangeRowsPerPage}
-      />
-      <DeleteCourse
-        mdOpen={openModal}
-        handleClose={handleCloseModal}
-        guidToDelete={guidToDelete}
-        onItemDeleted={handleItemDeleted}
       />
     </>
   )

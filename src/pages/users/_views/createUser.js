@@ -120,6 +120,7 @@ const SidebarAddUser = props => {
     toggle()
     reset()
   }
+
   return (
     <Drawer
       open={open}
@@ -234,6 +235,7 @@ const SidebarAddUser = props => {
               render={({ field: { value, onChange } }) => (
                 <Select
                   fullWidth
+
                   //value={value}
                   label='User Role'
                   labelId='userRoleLabel'

@@ -1,16 +1,19 @@
 import React, { useEffect, useState, useRef, useCallback } from 'react'
 
 // ** MUI Imports
-import { Grid, Card, CardHeader, CardContent, Button, Box, Link, Typography, CircularProgress } from '@mui/material'
+import { Grid, styled, useTheme, Card, CardHeader, CardContent, Button, Box, Link, Typography, CircularProgress } from '@mui/material'
 import toast from 'react-hot-toast'
 
 // ** Component Imports
 import PageHeader from 'src/layouts/components/page-header'
+import CardSnippet from 'src/@core/components/card-snippet'
+
+// ** Styled Component
+import DatePickerWrapper from 'src/@core/styles/libs/react-datepicker'
 
 // ** Module Specific Imports
-import EnrolList from 'src/pages/courses/_views/outline/enrolment'
-import QuickAddEnrol from 'src/pages/courses/enrolment/quickaddenrol'
-import Toolbar from 'src/pages/courses/_components/Outline/enrolment/Toolbar'
+import AddEnrolList from 'src/pages/courses/_views/outline/enrolment/AddEnrol'
+
 
 // ** Actions Imports
 import { ListCourses } from 'src/pages/courses/_models/CourseModel'
@@ -18,10 +21,20 @@ import { ListCourses } from 'src/pages/courses/_models/CourseModel'
 // ** Course API
 import CourseApi from 'src/pages/courses/_components/Apis'
 
+// ** date picker component 
+import PickersBasic from '../../../lib/common/datepicker/PickersBasic'
+
+
+
 
 
 
 const Page = () => {
+  // ** Hook
+  const theme = useTheme()
+  const { direction } = theme
+  const popperPlacement = direction === 'ltr' ? 'bottom-start' : 'bottom-end'
+
   const [currentPage, setCurrentPage] = useState('1')
   const [itemPerPage, setItemPerPage] = useState('10')
   const [checkedIds, setCheckedIds] = useState([])
@@ -122,49 +135,53 @@ const Page = () => {
       <Grid container spacing={6}>
         <Grid item xs={12}>
           <PageHeader
-            title={<Typography variant='h5'>Enrolment</Typography>}
-            subtitle={<Typography variant='body2'>List all Enrolment</Typography>}
-            buttonHref='./addenrolment'
-            // toggleDrawer={toggleCreateDrawer}
-            buttonTitle='Enrol Users'
+            title={<Typography variant='h5'>Add Enrolment</Typography>}
+            // subtitle={<Typography variant='body2'>List all Enrolment</Typography>}
             setReload={setReload}
             doReload={doReload}
           />
-          <Card style={{ marginTop: "20px" }}>
+
+          <Card style={{ marginTop: "20px", padding: '25px' }}>
+
+
             {isLoading ?
               (
                 <Box fullWidth className="loader" style={{ textAlign: "center", padding: "50px 0px" }}>
                   <CircularProgress />
                 </Box>) :
               (<form>
-                <CardContent>
-                  <Toolbar
-                    searchTerm={searchTerm}
-                    handleSearch={handleSearch}
-                    status={status}
-                    handleStatus={handleStatus}
-                    orderBy={orderBy}
-                    handleType={handleType}
-                  />
-                </CardContent>
-                <EnrolList
+                <Grid container sx={{ p: 3 }} spacing={3} gap={3}>
+
+                  <PickersBasic popperPlacement={popperPlacement} label='Start Date' />
+                  <PickersBasic popperPlacement={popperPlacement} label='End Date' />
+
+                </Grid>
+                <AddEnrolList
                   rows={dataList}
                   responseStatus={responseStatus}
                   responseMessage={responseMessage}
                   meta={metaData}
                   doReload={doReload}
                 />
+                <Grid container spacing={2} style={{ marginTop: '20px' }}>
+                  <Button variant='contained' size='medium' type='submit' sx={{ mt: 5 }}>
+                    Add
+                  </Button>
+                  <Button variant='outlined' size='medium' component={Link} href='/meetings' sx={{ mt: 5, ml: 3 }}>
+                    Cancel
+                  </Button>
+                </Grid>
               </form>)}
           </Card>
         </Grid>
       </Grid>
-      <QuickAddEnrol
+      {/* <CreateEnrol
         open={drawerOpen}
         toggle={toggleCreateDrawer}
         setReload={setReload}
         reload={reload}
         doReload={doReload}
-      />
+      /> */}
     </>
   )
 }

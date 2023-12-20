@@ -26,11 +26,9 @@ import CourseApi from 'src/pages/courses/_components/Apis'
 
 // ** Component Imports
 import PageHeader from 'src/layouts/components/page-header'
-import CreateSectionLeft from '../_views/outline/sections/create/leftside'
-import CreateSectionRight from '../_views/outline/sections/create/rightside'
 
+const CreateSectionLeft = props => {
 
-const SidebarAddSection = props => {
   const router = useRouter()
   const { id } = router.query
   const {
@@ -80,25 +78,53 @@ const SidebarAddSection = props => {
   }
 
   return (
-    <>
-      <Grid container spacing={6}>
-        <Grid item xs={12}>
-          <PageHeader
-            title={<Typography variant='h5'>Create Content</Typography>}
-            subtitle={<Typography variant='body2'>All Subject Description</Typography>}
-          />
-        </Grid>
-      </Grid>
-      <Grid container spacing={6} sx={{ mt: 2 }}>
-        <Grid item xs={12} md={8.5}>
-          <CreateSectionLeft />
-        </Grid>
-        <Grid item xs={12} md={3.5}>
-          <CreateSectionRight />
-        </Grid>
-      </Grid >
-    </>
+    <Card sx={{ height: '100%' }}>
+      <CardContent>
+        <form onSubmit={handleSubmit(updateFormSubmit)}>
+          <Grid item xs={12} sx={{ mt: 3 }}>
+            <label
+              htmlFor='sectiontitle'
+              style={{
+                fontSize: 16,
+                fontWeight: 500,
+                fontFamily: 'Arial',
+                marginBottom: '10px',
+                display: "block"
+              }}
+            >
+              Section Title
+            </label>
+            <FormControl fullWidth>
+              <Controller
+                render={({ field }) => (
+                  <TextField
+                    {...field}
+                    label='Title'
+                    variant='outlined'
+                    error={!!errors.title}
+                    helperText={errors.title && 'First name must be between 3 and 15 characters'}
+                  />
+                )}
+                control={control}
+                name='title'
+                rules={{
+                  required: 'Title is required',
+                  minLength: {
+                    value: 3,
+                    message: 'Title should be at least 3 characters'
+                  },
+                  maxLength: {
+                    value: 15,
+                    message: 'Title should not exceed 15 characters'
+                  }
+                }}
+              />
+            </FormControl>
+          </Grid>
+        </form>
+      </CardContent>
+    </Card >
   )
 }
 
-export default SidebarAddSection
+export default CreateSectionLeft

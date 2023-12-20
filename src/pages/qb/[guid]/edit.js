@@ -31,7 +31,6 @@ const Page = props => {
   const { open, toggle } = props
 
   // ** State
-  const [responseMessage, setResponseMessage] = useState('')
   const [isLoading, setLoading] = useState(true)
   const [question, setQuestion] = useState([])
   const [categories, setCategories] = useState([])
@@ -39,27 +38,21 @@ const Page = props => {
   /** FETCH QUESTION  */
   useEffect(() => {
     const fetchData = async () => {
-      if (guid) {
-        const response = await ViewQuestion(guid)
-        reset(response.payload)
+      const response = await ViewQuestion(guid)
+      if (response.success) {
+        setQuestion(response.payload)
       }
+      setLoading(false)
     }
-
     fetchData()
-      .then((response) => {
-        if (response.success) {
-          setQuestion(response.payload)
-        }
-      })
-      .then(setLoading(false))
   }, [guid])
 
   /*   const ques = useCallback(async () => {
       const response = await ViewQuestion(`${guid}`)
-  
+
       return response
     }, [])
-  
+
     useEffect(() => {
       ques()
         .then((response) => {
@@ -69,8 +62,8 @@ const Page = props => {
         })
         .then(setLoading(false))
     }, [ques, question])
-  
-  
+
+
    */  /** SAVE QUESTION  */
   const onSubmit = async (data) => {
     setLoading(true)

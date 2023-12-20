@@ -13,20 +13,18 @@ const PageHeader = props => {
         {title}
         {subtitle || null}
       </Box>
-      {toggleDrawer && (
-        <Box className='actions-right' sx={{ display: 'flex', alignItems: 'center' }}>
+      <Box className='actions-right' sx={{ display: 'flex', alignItems: 'center' }}>
+        {toggleDrawer && (
           <Button sx={{ mb: 2 }} onClick={toggleDrawer} variant='contained'>
             {buttonTitle}
           </Button>
-        </Box>
-      )}
-      {buttonHref && (
-        <Box className='actions-right' sx={{ display: 'flex', alignItems: 'center' }}>
+        )}
+        {buttonHref && (
           <Button sx={{ mb: 2 }} href={buttonHref} variant='contained'>
             {buttonTitle}
           </Button>
-        </Box>
-      )}
+        )}
+      </Box>
     </Box>
   )
 }

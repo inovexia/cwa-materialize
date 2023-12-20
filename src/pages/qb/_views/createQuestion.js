@@ -1,5 +1,6 @@
 import { useState } from 'react'
 import Grid from '@mui/material/Grid'
+import Link from '@mui/material/Link'
 import Select from '@mui/material/Select'
 import Button from '@mui/material/Button'
 import MenuItem from '@mui/material/MenuItem'
@@ -18,7 +19,7 @@ import { yupResolver } from '@hookform/resolvers/yup'
 import { Box, Checkbox, Divider, FormControlLabel, Radio } from '@mui/material'
 
 
-var defValues = {
+var defaultValues = {
   question: 'asasa',
   type: '',
   difficulty: '',
@@ -39,24 +40,14 @@ const schema = yup.object().shape({
 const CreateQuestionForm = (props) => {
   // ** Props
   const { onSubmit, isLoading, data } = props
-  console.log(data)
 
   // ** State
   const [count, setCount] = useState(1)
 
-  const [defaultValues, setdefaultValues] = useState([
-    question => 'asasa',
-    type => '',
-    difficulty => '',
-    feedback => '',
-    answer_feedback => '',
-    category_guid => ''
-  ])
-
-  if (data.length > 0) {
-    setdefaultValues(data)
+  if (data && data.length > 0) {
+    console.log('Oh yes')
+    reset(data)
   }
-  defValues.question = data.question
 
 
   // ** Hooks
@@ -66,14 +57,13 @@ const CreateQuestionForm = (props) => {
     handleSubmit,
     formState: { errors }
   } = useForm({
-    defValues,
+    defaultValues,
     mode: 'onChange',
     resolver: yupResolver(schema)
   })
 
-  const handleClose = () => {
-    toggle()
-    reset()
+  const handleCancel = () => {
+
   }
 
   return (
@@ -81,7 +71,6 @@ const CreateQuestionForm = (props) => {
     <form onSubmit={handleSubmit(onSubmit)}>
       <Grid container spacing={5}>
         <Grid item xs={12}>
-          {data.guid}
           <FormControl fullWidth sx={{ mb: 6 }}>
             <Controller
               name='question'
@@ -356,7 +345,7 @@ const CreateQuestionForm = (props) => {
             ) : null}
             Submit
           </Button>
-          <Button size='large' variant='outlined' color='secondary' onClick={handleClose}>
+          <Button size='large' variant='outlined' color='secondary' component={Link} href='/qb' sx={{ ml: 3 }}>
             Cancel
           </Button>
         </Grid>
