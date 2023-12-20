@@ -2,6 +2,7 @@ import React, { useEffect, useState, useRef } from 'react'
 import { useForm, Controller } from 'react-hook-form'
 import toast from 'react-hot-toast'
 import { useRouter } from 'next/router'
+import NextLink from 'next/link'
 
 // ** MUI Imports
 import { Grid, Card, TextField, Button, Link, CardHeader, CardContent, FormControl } from '@mui/material'
@@ -13,8 +14,7 @@ import CourseApi from 'src/pages/courses/_components/Apis'
 import FormEditorField from 'src/layouts/components/common/formEditorField'
 
 const EditLesson = () => {
-  const router = useRouter()
-  const { lessonId, subjectId } = router.query
+  const { query: { guid, subjectId, lessonId }, push } = useRouter()
   const {
     control,
     handleSubmit,
@@ -46,9 +46,9 @@ const EditLesson = () => {
     const res = await CourseApi.editLesson({ lessonId, data })
     if (res.success === true) {
       toast.success('Lesson updated successfully')
-      // setTimeout(() => {
-      //   router.push(`/courses/${guid}/subjects`)
-      // }, 500)
+      setTimeout(() => {
+        push(`/courses/${guid}/subjects/${subjectId}/lesson`)
+      }, 500)
     } else {
       toast.error('Failed to update lesson')
     }
@@ -137,7 +137,7 @@ const EditLesson = () => {
                   <Button variant='contained' size='medium' type='submit' sx={{ mt: 5 }}>
                     Update
                   </Button>
-                  <Button variant='outlined' size='medium' component={Link} href='/meetings' sx={{ mt: 5, ml: 3 }}>
+                  <Button variant='outlined' size='medium' component={NextLink} href={`/courses/${guid}/subjects/${subjectId}/lesson`} sx={{ mt: 5, ml: 3 }}>
                     Cancel
                   </Button>
                 </Grid>

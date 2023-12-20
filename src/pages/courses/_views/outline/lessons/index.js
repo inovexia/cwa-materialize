@@ -26,6 +26,7 @@ import { visuallyHidden } from '@mui/utils'
 import { alpha } from '@mui/material/styles'
 import Link from 'next/link'
 import ReactHtmlParser from 'react-html-parser'
+import { useRouter } from 'next/router'
 
 import Translations from 'src/layouts/components/Translations'
 
@@ -33,8 +34,8 @@ import Translations from 'src/layouts/components/Translations'
 import Icon from 'src/@core/components/icon'
 
 // ** Actions Imports
-import DeleteSubject from './delete'
-import { changeStatus } from 'src/pages/courses/_models/CourseModel'
+import DeleteLesson from './delete'
+import { changeStatus } from 'src/pages/courses/_models/LessonModel'
 import CourseApi from 'src/pages/courses/_components/Apis'
 
 const LinkStyled = styled(Link)(({ theme }) => ({
@@ -184,7 +185,8 @@ const EnhancedTableToolbar = props => {
   )
 }
 
-const RowOptions = ({ guid, onDelete }) => {
+const RowOptions = ({ lessonId, onDelete }) => {
+  const { query: { guid, subjectId }, push } = useRouter()
 
   // ** State
   const [anchorEl, setAnchorEl] = useState(null)
@@ -203,13 +205,13 @@ const RowOptions = ({ guid, onDelete }) => {
   //   handleRowOptionsClose()
   // }
 
-  const handleItemClick = () => {
+  const handleItemClick = (lessonId) => {
     handleRowOptionsClose();
-    handleDelete();
+    handleDelete(lessonId);
   };
 
   const handleDelete = () => {
-    onDelete(guid);
+    onDelete(lessonId);
   };
 
   return (
@@ -238,15 +240,6 @@ const RowOptions = ({ guid, onDelete }) => {
           onClick={handleRowOptionsClose}
           href='/courses/manage'
         >
-          <Icon icon='mdi:pencil-outline' fontSize={20} />
-          Manage
-        </MenuItem>
-        <MenuItem
-          component={Link}
-          sx={{ '& svg': { mr: 2 } }}
-          onClick={handleRowOptionsClose}
-          href='/courses/manage'
-        >
           <Icon icon='mdi:eye-outline' fontSize={20} />
           Preview
         </MenuItem>
@@ -254,7 +247,7 @@ const RowOptions = ({ guid, onDelete }) => {
           component={Link}
           sx={{ '& svg': { mr: 2 } }}
           onClick={handleRowOptionsClose}
-          href={`/courses/edit?id=${guid}`}
+          href={`/courses/${guid}/subjects/${subjectId}/lesson/edit/${lessonId}`}
         >
           <Icon icon='mdi:pencil-outline' fontSize={20} />
           Edit
@@ -273,6 +266,7 @@ const RowOptions = ({ guid, onDelete }) => {
 }
 
 const EnhancedTable = (props) => {
+  const { query: { subjectId }, push } = useRouter()
   // ** States
   const [page, setPage] = useState(0)
   const [order, setOrder] = useState('asc')
@@ -285,7 +279,7 @@ const EnhancedTable = (props) => {
 
   // ** Props
   const { dataList, setDataList, responseStatus, responseMessage, meta } = props
-
+  console.log(dataList)
   const handleRequestSort = (event, property) => {
     const isAsc = orderBy === property && order === 'asc'
     setOrder(isAsc ? 'desc' : 'asc')
@@ -326,8 +320,8 @@ const EnhancedTable = (props) => {
     setPage(0)
   }
 
-  const handleChangeStatus = (async (event, id) => {
-    const response = await changeStatus(event.target.checked, id)
+  const handleChangeStatus = (async (event, lessonId) => {
+    const response = await changeStatus(event.target.checked, lessonId)
   })
 
   const isSelected = guid => selected.indexOf(guid) !== -1
@@ -340,9 +334,9 @@ const EnhancedTable = (props) => {
     setOpenArcModal(false)
   }
 
-  // Delete course
+  // Delete Lesson
   const handleItemDeleted = async () => {
-    const updatedData = await CourseApi.getSubjects(props.guid)
+    const updatedData = await CourseApi.allLesson(subjectId)
     if (!updatedData.success) return
     setDataList(updatedData.payload.data)
     //setMetaData(updatedData.payload.meta)
@@ -352,6 +346,7 @@ const EnhancedTable = (props) => {
     setGuidToDelete(guid);
     setOpenModal(true);
   };
+  console.log(dataList)
   return (
     <>
       <EnhancedTableToolbar numSelected={selected.length} />
@@ -396,7 +391,7 @@ const EnhancedTable = (props) => {
                     </TableCell>
                     <TableCell >{ReactHtmlParser(row.description)}</TableCell>
                     <TableCell ><Switch defaultChecked={row.status === '1' ? true : false} onChange={event => handleChangeStatus(event, row.guid)} /></TableCell>
-                    <TableCell><RowOptions guid={row.guid} onDelete={handleDelete} /></TableCell>
+                    <TableCell><RowOptions lessonId={row.guid} onDelete={handleDelete} /></TableCell>
                   </TableRow>
                 )
               })}
@@ -412,7 +407,7 @@ const EnhancedTable = (props) => {
               </TableRow>
             )}
           </TableBody>) : (<TableCell colSpan={6}>
-            <Typography>No subject found</Typography>
+            <Typography>No lesson found</Typography>
           </TableCell>)}
 
         </Table>
@@ -426,10 +421,10 @@ const EnhancedTable = (props) => {
         rowsPerPageOptions={[10, 25, 50, 100]}
         onRowsPerPageChange={handleChangeRowsPerPage}
       />
-      <DeleteSubject
+      <DeleteLesson
         mdOpen={openModal}
         handleClose={handleCloseModal}
-        guidToDelete={guidToDelete}
+        lessonId={guidToDelete}
         onItemDeleted={handleItemDeleted}
       />
     </>

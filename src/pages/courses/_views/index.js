@@ -1,9 +1,8 @@
 // ** React Imports
-import React, { useState, useCallback } from 'react'
+import React, { useState } from 'react'
 
 // ** MUI Imports
 import {
-  Button,
   Box,
   Table,
   TableRow,
@@ -408,7 +407,7 @@ const EnhancedTable = (props) => {
                         <Typography noWrap variant='caption'>{row.guid}</Typography>
                       </Box>
                     </TableCell>
-                    <TableCell >{ReactHtmlParser(row.description)}</TableCell>
+                    <TableCell style={{ maxWidth: "400px", boxSizing: "border-box", wordWrap: "break-word" }}>{ReactHtmlParser(row.description)}</TableCell>
                     {/* <TableCell >{row.type}</TableCell> */}
                     <TableCell >
                       <Switch defaultChecked={row.status === '1' ? true : false} onChange={event => { handleChangeStatus(event, row.guid) }} onClick={e => { e.stopPropagation() }} />
@@ -424,7 +423,7 @@ const EnhancedTable = (props) => {
                 }}
               >
                 <TableCell colSpan={6}>
-                  <Translations text={responseMessage} message='No test found' />
+                  <Translations text={responseMessage} message='No course found' />
                 </TableCell>
               </TableRow>
             )}

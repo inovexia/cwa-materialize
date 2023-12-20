@@ -10,7 +10,7 @@ import toast from 'react-hot-toast'
 // ** API
 import CourseApi from 'src/pages/courses/_components/Apis'
 
-const DeleteSubject = ({ mdOpen, handleClose, guidToDelete, onItemDeleted }) => {
+const DeleteLesson = ({ mdOpen, handleClose, lessonId, onItemDeleted }) => {
   const [open, setOpen] = useState(mdOpen)
 
   useEffect(() => {
@@ -18,16 +18,16 @@ const DeleteSubject = ({ mdOpen, handleClose, guidToDelete, onItemDeleted }) => 
   }, [mdOpen])
 
   const handleDeleteMeeting = async () => {
-    const res = await CourseApi.deleteSubject(guidToDelete)
+    const res = await CourseApi.deleteLesson(lessonId)
     if (res.success === true) {
       setOpen(false)
-      toast.success('Course deleted successfully')
+      toast.success('Lesson deleted successfully')
       if (onItemDeleted) {
         onItemDeleted()
       }
     } else {
       setOpen(false)
-      toast.error('Failed to delete course')
+      toast.error('Failed to delete lesson')
     }
   }
 
@@ -44,7 +44,7 @@ const DeleteSubject = ({ mdOpen, handleClose, guidToDelete, onItemDeleted }) => 
           aria-labelledby='alert-dialog-title'
           aria-describedby='alert-dialog-description'
         >
-          <DialogTitle id='alert-dialog-title'>{'Delete Course'}</DialogTitle>
+          <DialogTitle id='alert-dialog-title'>{'Delete Lesson'}</DialogTitle>
           <DialogContent>
             <DialogContentText id='alert-dialog-description'>Confirm to delete ?</DialogContentText>
           </DialogContent>
@@ -62,4 +62,4 @@ const DeleteSubject = ({ mdOpen, handleClose, guidToDelete, onItemDeleted }) => 
   )
 }
 
-export default DeleteSubject
+export default DeleteLesson

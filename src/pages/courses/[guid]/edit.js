@@ -1,10 +1,11 @@
-import React, { useEffect, useState, useRef } from 'react'
+import React, { useEffect, useRef } from 'react'
 import { useForm, Controller } from 'react-hook-form'
 import toast from 'react-hot-toast'
 import { useRouter } from 'next/router'
+import NextLink from 'next/link'
 
 // ** MUI Imports
-import { Grid, Card, TextField, Button, Link, CardHeader, CardContent, FormControl } from '@mui/material'
+import { Grid, Card, TextField, Button, CardHeader, CardContent, FormControl } from '@mui/material'
 
 // ** API
 import CourseApi from 'src/pages/courses/_components/Apis'
@@ -13,8 +14,8 @@ import CourseApi from 'src/pages/courses/_components/Apis'
 import FormEditorField from 'src/layouts/components/common/formEditorField'
 
 const EditCourse = () => {
-  const router = useRouter()
-  const { guid } = router.query
+  const { query: { guid }, push } = useRouter()
+  const editorRef = useRef(null)
   const {
     control,
     handleSubmit,
@@ -27,16 +28,6 @@ const EditCourse = () => {
       created_by: 'ASI8'
     }
   })
-  // ** Get Current Meeting Details
-  useEffect(() => {
-    const fetchData = async () => {
-      if (guid) {
-        const res = await CourseApi.viewCourse(guid)
-        reset(res.payload)
-      }
-    }
-    fetchData()
-  }, [guid])
 
   const updateFormSubmit = async data => {
     const formData = new FormData()
@@ -47,19 +38,22 @@ const EditCourse = () => {
     if (res.success === true) {
       toast.success('Course updated successfully')
       setTimeout(() => {
-        router.push('/courses')
+        push('/courses')
       }, 3000)
     } else {
       toast.error('Failed to update course')
     }
   }
-
-  const editorRef = useRef(null)
-  const log = () => {
-    if (editorRef.current) {
-      console.log(editorRef.current.getContent())
+  // ** Get Current Course Details
+  useEffect(() => {
+    const fetchData = async () => {
+      if (guid) {
+        const res = await CourseApi.viewCourse(guid)
+        reset(res.payload)
+      }
     }
-  }
+    fetchData()
+  }, [guid])
 
   return (
     <>
@@ -137,7 +131,7 @@ const EditCourse = () => {
                   <Button variant='contained' size='medium' type='submit' sx={{ mt: 5 }}>
                     Update
                   </Button>
-                  <Button variant='contained' size='medium' component={Link} href='/meetings' sx={{ mt: 5, ml: 3 }}>
+                  <Button variant='contained' size='medium' component={NextLink} href={`/courses`} sx={{ mt: 5, ml: 3 }}>
                     Cancel
                   </Button>
                 </Grid>

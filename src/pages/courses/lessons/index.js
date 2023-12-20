@@ -148,6 +148,7 @@ const Page = () => {
                 </CardContent>
                 <LessonsList
                   rows={dataList}
+                  dataList={dataList}
                   responseStatus={responseStatus}
                   responseMessage={responseMessage}
                   meta={metaData}

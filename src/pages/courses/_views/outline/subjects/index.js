@@ -394,7 +394,7 @@ const EnhancedTable = (props) => {
                     </TableCell>
                     <TableCell component='th' id={labelId} scope='row' padding='none'>
                       <Box sx={{ display: 'flex', alignItems: 'flex-start', flexDirection: 'column' }}>
-                        <LinkStyled href={`/courses/${guid}/subjects/preview/${row.guid}`}>{row.title}</LinkStyled>
+                        <LinkStyled href={`/courses/${guid}/subjects/${row.guid}/lesson`}>{row.title}</LinkStyled>
                         <Typography noWrap variant='caption'>{row.guid}</Typography>
                       </Box>
                     </TableCell>

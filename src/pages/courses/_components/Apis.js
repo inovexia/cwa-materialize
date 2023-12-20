@@ -61,4 +61,10 @@ export default class CourseApi {
 
   // Edit Lesson
   static editLesson = async ({ lessonId, data }) => await ApiRequest(`/course/lesson/${lessonId}/edit`, 'POST', { data })
+
+  // Delete Lesson
+  static deleteLesson = async lessonId => await ApiRequest(`/course/lesson/${lessonId}/delete`, 'DELETE')
+
+  // Status Lesson
+  static statusLesson = async ({ lessonId, data }) => await ApiRequest(`/course/lesson/${lessonId}/change_status`, 'POST', { data })
 }
