@@ -193,6 +193,7 @@ const RowOptions = ({ guid, onDelete }) => {
   const rowOptionsOpen = Boolean(anchorEl)
 
   const handleRowOptionsClick = event => {
+    event.stopPropagation()
     setAnchorEl(event.currentTarget)
   }
 
@@ -212,7 +213,7 @@ const RowOptions = ({ guid, onDelete }) => {
 
   return (
     <>
-      <IconButton size='small' onClick={handleRowOptionsClick}>
+      <IconButton size='small' onClick={handleRowOptionsClick} >
         <Icon icon='mdi:dots-vertical' />
       </IconButton>
       <Menu
@@ -355,6 +356,7 @@ const EnhancedTable = (props) => {
     const updatedData = await CourseApi.getAllCourses()
     if (!updatedData.success) return
     setDataList(updatedData.payload.data)
+
     //setMetaData(updatedData.payload.meta)
     setOpenModal(false)
   }
@@ -363,6 +365,7 @@ const EnhancedTable = (props) => {
     setGuidToDelete(guid);
     setOpenModal(true);
   };
+
   return (
     <>
       <EnhancedTableToolbar numSelected={selected.length} />
@@ -407,7 +410,9 @@ const EnhancedTable = (props) => {
                     </TableCell>
                     <TableCell >{ReactHtmlParser(row.description)}</TableCell>
                     {/* <TableCell >{row.type}</TableCell> */}
-                    <TableCell ><Switch defaultChecked={row.status === '1' ? true : false} onChange={event => handleChangeStatus(event, row.guid)} /></TableCell>
+                    <TableCell >
+                      <Switch defaultChecked={row.status === '1' ? true : false} onChange={event => { handleChangeStatus(event, row.guid) }} onClick={e => { e.stopPropagation() }} />
+                    </TableCell>
                     <TableCell><RowOptions guid={row.guid} onDelete={handleDelete} /></TableCell>
                   </TableRow>
                 )

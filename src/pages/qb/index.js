@@ -86,7 +86,7 @@ const Page = () => {
             title={<Typography variant='h5'>Question Bank</Typography>}
             subtitle={<Typography variant='body2'>List All Questions</Typography>}
             buttonTitle='Add Question'
-            buttonHref='/qb/create_question'
+            buttonHref='/qb/create'
           />
           <Card>
             {isLoading ?

@@ -16,7 +16,7 @@ import Toolbar from 'src/pages/tests/_components/Toolbar'
 import { ListTests } from 'src/pages/tests/_models/TestModel'
 
 
-const Page = () => {
+const UserList = () => {
   const [dataList, setDataList] = useState([])
   const [metaData, setMetaData] = useState([])
   const [responseStatus, setResponseStatus] = useState(false)
@@ -119,4 +119,4 @@ const Page = () => {
   )
 }
 
-export default Page
+export default UserList
