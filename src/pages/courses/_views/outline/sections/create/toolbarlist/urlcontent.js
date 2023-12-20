@@ -23,6 +23,8 @@ import FormEditorField from 'src/layouts/components/common/formEditorField'
 
 // ** API
 import CourseApi from 'src/pages/courses/_components/Apis'
+import FileUploaderSingle from 'src/pages/courses/_components/Fileupload'
+import VideoUpload from 'src/pages/courses/_components/VideoUpload'
 
 const Header = styled(Box)(({ theme }) => ({
   display: 'flex',
@@ -38,7 +40,13 @@ const schema = yup.object().shape({
   created_by: yup.string().required()
 })
 
-const HtmlCode = props => {
+const ContentUrl = props => {
+  const [url, setUrl] = useState('');
+
+  const handleUrlChange = (event) => {
+    setUrl(event.target.value);
+  };
+
   // ** Props
   const { open, toggle, setReload, doReload } = props
 
@@ -85,7 +93,7 @@ const HtmlCode = props => {
       sx={{ '& .MuiDrawer-paper': { width: { xs: 300, sm: 400 } } }}
     >
       <Header>
-        <Typography variant='h6'>Create Html</Typography>
+        <Typography variant='h6'>Add Url</Typography>
         <IconButton size='small' onClick={handleClose} sx={{ color: 'text.primary' }}>
           <Icon icon='mdi:close' fontSize={20} />
         </IconButton>
@@ -99,19 +107,13 @@ const HtmlCode = props => {
       )}
       <Box sx={{ p: 5 }}>
         <form onSubmit={handleSubmit(handleFormSubmit)}>
-          <label
-            htmlFor='description'
-            style={{
-              fontSize: 16,
-              fontWeight: 500,
-              fontFamily: 'Arial',
-              marginBottom: '10px',
-              display: "block"
-            }}
-          >
-            Description
-          </label>
-          <FormEditorField control={control} name='description' onInit={(evt, editor) => (editorRef.current = editor)} />
+          <TextField
+            label="URL Link"
+            variant="outlined"
+            fullWidth
+            value={url}
+            onChange={handleUrlChange}
+          />
           <Box sx={{ display: 'flex', alignItems: 'center', justifyContent: 'space-between', marginTop: '30px' }}>
             <LoadingButton
               type='submit'
@@ -133,4 +135,4 @@ const HtmlCode = props => {
   )
 }
 
-export default HtmlCode
+export default ContentUrl
