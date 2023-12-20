@@ -46,6 +46,13 @@ export default class CourseApi {
   // Delete Subject
   static deleteSubject = async subjectId => await ApiRequest(`/course/subject/${subjectId}/delete`, 'DELETE')
 
+  // Change Subject Subject
+  static statusSubject = async ({ subjectId, data }) => await ApiRequest(`/course/subject/${subjectId}/change_status`, 'POST', { data })
+
+  // Edit Lesson
+  static allLesson = async subjectId => await ApiRequest(`/course/subject/${subjectId}/lessons`, 'POST')
+
+
   // Create Lesson
   static createLesson = async ({ subjectId, data }) => await ApiRequest(`/course/subject/${subjectId}/lesson/create`, 'POST', { data })
 

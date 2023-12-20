@@ -10,7 +10,7 @@ import PageHeader from 'src/layouts/components/page-header'
 
 // ** Module Specific Imports
 import SubjectList from 'src/pages/courses/_views/outline/subjects'
-import CreateSubject from 'src/pages/courses/subjects/create'
+import CreateSubject from 'src/pages/courses/[guid]/subjects/createDrawer'
 import Toolbar from 'src/pages/courses/_components/Outline/subjects/Toolbar'
 
 // ** Course API
@@ -97,7 +97,7 @@ const Page = () => {
                   />
                 </CardContent>
                 <SubjectList
-                  rows={dataList}
+                  rows={dataList && dataList}
                   responseStatus={responseStatus}
                   responseMessage={responseMessage}
                   meta={metaData}

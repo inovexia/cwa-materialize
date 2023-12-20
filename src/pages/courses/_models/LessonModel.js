@@ -1,16 +1,24 @@
 import API from 'src/pages/courses/_components/Apis'
 import toast from 'react-hot-toast'
 
-/** GET SUBJECTS */
+/** GET COURSES */
+export async function ListLesson({ subjectId, data }) {
 
-export async function ListSubjects(guid) {
-  const response = await API.getSubjects(guid)
-  if (!response.success) return toast.error(response.message)
+  const formData = new FormData()
+  if (typeof data === "object") {
+    Object.entries(data).forEach(([key, val]) => {
+      formData.append(key, val)
+    })
+  }
+  const response = await API.allLesson(subjectId && subjectId, formData)
+  var responseMessage = await responseMessages(response.message)
+  response.message = await responseMessage
+
   return response
 }
 
 
-/** CREATE SUBJECT */
+/** CREATE COURSE */
 export async function AddTest(data) {
 
   const formData = new FormData()
@@ -27,16 +35,7 @@ export async function AddTest(data) {
 }
 
 /** CHANGE STATUS */
-export async function changeStatus(subjectId, status) {
-  const formData = new FormData()
-  formData.append('status', status === "1" ? "0" : "1")
-  const response = await API.statusSubject({ subjectId, data: formData })
-  if (!response.success) return toast.error(response.message)
-  toast.success(response.message)
-}
-
-/** CHANGE STATUS */
-export async function changeBulkStatus(checked, id) {
+export async function changeStatus(checked, id) {
   var testStatus = 0
   if (checked === true) {
     testStatus = 1
@@ -45,7 +44,7 @@ export async function changeBulkStatus(checked, id) {
   }
   const formData = new FormData()
   formData.append('status', testStatus)
-  const response = await API.statusSubject({ id, data: formData })
+  const response = await API.statusCourse({ id, data: formData })
   if (!response.success) return toast.error(response.message)
   // var responseMessage = await responseMessages(response.message)
   // response.message = await responseMessage

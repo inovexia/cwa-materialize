@@ -1,10 +1,12 @@
 // ** React Imports
-import { useState } from 'react'
+import { useState, useEffect } from 'react'
 
 // ** MUI Imports
 import { Drawer, Select, Button, MenuItem, styled, TextField, IconButton, InputLabel, Typography, Box, FormControl, FormHelperText, CircularProgress, Card, Grid, CardHeader, CardContent, List, ListItem, ListItemIcon, ListItemText, ListItemButton, Divider } from '@mui/material'
 
 import toast from 'react-hot-toast'
+import ReactHtmlParser from 'react-html-parser';
+import { useRouter } from 'next/router'
 import CustomChip from 'src/@core/components/mui/chip'
 
 // ** Third Party Imports
@@ -20,6 +22,9 @@ import { AddTest } from 'src/pages/tests/_models/TestModel'
 
 // ** Component Imports
 import PageHeader from 'src/layouts/components/page-header'
+
+// ** API
+import CourseApi from '../_components/Apis'
 
 const Header = styled(Box)(({ theme }) => ({
   display: 'flex',
@@ -54,14 +59,71 @@ const schema = yup.object().shape({
 
 
 const ViewCourse = () => {
+  const router = useRouter()
+  const { guid } = router.query
+  const [course, setCourse] = useState("");
+  const [subjects, setSubjects] = useState([]);
+  const [tests, setTests] = useState([]);
+  const [meetings, setMeetings] = useState([]);
+  const [enrolledUsers, setEnrolledUsers] = useState([]);
 
+  /** GET CURRENT COURSE DATA */
+  useEffect(() => {
+    const fetchData = async () => {
+      const res = await CourseApi.viewCourse(guid)
+      if (!res.success) return
+      setCourse(res && res.payload)
+    }
+    fetchData()
+  }, [guid])
 
+  /** GET ALL SUBJECTS */
+  useEffect(() => {
+    const fetchData = async () => {
+      const res = await CourseApi.getSubjects(guid)
+      if (!res.success) return
+      setSubjects(res && res.payload.data)
+    }
+    fetchData()
+  }, [guid])
+
+  /** GET ALL TESTS */
+  useEffect(() => {
+    const fetchData = async () => {
+      const formData = new FormData()
+      const res = await CourseApi.filterTest({ guid, data: formData })
+      if (!res.success) return
+      setTests(res && res.payload.data)
+    }
+    fetchData()
+  }, [guid])
+
+  /** GET ALL MEETINGS */
+  useEffect(() => {
+    const fetchData = async () => {
+      const formData = new FormData()
+      const res = await CourseApi.filterMeetings({ guid, data: formData })
+      if (!res.success) return
+      setMeetings(res && res.payload.data)
+    }
+    fetchData()
+  }, [guid])
+
+  /** GET ALL ENROLLED USERS */
+  useEffect(() => {
+    const fetchData = async () => {
+      const formData = new FormData()
+      const res = await CourseApi.enrolledUsers({ guid, data: formData })
+      if (!res.success) return
+      setEnrolledUsers(res && res.payload.data)
+    }
+    fetchData()
+  }, [guid])
   return (
     <Grid container spacing={6}>
       <Grid item xs={12}>
         <PageHeader
-          title={<Typography variant='h5'>English Grammer</Typography>}
-          subtitle={<Typography variant='body2'>Lorem lpsm lorem lorem</Typography>}
+          title={<Typography variant='h5'>{course.title}</Typography>}
         />
       </Grid>
       <Grid item xs={12}>
@@ -70,9 +132,9 @@ const ViewCourse = () => {
             <Box sx={{
               pt: 1, pb: 4
             }}>
-              <Typography variant='h6' sx={{ mb: 2 }}> Description</Typography>
+              <Typography variant='h6' sx={{ mb: 2 }}>Description</Typography>
               <Typography variant='p'>
-                Lorem Ipsum is simply dummy text of the printing and typesetting industry. Lorem Ipsum has been the industry's standard dummy text ever since the 1500s, Lorem Ipsum is simply dummy text of the printing and typesetting industry. Lorem Ipsum has been the industry's standard dummy text ever since the 1500s,
+                {ReactHtmlParser(course.description)}
               </Typography>
             </Box>
             <Divider />
@@ -99,7 +161,8 @@ const ViewCourse = () => {
               py: 5,
             }}>
               <Typography variant='h6' sx={{ mb: 2 }}>Status</Typography>
-              <CustomChip circle label='Publish' skin='light' color='success' />
+              {course.status == "1" ? <CustomChip circle label='Published' skin='light' color='success' /> : <CustomChip circle label='Unpublished' skin='light' color='error' />}
+
             </Box>
             <Divider />
             <Box sx={{
@@ -111,31 +174,37 @@ const ViewCourse = () => {
                   <ListItemIcon>
                     <Icon icon="solar:book-bold" fontSize={20} />
                   </ListItemIcon>
-                  <ListItemText>Subject: 5</ListItemText>
+                  <ListItemText>Subject: {subjects.length}</ListItemText>
                 </ListItem>
                 <ListItem disablePadding sx={{ mb: 2 }}>
                   <ListItemIcon>
                     <Icon icon="carbon:book" fontSize={20} />
                   </ListItemIcon>
-                  <ListItemText>Lesson: 25</ListItemText>
+                  <ListItemText>Tests: {tests.length}</ListItemText>
                 </ListItem>
                 <ListItem disablePadding sx={{ mb: 2 }}>
                   <ListItemIcon>
                     <Icon icon="jam:book" fontSize={20} />
                   </ListItemIcon>
-                  <ListItemText>Section: 40</ListItemText>
+                  <ListItemText>Enrollments: {enrolledUsers.length}</ListItemText>
+                </ListItem>
+                <ListItem disablePadding sx={{ mb: 2 }}>
+                  <ListItemIcon>
+                    <Icon icon="jam:book" fontSize={20} />
+                  </ListItemIcon>
+                  <ListItemText>Meetings: {meetings.length}</ListItemText>
                 </ListItem>
                 <ListItem disablePadding sx={{ mb: 2 }}>
                   <ListItemIcon>
                     <Icon icon="mdi:user-outline" fontSize={20} />
                   </ListItemIcon>
-                  <ListItemText>Created By: ASI5</ListItemText>
+                  <ListItemText>Created By: {course.created_by}</ListItemText>
                 </ListItem>
                 <ListItem disablePadding sx={{ mb: 2 }}>
                   <ListItemIcon>
                     <Icon icon="fontisto:date" fontSize={20} />
                   </ListItemIcon>
-                  <ListItemText>Created On: 2023-11-05</ListItemText>
+                  <ListItemText>Created On: {course.created_on}</ListItemText>
                 </ListItem>
               </List>
             </Box>
