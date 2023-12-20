@@ -10,7 +10,7 @@ import DatePicker from 'react-datepicker'
 // ** Custom Component Imports
 import CustomInput from './PickersCustomInput'
 
-const PickersBasic = ({ popperPlacement }) => {
+const PickersBasic = ({ popperPlacement, label }) => {
   // ** States
   const [date, setDate] = useState(new Date())
 
@@ -22,9 +22,10 @@ const PickersBasic = ({ popperPlacement }) => {
         popperPlacement={popperPlacement}
         onChange={date => setDate(date)}
         placeholderText='Click to select a date'
-        customInput={<CustomInput label='Basic' />}
+        customInput={<CustomInput label={label} />}
         style={{ width: '100%' }}
       />
+
     </Box>
   )
 }

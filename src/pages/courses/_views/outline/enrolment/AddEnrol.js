@@ -78,10 +78,10 @@ function stableSort(array, comparator) {
 
 const headCells = [
   {
-    id: 'title',
+    id: 'username',
     numeric: false,
     disablePadding: true,
-    label: 'Title'
+    label: 'User Name'
   },
   {
     id: 'useremail',
@@ -96,11 +96,17 @@ const headCells = [
     label: 'User Phone No.'
   },
   {
-    id: 'status',
+    id: 'userid',
     numeric: false,
-    disablePadding: false,
-    label: 'Status'
-  },
+    disablePadding: true,
+    label: 'User ID'
+  }
+  // {
+  //   id: 'status',
+  //   numeric: false,
+  //   disablePadding: false,
+  //   label: 'Status'
+  // },
   // {
   //   id: 'actions',
   //   numeric: false,
@@ -176,11 +182,24 @@ const EnhancedTableToolbar = props => {
           ''
         )}
         {numSelected > 0 ? (
-          <Tooltip title='Delete'>
-            <IconButton sx={{ color: 'text.secondary' }}>
-              <Icon icon='mdi:delete-outline' />
-            </IconButton>
-          </Tooltip>
+          <>
+            <Tooltip title='Delete'>
+              <IconButton sx={{ color: 'text.secondary' }}>
+                <Icon icon='mdi:delete-outline' fontSize={20} />
+              </IconButton>
+            </Tooltip>
+            <Tooltip title='Date'>
+              <IconButton sx={{ color: 'text.secondary' }}>
+                <Icon icon="simple-line-icons:calender" fontSize={20} />
+              </IconButton>
+            </Tooltip>
+            <Tooltip title='Enrolment'>
+              <IconButton sx={{ color: 'text.secondary' }}>
+                <Icon icon="mdi:user" fontSize={20} />
+              </IconButton>
+            </Tooltip>
+          </>
+
         ) : null}
       </Toolbar>
       : ""
@@ -377,9 +396,10 @@ const EnhancedTable = (props) => {
                     <TableCell component='th' id={labelId} scope='row' padding='none'>
                       <Box sx={{ display: 'flex', alignItems: 'flex-start', flexDirection: 'column' }}>
                         <LinkStyled href='/tests/manage'>{row.title}</LinkStyled>
-                        <Typography noWrap variant='caption'>{row.guid}</Typography>
+
                       </Box>
                     </TableCell>
+
                     <TableCell >
                       <Box sx={{ display: 'flex', alignItems: 'flex-start', flexDirection: 'column' }}>
                         <Typography variant='body1'>ash@gmail.com</Typography>
@@ -388,7 +408,12 @@ const EnhancedTable = (props) => {
                     <TableCell >
                       <Typography variant='body2'>+91 9766488525</Typography>
                     </TableCell>
-                    <TableCell><RowOptions guid={row.guid} /></TableCell>
+                    <TableCell >
+                      <Box sx={{ display: 'flex', alignItems: 'flex-start', flexDirection: 'column' }}>
+                        <Typography variant='body2'>{row.guid}</Typography>
+                      </Box>
+                    </TableCell>
+                    {/* <TableCell><RowOptions guid={row.guid} /></TableCell> */}
                   </TableRow>
                 )
               })}

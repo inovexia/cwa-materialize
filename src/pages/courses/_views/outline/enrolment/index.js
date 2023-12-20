@@ -236,7 +236,7 @@ const RowOptions = ({ guid }) => {
           <Icon icon='mdi:pencil-outline' fontSize={20} />
           Manage
         </MenuItem> */}
-        {/* <MenuItem
+        <MenuItem
           component={Link}
           sx={{ '& svg': { mr: 2 } }}
           onClick={handleRowOptionsClose}
@@ -244,7 +244,7 @@ const RowOptions = ({ guid }) => {
         >
           <Icon icon='mdi:eye-outline' fontSize={20} />
           Preview
-        </MenuItem> */}
+        </MenuItem>
         <MenuItem
           component={Link}
           sx={{ '& svg': { mr: 2 } }}
@@ -252,7 +252,7 @@ const RowOptions = ({ guid }) => {
           href={`/courses/edit?id=${guid}`}
         >
           <Icon icon='mdi:pencil-outline' fontSize={20} />
-          Edit
+          Change Date
         </MenuItem>
         {/* <MenuItem
           component={Link}
@@ -268,7 +268,7 @@ const RowOptions = ({ guid }) => {
           onClick={handleRowOptionsClose}
         >
           <Icon icon='material-symbols-light:delete' fontSize={20} />
-          Delete
+          Unenroll
         </MenuItem>
       </Menu>
     </>

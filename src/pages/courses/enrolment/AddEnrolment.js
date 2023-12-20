@@ -22,7 +22,7 @@ import { ListCourses } from 'src/pages/courses/_models/CourseModel'
 import CourseApi from 'src/pages/courses/_components/Apis'
 
 // ** date picker component 
-import PickersBasic from '../_components/Outline/enrolment/PickersBasic'
+import PickersBasic from '../../../lib/common/datepicker/PickersBasic'
 
 
 
@@ -150,16 +150,11 @@ const Page = () => {
                   <CircularProgress />
                 </Box>) :
               (<form>
-                <Grid container spacing={2} sx={{ px: 3 }}>
-                  <Grid item xs={12} >
-                    <label
-                      htmlFor='startDate'
-                      sx={{ mb: 3 }}
-                    >
-                      Start Date
-                    </label>
-                    <PickersBasic popperPlacement={popperPlacement} fullWidth />
-                  </Grid>
+                <Grid container sx={{ p: 3 }} spacing={3} gap={3}>
+
+                  <PickersBasic popperPlacement={popperPlacement} label='Start Date' />
+                  <PickersBasic popperPlacement={popperPlacement} label='End Date' />
+
                 </Grid>
                 <AddEnrolList
                   rows={dataList}
