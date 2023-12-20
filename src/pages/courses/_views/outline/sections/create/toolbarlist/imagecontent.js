@@ -23,6 +23,7 @@ import FormEditorField from 'src/layouts/components/common/formEditorField'
 
 // ** API
 import CourseApi from 'src/pages/courses/_components/Apis'
+import FileUploaderSingle from 'src/pages/courses/_components/Fileupload'
 
 const Header = styled(Box)(({ theme }) => ({
   display: 'flex',
@@ -38,7 +39,7 @@ const schema = yup.object().shape({
   created_by: yup.string().required()
 })
 
-const HtmlCode = props => {
+const ContentImage = props => {
   // ** Props
   const { open, toggle, setReload, doReload } = props
 
@@ -85,7 +86,7 @@ const HtmlCode = props => {
       sx={{ '& .MuiDrawer-paper': { width: { xs: 300, sm: 400 } } }}
     >
       <Header>
-        <Typography variant='h6'>Create Html</Typography>
+        <Typography variant='h6'>Upload Image</Typography>
         <IconButton size='small' onClick={handleClose} sx={{ color: 'text.primary' }}>
           <Icon icon='mdi:close' fontSize={20} />
         </IconButton>
@@ -109,9 +110,9 @@ const HtmlCode = props => {
               display: "block"
             }}
           >
-            Description
+            Image Upload
           </label>
-          <FormEditorField control={control} name='description' onInit={(evt, editor) => (editorRef.current = editor)} />
+          <FileUploaderSingle />
           <Box sx={{ display: 'flex', alignItems: 'center', justifyContent: 'space-between', marginTop: '30px' }}>
             <LoadingButton
               type='submit'
@@ -133,4 +134,4 @@ const HtmlCode = props => {
   )
 }
 
-export default HtmlCode
+export default ContentImage

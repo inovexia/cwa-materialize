@@ -24,6 +24,11 @@ import FormEditorField from 'src/layouts/components/common/formEditorField'
 // ** API
 import CourseApi from 'src/pages/courses/_components/Apis'
 import HtmlCode from './toolbarlist/htmlcode'
+import ContentImage from './toolbarlist/imagecontent'
+import ContentVideo from './toolbarlist/videocontent'
+import ContentPdf from './toolbarlist/pdfcontent'
+import ContentYoutubeUrl from './toolbarlist/youtubeurl'
+import ContentUrl from './toolbarlist/urlcontent'
 
 const Header = styled(Box)(({ theme }) => ({
   display: 'flex',
@@ -87,8 +92,7 @@ const CreateSectionRight = props => {
             <Button
               variant='text'
               className='no-radius'
-              //onClick={handleAddMediaField}
-              onClick={() => addContentBlock('Image')}
+              onClick={toggleCreateDrawer}
               sx={{ display: 'block', width: '100%' }}
             >
               <Icon icon="ph:image" />
@@ -103,14 +107,20 @@ const CreateSectionRight = props => {
                 Image
               </Typography>
             </Button>
+            <ContentImage
+              open={drawerOpen}
+              toggle={toggleCreateDrawer}
+              setReload={setReload}
+              reload={reload}
+              doReload={doReload}
+            />
           </Grid>
           <Grid item xs={6}>
             <Button
               variant='text'
               className='no-radius'
-              //onClick={handleAddMediaField}
-              onClick={() => addContentBlock('Video')}
-              sx={{ display: 'block', width: '100%', backgroundColor: 'backgroundColor' }}
+              onClick={toggleCreateDrawer}
+              sx={{ display: 'block', width: '100%' }}
             >
               <Icon icon="ph:video-bold" />
               <Typography
@@ -124,13 +134,19 @@ const CreateSectionRight = props => {
                 Video
               </Typography>
             </Button>
+            <ContentVideo
+              open={drawerOpen}
+              toggle={toggleCreateDrawer}
+              setReload={setReload}
+              reload={reload}
+              doReload={doReload}
+            />
           </Grid>
           <Grid item xs={6}>
             <Button
               variant='text'
               className='no-radius'
-              //onClick={handleAddMediaField}
-              onClick={() => addContentBlock('File')}
+              onClick={toggleCreateDrawer}
               sx={{ display: 'block', width: '100%' }}
             >
               <Icon icon="mingcute:pdf-line" />
@@ -145,15 +161,20 @@ const CreateSectionRight = props => {
                 PDF
               </Typography>
             </Button>
+            <ContentPdf
+              open={drawerOpen}
+              toggle={toggleCreateDrawer}
+              setReload={setReload}
+              reload={reload}
+              doReload={doReload}
+            />
           </Grid>
           <Grid item xs={6}>
             <Button
               variant='text'
               className='no-radius'
-              //onClick={handleAddUrlField}
-              onClick={() => addContentBlock('Link')}
+              onClick={toggleCreateDrawer}
               sx={{ display: 'block', width: '100%' }}
-
             >
               <Icon icon="material-symbols:link" />
               <Typography
@@ -167,13 +188,19 @@ const CreateSectionRight = props => {
                 URL
               </Typography>
             </Button>
+            <ContentUrl
+              open={drawerOpen}
+              toggle={toggleCreateDrawer}
+              setReload={setReload}
+              reload={reload}
+              doReload={doReload}
+            />
           </Grid>
           <Grid item xs={6}>
             <Button
               variant='text'
               className='no-radius'
-              //onClick={handleAddUrlField}
-              onClick={() => addContentBlock('YoutubeLink')}
+              onClick={toggleCreateDrawer}
               sx={{ display: 'block', width: '100%' }}
             >
               <Icon icon="ant-design:youtube-outlined" />
@@ -188,6 +215,13 @@ const CreateSectionRight = props => {
                 Youtube URL
               </Typography>
             </Button>
+            <ContentYoutubeUrl
+              open={drawerOpen}
+              toggle={toggleCreateDrawer}
+              setReload={setReload}
+              reload={reload}
+              doReload={doReload}
+            />
           </Grid>
         </Grid>
       </CardContent>

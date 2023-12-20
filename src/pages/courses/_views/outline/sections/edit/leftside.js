@@ -78,50 +78,99 @@ const EditSectionLeft = props => {
   }
 
   return (
-    <Card sx={{ height: '100%' }}>
+    <Card>
       <CardContent>
-        <form onSubmit={handleSubmit(updateFormSubmit)}>
-          <Grid item xs={12} sx={{ mt: 3 }}>
-            <label
-              htmlFor='sectiontitle'
-              style={{
-                fontSize: 16,
-                fontWeight: 500,
-                fontFamily: 'Arial',
-                marginBottom: '10px',
-                display: "block"
-              }}
-            >
-              Section Title
-            </label>
-            <FormControl fullWidth>
-              <Controller
-                render={({ field }) => (
-                  <TextField
-                    {...field}
-                    label='Title'
-                    variant='outlined'
-                    error={!!errors.title}
-                    helperText={errors.title && 'First name must be between 3 and 15 characters'}
-                  />
-                )}
-                control={control}
-                name='title'
-                rules={{
-                  required: 'Title is required',
-                  minLength: {
-                    value: 3,
-                    message: 'Title should be at least 3 characters'
-                  },
-                  maxLength: {
-                    value: 15,
-                    message: 'Title should not exceed 15 characters'
-                  }
-                }}
-              />
-            </FormControl>
-          </Grid>
-        </form>
+        <Box sx={{ mb: 3 }}>
+          <img
+            src="https://images.unsplash.com/photo-1502657877623-f66bf489d236?auto=format&fit=crop&w=800"
+            srcSet="https://images.unsplash.com/photo-1502657877623-f66bf489d236?auto=format&fit=crop&w=800&dpr=2 2x"
+            loading="lazy"
+            alt=""
+            style={{ width: '100%', height: '300px' }}
+          />
+        </Box>
+        <Box sx={{ mb: 3 }}>
+          <Typography variant='h6' sx={{ mb: 2 }}> Description</Typography>
+          <Typography variant='p'>
+            Lorem Ipsum is simply dummy text of the printing and typesetting industry. Lorem Ipsum has been the industry's standard dummy text ever since the 1500s, Lorem Ipsum is simply dummy text of the printing and typesetting industry. Lorem Ipsum has been the industry's standard dummy text ever since the 1500s,
+          </Typography>
+        </Box>
+        <Box sx={{ mb: 3 }}>
+          <video
+            autoPlay
+            loop
+            muted
+            // poster="https://assets.codepen.io/6093409/river.jpg"
+            style={{ width: '100%', height: '100%' }}
+          >
+            <source
+              src="https://assets.codepen.io/6093409/river.mp4"
+              type="video/mp4"
+
+            />
+          </video>
+        </Box>
+        <Box sx={{ mb: 3 }}>
+          <List component='nav' aria-label='main mailbox'>
+            <ListItem disablePadding>
+              <ListItemIcon sx={{ mr: 1 }}>
+                <Icon icon="ph:dot-fill" fontSize={30} />
+              </ListItemIcon>
+              <ListItemText>Lorem ipsum dolor sit amet, </ListItemText>
+            </ListItem>
+            <ListItem disablePadding>
+              <ListItemIcon sx={{ mr: 1 }}>
+                <Icon icon="ph:dot-fill" fontSize={30} />
+              </ListItemIcon>
+              <ListItemText>Lorem ipsum dolor sit amet, </ListItemText>
+            </ListItem>
+            <ListItem disablePadding>
+              <ListItemIcon sx={{ mr: 1 }}>
+                <Icon icon="ph:dot-fill" fontSize={30} />
+              </ListItemIcon>
+              <ListItemText>Lorem ipsum dolor sit amet, </ListItemText>
+            </ListItem>
+            <ListItem disablePadding>
+              <ListItemIcon sx={{ mr: 1 }}>
+                <Icon icon="ph:dot-fill" fontSize={30} />
+              </ListItemIcon>
+              <ListItemText>Lorem ipsum dolor sit amet, </ListItemText>
+            </ListItem>
+            <ListItem disablePadding>
+              <ListItemIcon sx={{ mr: 1 }}>
+                <Icon icon="ph:dot-fill" fontSize={30} />
+              </ListItemIcon>
+              <ListItemText>Lorem ipsum dolor sit amet, </ListItemText>
+            </ListItem>
+          </List>
+        </Box>
+        <Box sx={{ mb: 3 }}>
+          <Typography variant='p'>
+            Lorem Ipsum is simply dummy text of the printing and typesetting industry. Lorem Ipsum has been the industry's standard dummy text ever since the 1500s, Lorem Ipsum is simply dummy text of the printing and typesetting industry. Lorem Ipsum has been the industry's standard dummy text ever since the 1500s,
+          </Typography>
+        </Box>
+        <Box sx={{ mb: 3 }}>
+          <Box sx={{ mb: 3 }}>
+            <Typography variant='p' sx={{ mb: 2 }}>English Grammer PDF</Typography>
+          </Box>
+          <Button component="label" variant="contained" color="primary" size="small" startIcon={<Icon icon="material-symbols:download" />}>
+            Download
+          </Button>
+          <Button component="label" variant="contained" color="success" size="small" sx={{ ml: 3 }} startIcon={<Icon icon="carbon:view" />}>
+            Preview
+          </Button>
+        </Box>
+        <Box sx={{ mb: 3 }}>
+          <Box sx={{ mb: 3 }}>
+            <Typography variant='p' sx={{ mb: 2 }}>English Grammer PDF</Typography>
+          </Box>
+          <Button component="label" variant="contained" color="primary" size="small" startIcon={<Icon icon="material-symbols:download" />}>
+            Download
+          </Button>
+          <Button component="label" variant="contained" color="success" size="small" sx={{ ml: 3 }} startIcon={<Icon icon="carbon:view" />}>
+            Preview
+          </Button>
+        </Box>
       </CardContent>
     </Card >
   )

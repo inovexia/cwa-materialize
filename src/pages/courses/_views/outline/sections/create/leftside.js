@@ -121,8 +121,15 @@ const CreateSectionLeft = props => {
               />
             </FormControl>
           </Grid>
-        </form>
-      </CardContent>
+          <Grid item xs={12} sx={{ mt: 3 }}>
+            <FormEditorField
+              control={control}
+              name='description'
+              onInit={(evt, editor) => (editorRef.current = editor)}
+            />
+          </Grid>
+      </form>
+    </CardContent>
     </Card >
   )
 }
