@@ -95,12 +95,12 @@ const headCells = [
     disablePadding: false,
     label: 'User Phone No.'
   },
-  {
-    id: 'userid',
-    numeric: false,
-    disablePadding: true,
-    label: 'User ID'
-  }
+  // {
+  //   id: 'userid',
+  //   numeric: false,
+  //   disablePadding: true,
+  //   label: 'User ID'
+  // }
   // {
   //   id: 'status',
   //   numeric: false,
@@ -185,17 +185,7 @@ const EnhancedTableToolbar = props => {
           <>
             <Tooltip title='Delete'>
               <IconButton sx={{ color: 'text.secondary' }}>
-                <Icon icon='mdi:delete-outline' fontSize={20} />
-              </IconButton>
-            </Tooltip>
-            <Tooltip title='Date'>
-              <IconButton sx={{ color: 'text.secondary' }}>
-                <Icon icon="simple-line-icons:calender" fontSize={20} />
-              </IconButton>
-            </Tooltip>
-            <Tooltip title='Enrolment'>
-              <IconButton sx={{ color: 'text.secondary' }}>
-                <Icon icon="mdi:user" fontSize={20} />
+                <Icon icon='mdi:user' fontSize={20} />
               </IconButton>
             </Tooltip>
           </>
@@ -396,7 +386,7 @@ const EnhancedTable = (props) => {
                     <TableCell component='th' id={labelId} scope='row' padding='none'>
                       <Box sx={{ display: 'flex', alignItems: 'flex-start', flexDirection: 'column' }}>
                         <LinkStyled href='/tests/manage'>{row.title}</LinkStyled>
-
+                        <Typography variant='body2'>{row.guid}</Typography>
                       </Box>
                     </TableCell>
 
@@ -407,11 +397,6 @@ const EnhancedTable = (props) => {
                     </TableCell>
                     <TableCell >
                       <Typography variant='body2'>+91 9766488525</Typography>
-                    </TableCell>
-                    <TableCell >
-                      <Box sx={{ display: 'flex', alignItems: 'flex-start', flexDirection: 'column' }}>
-                        <Typography variant='body2'>{row.guid}</Typography>
-                      </Box>
                     </TableCell>
                     {/* <TableCell><RowOptions guid={row.guid} /></TableCell> */}
                   </TableRow>

@@ -35,6 +35,8 @@ import Icon from 'src/@core/components/icon'
 // ** Actions Imports
 import { changeStatus } from 'src/pages/courses/_models/CourseModel'
 
+import QuickAddEnrol from 'src/pages/courses/enrolment/quickaddenrol'
+
 const LinkStyled = styled(Link)(({ theme }) => ({
   fontWeight: 600,
   fontSize: '1rem',
@@ -176,11 +178,24 @@ const EnhancedTableToolbar = props => {
           ''
         )}
         {numSelected > 0 ? (
-          <Tooltip title='Delete'>
-            <IconButton sx={{ color: 'text.secondary' }}>
-              <Icon icon='mdi:delete-outline' />
-            </IconButton>
-          </Tooltip>
+          <>
+            <Tooltip title='Delete'>
+              <IconButton sx={{ color: 'text.secondary' }}>
+                <Icon icon='mdi:delete-outline' />
+              </IconButton>
+            </Tooltip>
+            <Tooltip title='Date'>
+              <IconButton sx={{ color: 'text.secondary' }}>
+                <Icon icon="simple-line-icons:calender" fontSize={20} />
+              </IconButton>
+            </Tooltip>
+            <Tooltip title='Enrolment'>
+              <IconButton sx={{ color: 'text.secondary' }}>
+                <Icon icon="mdi:user" fontSize={20} />
+              </IconButton>
+            </Tooltip>
+          </>
+
         ) : null}
       </Toolbar>
       : ""
@@ -206,7 +221,9 @@ const RowOptions = ({ guid }) => {
     dispatch(deleteUser(id))
     handleRowOptionsClose()
   }
-
+  const [drawerOpen, setDrawerOpen] = useState(false)
+  /** HANDLE CREATE TEST DRAWER */
+  const toggleCreateDrawer = () => setDrawerOpen(!drawerOpen)
   return (
     <>
       <IconButton size='small' onClick={handleRowOptionsClick}>
@@ -236,7 +253,7 @@ const RowOptions = ({ guid }) => {
           <Icon icon='mdi:pencil-outline' fontSize={20} />
           Manage
         </MenuItem> */}
-        <MenuItem
+        {/* <MenuItem
           component={Link}
           sx={{ '& svg': { mr: 2 } }}
           onClick={handleRowOptionsClose}
@@ -244,12 +261,13 @@ const RowOptions = ({ guid }) => {
         >
           <Icon icon='mdi:eye-outline' fontSize={20} />
           Preview
-        </MenuItem>
+        </MenuItem> */}
         <MenuItem
-          component={Link}
+          // component={Link}
           sx={{ '& svg': { mr: 2 } }}
-          onClick={handleRowOptionsClose}
-          href={`/courses/edit?id=${guid}`}
+          onClick={toggleCreateDrawer}
+        // href={`/courses/edit?id=${guid}`}
+
         >
           <Icon icon='mdi:pencil-outline' fontSize={20} />
           Change Date
@@ -285,7 +303,9 @@ const EnhancedTable = (props) => {
   const [guid, setGuid] = useState('')
   const [testStatus, setTestStatus] = useState(0)
   const [checked, setChecked] = useState(false)
-
+  const [drawerOpen, setDrawerOpen] = useState(false)
+  const [reload, setReload] = useState(0)
+  const doReload = () => setReload(r => r + 1)
   // ** Props
   const { rows, responseStatus, responseMessage, meta } = props
 
@@ -337,7 +357,8 @@ const EnhancedTable = (props) => {
 
   // Avoid a layout jump when reaching the last page with empty rows.
   const emptyRows = page > 0 ? Math.max(0, (1 + page) * rowsPerPage - rows.length) : 0
-
+  /** HANDLE CREATE TEST DRAWER */
+  const toggleCreateDrawer = () => setDrawerOpen(!drawerOpen)
   return (
     <>
       <EnhancedTableToolbar numSelected={selected.length} />
@@ -410,6 +431,13 @@ const EnhancedTable = (props) => {
         onPageChange={handleChangePage}
         rowsPerPageOptions={[10, 25, 50, 100]}
         onRowsPerPageChange={handleChangeRowsPerPage}
+      />
+      <QuickAddEnrol
+        open={drawerOpen}
+        toggle={toggleCreateDrawer}
+        setReload={setReload}
+        reload={reload}
+        doReload={doReload}
       />
     </>
   )
