@@ -14,7 +14,7 @@ import { ListCourses } from 'src/pages/courses/_models/CourseModel'
 const Toolbar = (props) => {
 
   // ** Props
-  const { searchTerm, handleSearch, status, handleStatus, orderBy, handleType } = props
+  const { searchTerm, handleSearch, status, orderBy, handleType } = props
 
   return (
     <Grid container spacing={6}>
@@ -29,7 +29,7 @@ const Toolbar = (props) => {
           />
         </FormControl>
       </Grid>
-      <Grid item sm={4} xs={12}>
+      {/* <Grid item sm={4} xs={12}>
         <FormControl fullWidth>
           <InputLabel id='status-select'>Select Status</InputLabel>
           <Select
@@ -46,8 +46,8 @@ const Toolbar = (props) => {
             <MenuItem value='0'>Unpublished</MenuItem>
           </Select>
         </FormControl>
-      </Grid>
-      <Grid item sm={4} xs={12}>
+      </Grid> */}
+      {/* <Grid item sm={4} xs={12}>
         <FormControl fullWidth>
           <InputLabel id='type-select'>Order By</InputLabel>
           <Select
@@ -68,7 +68,7 @@ const Toolbar = (props) => {
             <MenuItem value='first_name_desc'>First Name DESC</MenuItem>
           </Select>
         </FormControl>
-      </Grid>
+      </Grid> */}
     </Grid>
   )
 }

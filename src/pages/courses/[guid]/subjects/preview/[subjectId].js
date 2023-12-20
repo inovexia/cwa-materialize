@@ -18,8 +18,8 @@ import { AddTest } from 'src/pages/tests/_models/TestModel'
 
 // ** Component Imports
 import PageHeader from 'src/layouts/components/page-header'
-import RightSide from '../../_views/preview/RightSide'
-import LeftSide from '../../_views/preview/LeftSide'
+import RightSide from 'src/pages/courses/_views/preview/RightSide'
+import LeftSide from 'src/pages/courses/_views/preview/LeftSide'
 
 const Header = styled(Box)(({ theme }) => ({
   display: 'flex',

@@ -9,12 +9,12 @@ import { useRouter } from 'next/router'
 import PageHeader from 'src/layouts/components/page-header'
 
 // ** Module Specific Imports
-import SubjectList from 'src/pages/courses/_views/subjects'
+import LessonList from 'src/pages/courses/_views/outline/lessons'
 import CreateLesson from 'src/pages/courses/[guid]/subjects/[subjectId]/lesson/createDrawer'
-import Toolbar from 'src/pages/courses/_components/subjects/Toolbar'
+import Toolbar from 'src/pages/courses/_components/Toolbar'
 
 // ** Actions Imports
-import { ListCourses } from 'src/pages/courses/_models/CourseModel'
+import { ListLesson } from 'src/pages/courses/_models/LessonModel'
 
 // ** Course API
 import CourseApi from 'src/pages/courses/_components/Apis'
@@ -57,7 +57,7 @@ const Page = () => {
     formData.append('results_per_page', itemPerPage)
     formData.append('page', currentPage)
     setLoader(true)
-    const res = await CourseApi.filterCourse(formData)
+    const res = await CourseApi.allLesson(formData)
     setLoader(false)
     if (!res.success) return
     setDataList(res.payload.data)
@@ -72,7 +72,7 @@ const Page = () => {
 
 
   /** GET ALL TESTS */
-  const getCourses = useCallback(async (searchTerm, status, orderBy) => {
+  const getLessons = useCallback(async (searchTerm, status, orderBy) => {
     const data = {
     }
     if (status !== "")
@@ -84,13 +84,14 @@ const Page = () => {
     if (orderBy !== "")
       data['order_by'] = orderBy
 
-    const response = await ListCourses(data)
-
+    const response = await ListLesson({ subjectId, data })
     return response
+
+
   }, [])
 
   useEffect(() => {
-    getCourses(searchTerm, status, orderBy)
+    getLessons(searchTerm, status, orderBy)
       .then((response) => {
         if (response.success === true) {
           setDataList(response.payload.data)
@@ -100,7 +101,7 @@ const Page = () => {
           toast.error(response.message)
         }
       })
-  }, [getCourses, searchTerm, status, orderBy, isLoading])
+  }, [getLessons, searchTerm, status, orderBy, isLoading])
 
 
   /** HANDLE SEARCH */
@@ -149,8 +150,10 @@ const Page = () => {
                     handleType={handleType}
                   />
                 </CardContent>
-                <SubjectList
+                <LessonList
                   rows={dataList}
+                  dataList={dataList}
+                  setDataList={setDataList}
                   responseStatus={responseStatus}
                   responseMessage={responseMessage}
                   meta={metaData}

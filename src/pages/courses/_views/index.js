@@ -244,7 +244,7 @@ const RowOptions = ({ guid, onDelete }) => {
           component={Link}
           sx={{ '& svg': { mr: 2 } }}
           onClick={handleRowOptionsClose}
-          href={`/courses/${guid}/preview`}
+          href={`/courses/view/${guid}`}
         >
           <Icon icon='mdi:eye-outline' fontSize={20} />
           Preview
@@ -404,7 +404,7 @@ const EnhancedTable = (props) => {
                     </TableCell>
                     <TableCell component='th' id={labelId} scope='row' padding='none'>
                       <Box sx={{ display: 'flex', alignItems: 'flex-start', flexDirection: 'column' }}>
-                        <LinkStyled href={`/courses/${row.guid}/manage`}>{row.title}</LinkStyled>
+                        <LinkStyled href={`/courses/view/${row.guid}`}>{row.title}</LinkStyled>
                         <Typography noWrap variant='caption'>{row.guid}</Typography>
                       </Box>
                     </TableCell>

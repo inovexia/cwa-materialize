@@ -10,24 +10,24 @@ import toast from 'react-hot-toast'
 // ** API
 import CourseApi from 'src/pages/courses/_components/Apis'
 
-const DeleteSubject = ({ mdOpen, handleClose, guidToDelete, onItemDeleted }) => {
+const DeleteSubject = ({ mdOpen, handleClose, subjectId, onItemDeleted }) => {
   const [open, setOpen] = useState(mdOpen)
 
   useEffect(() => {
     setOpen(mdOpen)
   }, [mdOpen])
 
-  const handleDeleteMeeting = async () => {
-    const res = await CourseApi.deleteSubject(guidToDelete)
+  const handleDeleteSubject = async () => {
+    const res = await CourseApi.deleteSubject(subjectId)
     if (res.success === true) {
       setOpen(false)
-      toast.success('Course deleted successfully')
+      toast.success('Subject deleted successfully')
       if (onItemDeleted) {
         onItemDeleted()
       }
     } else {
       setOpen(false)
-      toast.error('Failed to delete course')
+      toast.error('Failed to delete subject')
     }
   }
 
@@ -44,7 +44,7 @@ const DeleteSubject = ({ mdOpen, handleClose, guidToDelete, onItemDeleted }) => 
           aria-labelledby='alert-dialog-title'
           aria-describedby='alert-dialog-description'
         >
-          <DialogTitle id='alert-dialog-title'>{'Delete Course'}</DialogTitle>
+          <DialogTitle id='alert-dialog-title'>{'Delete Subject'}</DialogTitle>
           <DialogContent>
             <DialogContentText id='alert-dialog-description'>Confirm to delete ?</DialogContentText>
           </DialogContent>
@@ -52,7 +52,7 @@ const DeleteSubject = ({ mdOpen, handleClose, guidToDelete, onItemDeleted }) => 
             <Button onClick={handleClose} variant='outlined'>
               Cancel
             </Button>
-            <Button onClick={handleDeleteMeeting} autoFocus variant='contained'>
+            <Button onClick={handleDeleteSubject} autoFocus variant='contained'>
               Confirm
             </Button>
           </DialogActions>

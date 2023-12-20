@@ -35,7 +35,6 @@ const Header = styled(Box)(({ theme }) => ({
 const schema = yup.object().shape({
   title: yup.string(),
   description: yup.string().required(),
-  created_by: yup.string().required()
 })
 
 const SidebarAddSubject = props => {
@@ -59,11 +58,12 @@ const SidebarAddSubject = props => {
     mode: 'onChange',
     resolver: yupResolver(schema)
   })
-
   const handleFormSubmit = async data => {
-    setLoading(true)
-    const response = await CourseApi.createSubject({ guid, data })
-    setLoading(false)
+    console.log('Form data:', data);
+    setLoading(true);
+    const response = await CourseApi.createSubject({ guid, data });
+    console.log('API Response:', response);
+    setLoading(false);
     if (!response.success) return toast.success(response.message)
     doReload(true)
     toggle()
@@ -137,7 +137,7 @@ const SidebarAddSubject = props => {
               startIcon={loading ? <Icon icon='eos-icons:bubble-loading' /> : ''}
               variant='contained'
             >
-              <span>SAVEE</span>
+              <span>SAVE</span>
             </LoadingButton>
             <Button size='large' variant='outlined' color='secondary' onClick={handleClose}>
               Cancel
