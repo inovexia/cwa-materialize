@@ -24,9 +24,9 @@ import {
 } from '@mui/material'
 import { visuallyHidden } from '@mui/utils'
 import { alpha } from '@mui/material/styles'
-import Link from 'next/link'
 import ReactHtmlParser from 'react-html-parser'
 import { useRouter } from 'next/router'
+import NextLink from 'next/link'
 
 import Translations from 'src/layouts/components/Translations'
 
@@ -38,7 +38,7 @@ import DeleteLesson from './delete'
 import { changeStatus } from 'src/pages/courses/_models/LessonModel'
 import CourseApi from 'src/pages/courses/_components/Apis'
 
-const LinkStyled = styled(Link)(({ theme }) => ({
+const LinkStyled = styled(NextLink)(({ theme }) => ({
   fontWeight: 600,
   fontSize: '1rem',
   cursor: 'pointer',
@@ -107,6 +107,7 @@ const headCells = [
 ]
 
 function EnhancedTableHead(props) {
+  const { query: { guid, subjectId } } = useRouter()
   // ** Props
   const { onSelectAllClick, order, orderBy, numSelected, rowCount, onRequestSort } = props
 
@@ -235,16 +236,16 @@ const RowOptions = ({ lessonId, onDelete }) => {
         PaperProps={{ style: { minWidth: '8rem' } }}
       >
         <MenuItem
-          component={Link}
+          component={NextLink}
           sx={{ '& svg': { mr: 2 } }}
           onClick={handleRowOptionsClose}
-          href='/courses/manage'
+          href={`/courses/${guid}/subjects/${subjectId}/lesson/preview/${lessonId}`}
         >
           <Icon icon='mdi:eye-outline' fontSize={20} />
           Preview
         </MenuItem>
         <MenuItem
-          component={Link}
+          component={NextLink}
           sx={{ '& svg': { mr: 2 } }}
           onClick={handleRowOptionsClose}
           href={`/courses/${guid}/subjects/${subjectId}/lesson/edit/${lessonId}`}
@@ -266,7 +267,7 @@ const RowOptions = ({ lessonId, onDelete }) => {
 }
 
 const EnhancedTable = (props) => {
-  const { query: { subjectId }, push } = useRouter()
+  const { query: { guid, subjectId }, push } = useRouter()
   // ** States
   const [page, setPage] = useState(0)
   const [order, setOrder] = useState('asc')
@@ -385,7 +386,7 @@ const EnhancedTable = (props) => {
                     </TableCell>
                     <TableCell component='th' id={labelId} scope='row' padding='none'>
                       <Box sx={{ display: 'flex', alignItems: 'flex-start', flexDirection: 'column' }}>
-                        <LinkStyled href='/tests/manage'>{row.title}</LinkStyled>
+                        <LinkStyled href={`/courses/${guid}/subjects/${subjectId}/lesson/view/${row.guid}`}>{row.title}</LinkStyled>
                         <Typography noWrap variant='caption'>{row.guid}</Typography>
                       </Box>
                     </TableCell>
