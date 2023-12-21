@@ -23,8 +23,13 @@ import FormEditorField from 'src/layouts/components/common/formEditorField'
 
 // ** API
 import CourseApi from 'src/pages/courses/_components/Apis'
-import FileUploaderSingle from 'src/pages/courses/_components/Fileupload'
-import VideoUpload from 'src/pages/courses/_components/VideoUpload'
+
+import ContentPdf from './PdfContent'
+import ContentUrl from './UrlContent'
+import ContentVideo from './VideoContent'
+import ContentYoutubeUrl from './YoutubeUrl'
+import HtmlCode from './HtmlCode'
+import ContentImage from './ImageContent'
 
 const Header = styled(Box)(({ theme }) => ({
   display: 'flex',
@@ -40,34 +45,14 @@ const schema = yup.object().shape({
   created_by: yup.string().required()
 })
 
-const ContentYoutubeUrl = props => {
-  const [youtubeUrl, setYoutubeUrl] = useState('');
-  const [videoId, setVideoId] = useState(null);
-
-  const extractVideoId = (url) => {
-    const match = url.match(
-      /^(?:https?:\/\/)?(?:www\.)?(?:youtube\.com\/(?:[^/]+\/.+\/|(?:v|e(?:mbed)?)\/|.*[?&]v=)|youtu\.be\/)([^"&?\/\s]{11})/
-    );
-    return match ? match[1] : null;
-  };
-
-  const handleUrlChange = (event) => {
-    const url = event.target.value;
-    setYoutubeUrl(url);
-    const id = extractVideoId(url);
-    setVideoId(id);
-  };
-
-  const handleButtonClick = () => {
-    // Implement your logic using the extracted videoId
-    console.log('Video ID:', videoId);
-  };
+const CreateSectionDrawer = props => {
   // ** Props
-  const { open, toggle, setReload, doReload } = props
+  const { open, toggle, contentType, setDrawerOpen } = props
 
   // ** State
   const [responseMessage, setResponseMessage] = useState('')
   const [loading, setLoading] = useState(false)
+  const [htmlCode, setHtmlCode] = useState('');
   // ** Hooks
   const {
     reset,
@@ -95,8 +80,9 @@ const ContentYoutubeUrl = props => {
   }
 
   const handleClose = () => {
-    toggle()
+    // toggle()
     reset()
+    setDrawerOpen(false)
   }
 
   const editorRef = useRef(null)
@@ -108,7 +94,7 @@ const ContentYoutubeUrl = props => {
       sx={{ '& .MuiDrawer-paper': { width: { xs: 300, sm: 400 } } }}
     >
       <Header>
-        <Typography variant='h6'>Add youtube Url</Typography>
+        <Typography variant='h6'>Create {contentType === 'html' ? 'html' : contentType === 'image' ? 'image' : contentType === 'pdf' ? 'pdf' : contentType === 'url' ? 'url' : contentType === 'video' ? 'video' : 'youtube'}</Typography>
         <IconButton size='small' onClick={handleClose} sx={{ color: 'text.primary' }}>
           <Icon icon='mdi:close' fontSize={20} />
         </IconButton>
@@ -122,21 +108,14 @@ const ContentYoutubeUrl = props => {
       )}
       <Box sx={{ p: 5 }}>
         <form onSubmit={handleSubmit(handleFormSubmit)}>
-          <TextField
-            label="YouTube URL"
-            variant="outlined"
-            fullWidth
-            value={youtubeUrl}
-            onChange={handleUrlChange}
-          />
-          {videoId && (
-            <div>
-              <p>Extracted Video ID: {videoId}</p>
-              <Button onClick={handleButtonClick} variant="contained" color="primary">
-                Process Video
-              </Button>
-            </div>
-          )}
+          <Box>
+            {contentType === 'html' && <HtmlCode />}
+            {contentType === 'image' && <ContentImage />}
+            {contentType === 'pdf' && <ContentPdf />}
+            {contentType === 'url' && <ContentUrl />}
+            {contentType === 'video' && <ContentVideo />}
+            {contentType === 'youtube' && <ContentYoutubeUrl />}
+          </Box>
           <Box sx={{ display: 'flex', alignItems: 'center', justifyContent: 'space-between', marginTop: '30px' }}>
             <LoadingButton
               type='submit'
@@ -158,4 +137,4 @@ const ContentYoutubeUrl = props => {
   )
 }
 
-export default ContentYoutubeUrl
+export default CreateSectionDrawer

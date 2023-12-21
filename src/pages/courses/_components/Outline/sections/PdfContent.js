@@ -24,6 +24,7 @@ import FormEditorField from 'src/layouts/components/common/formEditorField'
 // ** API
 import CourseApi from 'src/pages/courses/_components/Apis'
 import FileUploaderSingle from 'src/pages/courses/_components/Fileupload'
+import VideoUpload from 'src/pages/courses/_components/VideoUpload'
 
 const Header = styled(Box)(({ theme }) => ({
   display: 'flex',
@@ -39,7 +40,20 @@ const schema = yup.object().shape({
   created_by: yup.string().required()
 })
 
-const ContentImage = props => {
+const ContentPdf = props => {
+  const [file, setFile] = useState(null);
+  const [progress, setProgress] = useState(0);
+
+  const handleFileChange = (event) => {
+    const selectedFile = event.target.files[0];
+    setFile(selectedFile);
+  };
+
+  const handleUpload = () => {
+    // Implement your file upload logic here
+    // You can use libraries like axios to send the file to the server
+    // Update the progress as needed
+  };
   // ** Props
   const { open, toggle, setReload, doReload } = props
 
@@ -79,59 +93,34 @@ const ContentImage = props => {
 
   const editorRef = useRef(null)
   return (
-    <Drawer
-      open={open}
-      anchor='right'
-      onClose={handleClose}
-      sx={{ '& .MuiDrawer-paper': { width: { xs: 300, sm: 400 } } }}
-    >
-      <Header>
-        <Typography variant='h6'>Upload Image</Typography>
-        <IconButton size='small' onClick={handleClose} sx={{ color: 'text.primary' }}>
-          <Icon icon='mdi:close' fontSize={20} />
-        </IconButton>
-      </Header>
-      {responseMessage && responseMessage ? (
-        <Box sx={{ p: 4 }}>
-          {responseMessage && <FormHelperText sx={{ color: 'error.main' }}>{responseMessage}</FormHelperText>}
-        </Box>
-      ) : (
-        ''
+    <Box>
+      <input
+        accept=".pdf"
+        style={{ display: 'none' }}
+        id="upload-pdf"
+        type="file"
+        onChange={handleFileChange}
+      />
+      <label htmlFor="upload-pdf">
+        <Button
+          variant="outlined"
+          component="span"
+          startIcon={<Icon icon="material-symbols:upload" />}
+        >
+          Upload PDF
+        </Button>
+      </label>
+      {file && (
+        <div>
+          <Typography variant="subtitle1">Selected File: {file.name}</Typography>
+          <LinearProgress variant="determinate" value={progress} />
+          <Button onClick={handleUpload} variant="contained" color="primary">
+            Upload
+          </Button>
+        </div>
       )}
-      <Box sx={{ p: 5 }}>
-        <form onSubmit={handleSubmit(handleFormSubmit)}>
-          <label
-            htmlFor='description'
-            style={{
-              fontSize: 16,
-              fontWeight: 500,
-              fontFamily: 'Arial',
-              marginBottom: '10px',
-              display: "block"
-            }}
-          >
-            Image Upload
-          </label>
-          <FileUploaderSingle />
-          <Box sx={{ display: 'flex', alignItems: 'center', justifyContent: 'space-between', marginTop: '30px' }}>
-            <LoadingButton
-              type='submit'
-              color='primary'
-              loading={loading}
-              loadingPosition='start'
-              startIcon={loading ? <Icon icon='eos-icons:bubble-loading' /> : ''}
-              variant='contained'
-            >
-              <span>SAVE</span>
-            </LoadingButton>
-            <Button size='large' variant='outlined' color='secondary' onClick={handleClose}>
-              Cancel
-            </Button>
-          </Box>
-        </form>
-      </Box>
-    </Drawer>
+    </Box>
   )
 }
 
-export default ContentImage
+export default ContentPdf

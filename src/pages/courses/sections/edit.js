@@ -26,8 +26,8 @@ import CourseApi from 'src/pages/courses/_components/Apis'
 
 // ** Component Imports
 import PageHeader from 'src/layouts/components/page-header'
-import CreateSectionRight from '../_views/outline/sections/create/rightside'
-import EditSectionLeft from '../_views/outline/sections/edit/leftside'
+import CreateSectionRight from '../_views/outline/sections/createrightside'
+import EditSectionLeft from '../_views/outline/sections/editleftside'
 
 
 const EditContent = props => {

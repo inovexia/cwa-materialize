@@ -40,13 +40,7 @@ const schema = yup.object().shape({
   created_by: yup.string().required()
 })
 
-const ContentUrl = props => {
-  const [url, setUrl] = useState('');
-
-  const handleUrlChange = (event) => {
-    setUrl(event.target.value);
-  };
-
+const ContentVideo = props => {
   // ** Props
   const { open, toggle, setReload, doReload } = props
 
@@ -86,53 +80,22 @@ const ContentUrl = props => {
 
   const editorRef = useRef(null)
   return (
-    <Drawer
-      open={open}
-      anchor='right'
-      onClose={handleClose}
-      sx={{ '& .MuiDrawer-paper': { width: { xs: 300, sm: 400 } } }}
-    >
-      <Header>
-        <Typography variant='h6'>Add Url</Typography>
-        <IconButton size='small' onClick={handleClose} sx={{ color: 'text.primary' }}>
-          <Icon icon='mdi:close' fontSize={20} />
-        </IconButton>
-      </Header>
-      {responseMessage && responseMessage ? (
-        <Box sx={{ p: 4 }}>
-          {responseMessage && <FormHelperText sx={{ color: 'error.main' }}>{responseMessage}</FormHelperText>}
-        </Box>
-      ) : (
-        ''
-      )}
-      <Box sx={{ p: 5 }}>
-        <form onSubmit={handleSubmit(handleFormSubmit)}>
-          <TextField
-            label="URL Link"
-            variant="outlined"
-            fullWidth
-            value={url}
-            onChange={handleUrlChange}
-          />
-          <Box sx={{ display: 'flex', alignItems: 'center', justifyContent: 'space-between', marginTop: '30px' }}>
-            <LoadingButton
-              type='submit'
-              color='primary'
-              loading={loading}
-              loadingPosition='start'
-              startIcon={loading ? <Icon icon='eos-icons:bubble-loading' /> : ''}
-              variant='contained'
-            >
-              <span>SAVE</span>
-            </LoadingButton>
-            <Button size='large' variant='outlined' color='secondary' onClick={handleClose}>
-              Cancel
-            </Button>
-          </Box>
-        </form>
-      </Box>
-    </Drawer>
+    <Box>
+      <label
+        htmlFor='description'
+        style={{
+          fontSize: 16,
+          fontWeight: 500,
+          fontFamily: 'Arial',
+          marginBottom: '10px',
+          display: "block"
+        }}
+      >
+        Video Upload
+      </label>
+      <VideoUpload />
+    </Box>
   )
 }
 
-export default ContentUrl
+export default ContentVideo

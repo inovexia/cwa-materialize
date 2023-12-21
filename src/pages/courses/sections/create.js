@@ -26,8 +26,8 @@ import CourseApi from 'src/pages/courses/_components/Apis'
 
 // ** Component Imports
 import PageHeader from 'src/layouts/components/page-header'
-import CreateSectionLeft from '../_views/outline/sections/create/leftside'
-import CreateSectionRight from '../_views/outline/sections/create/rightside'
+import CreateSectionLeft from '../_views/outline/sections/createleftside'
+import CreateSectionRight from '../_views/outline/sections/createrightside'
 
 
 const SidebarAddSection = props => {

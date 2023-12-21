@@ -23,6 +23,8 @@ import FormEditorField from 'src/layouts/components/common/formEditorField'
 
 // ** API
 import CourseApi from 'src/pages/courses/_components/Apis'
+import FileUploaderSingle from 'src/pages/courses/_components/Fileupload'
+import VideoUpload from 'src/pages/courses/_components/VideoUpload'
 
 const Header = styled(Box)(({ theme }) => ({
   display: 'flex',
@@ -38,7 +40,28 @@ const schema = yup.object().shape({
   created_by: yup.string().required()
 })
 
-const HtmlCode = props => {
+const ContentYoutubeUrl = props => {
+  const [youtubeUrl, setYoutubeUrl] = useState('');
+  const [videoId, setVideoId] = useState(null);
+
+  const extractVideoId = (url) => {
+    const match = url.match(
+      /^(?:https?:\/\/)?(?:www\.)?(?:youtube\.com\/(?:[^/]+\/.+\/|(?:v|e(?:mbed)?)\/|.*[?&]v=)|youtu\.be\/)([^"&?\/\s]{11})/
+    );
+    return match ? match[1] : null;
+  };
+
+  const handleUrlChange = (event) => {
+    const url = event.target.value;
+    setYoutubeUrl(url);
+    const id = extractVideoId(url);
+    setVideoId(id);
+  };
+
+  const handleButtonClick = () => {
+    // Implement your logic using the extracted videoId
+    console.log('Video ID:', videoId);
+  };
   // ** Props
   const { open, toggle, setReload, doReload } = props
 
@@ -78,59 +101,24 @@ const HtmlCode = props => {
 
   const editorRef = useRef(null)
   return (
-    <Drawer
-      open={open}
-      anchor='right'
-      onClose={handleClose}
-      sx={{ '& .MuiDrawer-paper': { width: { xs: 300, sm: 400 } } }}
-    >
-      <Header>
-        <Typography variant='h6'>Create Html</Typography>
-        <IconButton size='small' onClick={handleClose} sx={{ color: 'text.primary' }}>
-          <Icon icon='mdi:close' fontSize={20} />
-        </IconButton>
-      </Header>
-      {responseMessage && responseMessage ? (
-        <Box sx={{ p: 4 }}>
-          {responseMessage && <FormHelperText sx={{ color: 'error.main' }}>{responseMessage}</FormHelperText>}
-        </Box>
-      ) : (
-        ''
+    <Box>
+      <TextField
+        label="YouTube URL"
+        variant="outlined"
+        fullWidth
+        value={youtubeUrl}
+        onChange={handleUrlChange}
+      />
+      {videoId && (
+        <div>
+          <p>Extracted Video ID: {videoId}</p>
+          <Button onClick={handleButtonClick} variant="contained" color="primary">
+            Process Video
+          </Button>
+        </div>
       )}
-      <Box sx={{ p: 5 }}>
-        <form onSubmit={handleSubmit(handleFormSubmit)}>
-          <label
-            htmlFor='description'
-            style={{
-              fontSize: 16,
-              fontWeight: 500,
-              fontFamily: 'Arial',
-              marginBottom: '10px',
-              display: "block"
-            }}
-          >
-            Description
-          </label>
-          <FormEditorField control={control} name='description' onInit={(evt, editor) => (editorRef.current = editor)} />
-          <Box sx={{ display: 'flex', alignItems: 'center', justifyContent: 'space-between', marginTop: '30px' }}>
-            <LoadingButton
-              type='submit'
-              color='primary'
-              loading={loading}
-              loadingPosition='start'
-              startIcon={loading ? <Icon icon='eos-icons:bubble-loading' /> : ''}
-              variant='contained'
-            >
-              <span>SAVE</span>
-            </LoadingButton>
-            <Button size='large' variant='outlined' color='secondary' onClick={handleClose}>
-              Cancel
-            </Button>
-          </Box>
-        </form>
-      </Box>
-    </Drawer>
+    </Box>
   )
 }
 
-export default HtmlCode
+export default ContentYoutubeUrl
