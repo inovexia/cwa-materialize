@@ -32,7 +32,7 @@ const Header = styled(Box)(({ theme }) => ({
   padding: theme.spacing(3, 4),
   justifyContent: 'space-between'
 }))
-const CreateSectionRight = props => {
+const CreateSectionRight = ({ updateValue }) => {
   const [currentPage, setCurrentPage] = useState('1')
   const [itemPerPage, setItemPerPage] = useState('10')
   const [checkedIds, setCheckedIds] = useState([])
@@ -53,10 +53,12 @@ const CreateSectionRight = props => {
   /** HANDLE CREATE TEST DRAWER */
 
   const handleDrawerContent = (value) => {
-    // alert(value)
+    const newValue = value
+    updateValue(newValue);
     setContentType(value)
     setDrawerOpen(!drawerOpen)
   }
+
 
   return (
     <Card>
@@ -186,12 +188,12 @@ const CreateSectionRight = props => {
             </Button>
           </Grid>
         </Grid>
-        <CreateSectionDrawer
+        {/* <CreateSectionDrawer
           contentType={contentType}
           open={drawerOpen}
           toggle={!drawerOpen}
           setDrawerOpen={setDrawerOpen}
-        />
+        /> */}
       </CardContent>
     </Card>
   )

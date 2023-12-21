@@ -68,4 +68,10 @@ export default class CourseApi {
   // Status Lesson
   static statusLesson = async ({ lessonId, data }) => await ApiRequest(`/course/lesson/${lessonId}/change_status`, 'POST', { data })
 
+  // Get Sections in Lesson
+  static allSections = async lessonId => await ApiRequest(`/course/lesson/${lessonId}/sections`, 'POST')
+
+  // Create Section in lesson
+  // Get Sections in Lesson
+  static createSection = async ({ lessonId, data }) => await ApiRequest(`/course/lesson/${lessonId}/section/create`, 'POST', { data })
 }

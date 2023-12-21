@@ -1,4 +1,4 @@
-import React, { useEffect, useRef } from 'react'
+import React, { useEffect, useRef, useState } from 'react'
 import { useForm, Controller } from 'react-hook-form'
 import toast from 'react-hot-toast'
 import { useRouter } from 'next/router'
@@ -16,6 +16,7 @@ import FormEditorField from 'src/layouts/components/common/formEditorField'
 const EditCourse = () => {
   const { query: { guid }, push } = useRouter()
   const editorRef = useRef(null)
+  const [loading, setLoading] = useState(true)
   const {
     control,
     handleSubmit,
@@ -48,12 +49,16 @@ const EditCourse = () => {
   useEffect(() => {
     const fetchData = async () => {
       if (guid) {
+        setLoading(true)
         const res = await CourseApi.viewCourse(guid)
+        setLoading(false)
         reset(res.payload)
       }
     }
     fetchData()
   }, [guid])
+
+  if (loading) return null
 
   return (
     <>

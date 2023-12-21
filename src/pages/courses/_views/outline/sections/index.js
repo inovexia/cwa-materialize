@@ -24,7 +24,7 @@ import {
 } from '@mui/material'
 import { visuallyHidden } from '@mui/utils'
 import { alpha } from '@mui/material/styles'
-import Link from 'next/link'
+import NextLink from 'next/link'
 import ReactHtmlParser from 'react-html-parser'
 
 import Translations from 'src/layouts/components/Translations'
@@ -35,7 +35,7 @@ import Icon from 'src/@core/components/icon'
 // ** Actions Imports
 import { changeStatus } from 'src/pages/courses/_models/CourseModel'
 
-const LinkStyled = styled(Link)(({ theme }) => ({
+const LinkStyled = styled(NextLink)(({ theme }) => ({
   fontWeight: 600,
   fontSize: '1rem',
   cursor: 'pointer',
@@ -189,10 +189,12 @@ const RowOptions = ({ guid }) => {
   const rowOptionsOpen = Boolean(anchorEl)
 
   const handleRowOptionsClick = event => {
+    event.stopPropagation()
     setAnchorEl(event.currentTarget)
   }
 
-  const handleRowOptionsClose = () => {
+  const handleRowOptionsClose = (e) => {
+    e.stopPropagation()
     setAnchorEl(null)
   }
 
@@ -222,16 +224,16 @@ const RowOptions = ({ guid }) => {
         PaperProps={{ style: { minWidth: '8rem' } }}
       >
         <MenuItem
-          component={Link}
+          component={NextLink}
           sx={{ '& svg': { mr: 2 } }}
           onClick={handleRowOptionsClose}
           href='/courses/manage'
         >
-          <Icon icon='mdi:pencil-outline' fontSize={20} />
-          Manage
+          <Icon icon='grommet-icons:chapter-add' fontSize={20} />
+          Add Content
         </MenuItem>
         <MenuItem
-          component={Link}
+          component={NextLink}
           sx={{ '& svg': { mr: 2 } }}
           onClick={handleRowOptionsClose}
           href='/courses/manage'
@@ -240,22 +242,13 @@ const RowOptions = ({ guid }) => {
           Preview
         </MenuItem>
         <MenuItem
-          component={Link}
+          component={NextLink}
           sx={{ '& svg': { mr: 2 } }}
           onClick={handleRowOptionsClose}
           href={`/courses/edit?id=${guid}`}
         >
           <Icon icon='mdi:pencil-outline' fontSize={20} />
           Edit
-        </MenuItem>
-        <MenuItem
-          component={Link}
-          sx={{ '& svg': { mr: 2 } }}
-          onClick={handleRowOptionsClose}
-          href='/courses/manage'
-        >
-          <Icon icon='mdi:pencil-outline' fontSize={20} />
-          Settings
         </MenuItem>
         <MenuItem
           sx={{ '& svg': { mr: 2 } }}
@@ -276,12 +269,11 @@ const EnhancedTable = (props) => {
   const [rowsPerPage, setRowsPerPage] = useState('10')
   const [orderBy, setOrderBy] = useState('calories')
   const [selected, setSelected] = useState([])
-  const [guid, setGuid] = useState('')
   const [testStatus, setTestStatus] = useState(0)
   const [checked, setChecked] = useState(false)
 
   // ** Props
-  const { rows, responseStatus, responseMessage, meta } = props
+  const { rows, responseStatus, responseMessage, meta, guid, subjectId, lessonId } = props
 
   const handleRequestSort = (event, property) => {
     const isAsc = orderBy === property && order === 'asc'
@@ -370,12 +362,10 @@ const EnhancedTable = (props) => {
                     </TableCell>
                     <TableCell component='th' id={labelId} scope='row' padding='none'>
                       <Box sx={{ display: 'flex', alignItems: 'flex-start', flexDirection: 'column' }}>
-                        <LinkStyled href='/tests/manage'>{row.title}</LinkStyled>
+                        <LinkStyled href={`/courses/${guid}/subjects/${subjectId}/lesson/${lessonId}/sections/${row.guid}/preview/`} onClick={e => e.stopPropagation()}>{row.title}</LinkStyled>
                         <Typography noWrap variant='caption'>{row.guid}</Typography>
                       </Box>
                     </TableCell>
-                    {/* <TableCell >{ReactHtmlParser(row.description)}</TableCell> */}
-                    {/* <TableCell >{row.type}</TableCell> */}
                     <TableCell ><Switch defaultChecked={row.status === '1' ? true : false} onChange={event => handleChangeStatus(event, row.guid)} /></TableCell>
                     <TableCell><RowOptions guid={row.guid} /></TableCell>
                   </TableRow>
@@ -388,7 +378,7 @@ const EnhancedTable = (props) => {
                 }}
               >
                 <TableCell colSpan={6}>
-                  <Translations text={responseMessage} message='No test found' />
+                  <Translations text={responseMessage} message='No section found' />
                 </TableCell>
               </TableRow>
             )}

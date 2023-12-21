@@ -66,7 +66,7 @@ const SidebarAddCourse = props => {
     const response = await CourseApi.createCourse(data)
     setLoading(false)
     if (!response.success) return toast.success(response.message)
-    doReload(true)
+    doReload()
     toggle()
     reset()
   }

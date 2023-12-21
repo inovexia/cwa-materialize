@@ -51,11 +51,8 @@ const Page = () => {
       setResponseMessage(res.message)
 
     };
-    console.log(loader)
-
-
     fetchData();
-  }, [subjectId, searchTerm]);
+  }, [subjectId, searchTerm, reload]);
   return (
     <>
       <Grid container spacing={6}>

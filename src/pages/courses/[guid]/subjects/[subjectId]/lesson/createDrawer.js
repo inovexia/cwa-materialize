@@ -65,7 +65,7 @@ const SidebarAddSubject = props => {
     setLoading(false)
     if (!response.success) return toast.error(response.message)
     toast.success(response.message)
-    doReload(true)
+    doReload()
     toggle()
     reset()
   }

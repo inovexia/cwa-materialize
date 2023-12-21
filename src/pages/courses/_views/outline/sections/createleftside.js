@@ -1,18 +1,18 @@
 // ** React Imports
 import React, { useEffect, useState, useRef } from 'react'
-
 import { useRouter } from 'next/router'
+import NextLink from "next/link"
+import { serialize } from 'object-to-formdata';
 // ** MUI Imports
 import { Grid, Card, Fragment, Link, ListItemButton, Box, List, CardHeader, ListItem, ListItemIcon, ListItemText, Drawer, Button, styled, TextField, IconButton, Typography, CardContent } from '@mui/material'
 import FormControl from '@mui/material/FormControl'
 import FormHelperText from '@mui/material/FormHelperText'
-import LoadingButton from '@mui/lab/LoadingButton'
 import 'react-draft-wysiwyg/dist/react-draft-wysiwyg.css'
 
 // ** Third Party Imports
 import * as yup from 'yup'
 import toast from 'react-hot-toast'
-import { useForm, Controller } from 'react-hook-form'
+import { useForm, useFieldArray, Controller } from 'react-hook-form';
 import { yupResolver } from '@hookform/resolvers/yup'
 
 // ** Icon Imports
@@ -27,10 +27,8 @@ import CourseApi from 'src/pages/courses/_components/Apis'
 // ** Component Imports
 import PageHeader from 'src/layouts/components/page-header'
 
-const CreateSectionLeft = props => {
-
-  const router = useRouter()
-  const { id } = router.query
+const CreateSectionLeft = ({ passedValue, contentType }) => {
+  const { query: { guid, subjectId, lessonId } } = useRouter()
   const {
     control,
     handleSubmit,
@@ -43,23 +41,16 @@ const CreateSectionLeft = props => {
       created_by: 'ASI8'
     }
   })
-  // ** Get Current Meeting Details
-  useEffect(() => {
-    const fetchData = async () => {
-      if (id) {
-        const res = await CourseApi.viewCourse(id)
-        reset(res.payload)
-      }
-    }
-    fetchData()
-  }, [id])
-
-  const updateFormSubmit = async data => {
+  console.log(passedValue)
+  const handleFormSubmit = async data => {
+    console.log('Content Type:', contentType);
+    return;
     const formData = new FormData()
     Object.entries(data).forEach(([key, value]) => {
       formData.append(key, value)
     })
-    const res = await CourseApi.updateCourse({ id, data })
+
+    const res = await CourseApi.createSection({ lessonId, data })
     if (res.success === true) {
       toast.success('Course updated successfully')
       setTimeout(() => {
@@ -80,7 +71,7 @@ const CreateSectionLeft = props => {
   return (
     <Card sx={{ height: '100%' }}>
       <CardContent>
-        <form onSubmit={handleSubmit(updateFormSubmit)}>
+        <form onSubmit={handleSubmit(handleFormSubmit)}>
           <Grid item xs={12} sx={{ mt: 3 }}>
             <label
               htmlFor='sectiontitle'
@@ -128,8 +119,20 @@ const CreateSectionLeft = props => {
               onInit={(evt, editor) => (editorRef.current = editor)}
             />
           </Grid>
-      </form>
-    </CardContent>
+          <Box sx={{ display: 'flex', alignItems: 'center', justifyContent: 'space-between', marginTop: '30px' }}>
+            <Button
+              type='submit'
+              color='primary'
+              variant='contained'
+            >
+              <span>SAVE</span>
+            </Button>
+            <Button size='large' variant='outlined' component={NextLink} href="#" color='secondary'>
+              Cancel
+            </Button>
+          </Box>
+        </form>
+      </CardContent>
     </Card >
   )
 }

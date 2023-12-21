@@ -1,19 +1,15 @@
-import React, { useEffect, useState, useRef, useCallback } from 'react'
+import React, { useEffect, useState, useCallback } from 'react'
 
 // ** MUI Imports
-import { Grid, Card, CardHeader, CardContent, Button, Box, Link, Typography, CircularProgress } from '@mui/material'
-import toast from 'react-hot-toast'
+import { Grid, Card, CardContent, Box, Typography, CircularProgress } from '@mui/material'
+import { useRouter } from 'next/router'
 
 // ** Component Imports
 import PageHeader from 'src/layouts/components/page-header'
 
 // ** Module Specific Imports
 import SectionList from 'src/pages/courses/_views/outline/sections'
-import CreateSection from 'src/pages/courses/sections/create'
 import Toolbar from 'src/pages/courses/_components/Outline/sections/Toolbar'
-
-// ** Actions Imports
-import { ListCourses } from 'src/pages/courses/_models/CourseModel'
 
 // ** Course API
 import CourseApi from 'src/pages/courses/_components/Apis'
@@ -22,6 +18,7 @@ import CourseApi from 'src/pages/courses/_components/Apis'
 
 
 const Page = () => {
+  const { query: { guid, subjectId, lessonId } } = useRouter()
   const [currentPage, setCurrentPage] = useState('1')
   const [itemPerPage, setItemPerPage] = useState('10')
   const [checkedIds, setCheckedIds] = useState([])
@@ -33,71 +30,29 @@ const Page = () => {
   const [reload, setReload] = useState(0)
   const [loader, setLoader] = useState(true)
   const [searchTerm, setSearchTerm] = useState('')
-  const [statusFilter, setStatusFilter] = useState('')
-  const [roleFilter, setRoleFilter] = useState('')
-  const [orderFilter, setOrderFilter] = useState('')
-  const [bulkAction, setBulkAction] = useState('')
   const doReload = () => setReload(r => r + 1)
 
   const [isLoading, setLoading] = useState(true)
-  const [status, setStatus] = useState('')
-  const [orderBy, setOrderBy] = useState('')
 
   // Get All Courses
-  //  Multiple Filter
-  const handleFiltersChange = useCallback(async () => {
-    setLoader(true)
-    const formData = new FormData()
-    formData.append('search', searchTerm)
-    formData.append('status', status)
-    formData.append('order_by', orderBy)
-    formData.append('results_per_page', itemPerPage)
-    formData.append('page', currentPage)
-    setLoader(true)
-    const res = await CourseApi.filterCourse(formData)
-    setLoader(false)
-    if (!res.success) return
-    setDataList(res.payload.data)
-    setMetaData(res.payload.meta)
-    setResponseStatus(res.status)
-    setResponseMessage(res.message)
-  }, [searchTerm, statusFilter, roleFilter, orderFilter, reload, itemPerPage, currentPage])
-
+  //** GET ALL LESSON OF CURRENT SUBJECT */
   useEffect(() => {
-    handleFiltersChange()
-  }, [handleFiltersChange])
+    const fetchData = async () => {
+      const res = await CourseApi.allSections(lessonId)
+      if (!res.success) return setLoader(false)
+      setLoading(false)
+      const searchTermLower = searchTerm.toLowerCase();
+      // Filter subjects based on the case-insensitive search term
+      const filteredSection = res.payload.filter(lesson =>
+        lesson.title.toLowerCase().includes(searchTermLower)
+      );
+      setDataList(filteredSection)
+      setResponseMessage(res.message)
 
+    };
 
-  /** GET ALL TESTS */
-  const getCourses = useCallback(async (searchTerm, status, orderBy) => {
-    const data = {
-    }
-    if (status !== "")
-      data['status'] = status
-
-    if (searchTerm !== "")
-      data['search'] = searchTerm
-
-    if (orderBy !== "")
-      data['order_by'] = orderBy
-
-    const response = await ListCourses(data)
-
-    return response
-  }, [])
-
-  useEffect(() => {
-    getCourses(searchTerm, status, orderBy)
-      .then((response) => {
-        if (response.success === true) {
-          setDataList(response.payload.data)
-          setMetaData(response.payload.meta)
-          setLoading(false)
-        } else {
-          toast.error(response.message)
-        }
-      })
-  }, [getCourses, searchTerm, status, orderBy, isLoading])
+    fetchData();
+  }, [lessonId, searchTerm]);
 
 
   /** HANDLE SEARCH */
@@ -124,10 +79,8 @@ const Page = () => {
           <PageHeader
             title={<Typography variant='h5'>Sections</Typography>}
             subtitle={<Typography variant='body2'>List all Sections</Typography>}
-            toggleDrawer={toggleCreateDrawer}
+            buttonHref={`/courses/${guid}/subjects/${subjectId}/lesson/${lessonId}/sections/create`}
             buttonTitle='Add Section'
-            setReload={setReload}
-            doReload={doReload}
           />
 
           <Card style={{ marginTop: "20px" }}>
@@ -141,10 +94,6 @@ const Page = () => {
                   <Toolbar
                     searchTerm={searchTerm}
                     handleSearch={handleSearch}
-                    status={status}
-                    handleStatus={handleStatus}
-                    orderBy={orderBy}
-                    handleType={handleType}
                   />
                 </CardContent>
                 <SectionList
@@ -153,18 +102,21 @@ const Page = () => {
                   responseMessage={responseMessage}
                   meta={metaData}
                   doReload={doReload}
+                  guid={guid}
+                  subjectId={subjectId}
+                  lessonId={lessonId}
                 />
               </form>)}
           </Card>
         </Grid>
       </Grid>
-      <CreateSection
+      {/* <CreateSection
         open={drawerOpen}
         toggle={toggleCreateDrawer}
         setReload={setReload}
         reload={reload}
         doReload={doReload}
-      />
+      /> */}
     </>
   )
 }

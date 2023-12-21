@@ -10,7 +10,7 @@ import toast from 'react-hot-toast'
 // ** API
 import CourseApi from 'src/pages/courses/_components/Apis'
 
-const DeleteCourse = ({ mdOpen, handleClose, guidToDelete, onItemDeleted }) => {
+const DeleteCourse = ({ mdOpen, handleClose, guidToDelete, onItemDeleted, doReload }) => {
   const [open, setOpen] = useState(mdOpen)
 
   useEffect(() => {
@@ -19,16 +19,11 @@ const DeleteCourse = ({ mdOpen, handleClose, guidToDelete, onItemDeleted }) => {
 
   const handleDeleteMeeting = async () => {
     const res = await CourseApi.deleteCourse(guidToDelete)
-    if (res.success === true) {
-      setOpen(false)
-      toast.success('Course deleted successfully')
-      if (onItemDeleted) {
-        onItemDeleted()
-      }
-    } else {
-      setOpen(false)
-      toast.error('Failed to delete course')
-    }
+    setOpen(false)
+    if (!res.success) return toast.error('Failed to delete course')
+    toast.success('Course deleted successfully')
+    doReload()
+    if (onItemDeleted) onItemDeleted()
   }
 
   useEffect(() => {

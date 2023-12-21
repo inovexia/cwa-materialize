@@ -26,13 +26,15 @@ import CourseApi from 'src/pages/courses/_components/Apis'
 
 // ** Component Imports
 import PageHeader from 'src/layouts/components/page-header'
-import CreateSectionLeft from '../_views/outline/sections/create/leftside'
-import CreateSectionRight from '../_views/outline/sections/create/rightside'
+import CreateSectionLeft from 'src/pages/courses/_views/outline/sections/createleftside'
+import CreateSectionRight from 'src/pages/courses/_views/outline/sections/createrightside'
 
 
 const SidebarAddSection = props => {
   const router = useRouter()
   const { id } = router.query
+  const [valueToPass, setValueToPass] = useState('');
+  const [contentType, setContentType] = useState('');
   const {
     control,
     handleSubmit,
@@ -45,6 +47,7 @@ const SidebarAddSection = props => {
       created_by: 'ASI8'
     }
   })
+
   // ** Get Current Meeting Details
   useEffect(() => {
     const fetchData = async () => {
@@ -73,28 +76,27 @@ const SidebarAddSection = props => {
   }
 
   const editorRef = useRef(null)
-  const log = () => {
-    if (editorRef.current) {
-      console.log(editorRef.current.getContent())
-    }
-  }
+
+  const updateValue = (newValue, newContentType) => {
+    setValueToPass(newValue);
+    setContentType(newContentType);
+  };
 
   return (
     <>
       <Grid container spacing={6}>
         <Grid item xs={12}>
           <PageHeader
-            title={<Typography variant='h5'>Create Content</Typography>}
-            subtitle={<Typography variant='body2'>All Subject Description</Typography>}
+            title={<Typography variant='h5'>Create Section</Typography>}
           />
         </Grid>
       </Grid>
       <Grid container spacing={6} sx={{ mt: 2 }}>
         <Grid item xs={12} md={8.5}>
-          <CreateSectionLeft />
+          <CreateSectionLeft passedValue={valueToPass} contentType={contentType} />
         </Grid>
         <Grid item xs={12} md={3.5}>
-          <CreateSectionRight />
+          <CreateSectionRight updateValue={updateValue} />
         </Grid>
       </Grid >
     </>

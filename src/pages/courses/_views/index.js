@@ -196,15 +196,17 @@ const RowOptions = ({ guid, onDelete }) => {
     setAnchorEl(event.currentTarget)
   }
 
-  const handleRowOptionsClose = () => {
+  const handleRowOptionsClose = (e) => {
+    e.stopPropagation()
     setAnchorEl(null)
   }
 
   // New function that calls both functions
-  const handleItemClick = () => {
-    handleRowOptionsClose();
-    handleDelete();
-  };
+  const handleItemClick = (event) => {
+    event.stopPropagation()
+    handleRowOptionsClose()
+    handleDelete()
+  }
 
   const handleDelete = () => {
     onDelete(guid);
@@ -257,15 +259,6 @@ const RowOptions = ({ guid, onDelete }) => {
           <Icon icon='mdi:pencil-outline' fontSize={20} />
           Edit
         </MenuItem>
-        {/* <MenuItem
-          component={Link}
-          sx={{ '& svg': { mr: 2 } }}
-          onClick={handleRowOptionsClose}
-          href={`/courses/${guid}/manage`}
-        >
-          <Icon icon='lets-icons:setting-line' fontSize={20} />
-          Settings
-        </MenuItem> */}
         <MenuItem
           sx={{ '& svg': { mr: 2 } }}
           onClick={handleItemClick}
@@ -278,7 +271,7 @@ const RowOptions = ({ guid, onDelete }) => {
   )
 }
 
-const EnhancedTable = (props) => {
+const EnhancedTable = ({ dataList, setDataList, responseStatus, responseMessage, meta, doReload }) => {
   // ** States
   const [page, setPage] = useState(0)
   const [order, setOrder] = useState('asc')
@@ -291,9 +284,6 @@ const EnhancedTable = (props) => {
   const [guidToDelete, setGuidToDelete] = useState('')
   const [openModal, setOpenModal] = useState(false)
   const [openArcModal, setOpenArcModal] = useState(false)
-
-  // ** Props
-  const { dataList, setDataList, responseStatus, responseMessage, meta } = props
 
   const handleRequestSort = (event, property) => {
     const isAsc = orderBy === property && order === 'asc'
@@ -403,7 +393,7 @@ const EnhancedTable = (props) => {
                     </TableCell>
                     <TableCell component='th' id={labelId} scope='row' padding='none'>
                       <Box sx={{ display: 'flex', alignItems: 'flex-start', flexDirection: 'column' }}>
-                        <LinkStyled href={`/courses/view/${row.guid}`}>{row.title}</LinkStyled>
+                        <LinkStyled href={`/courses/view/${row.guid}`} onClick={e => e.stopPropagation()}>{row.title}</LinkStyled>
                         <Typography noWrap variant='caption'>{row.guid}</Typography>
                       </Box>
                     </TableCell>
@@ -444,6 +434,7 @@ const EnhancedTable = (props) => {
         handleClose={handleCloseModal}
         guidToDelete={guidToDelete}
         onItemDeleted={handleItemDeleted}
+        doReload={doReload}
       />
     </>
   )

@@ -194,10 +194,12 @@ const RowOptions = ({ lessonId, onDelete }) => {
   const rowOptionsOpen = Boolean(anchorEl)
 
   const handleRowOptionsClick = event => {
+    event.stopPropagation()
     setAnchorEl(event.currentTarget)
   }
 
-  const handleRowOptionsClose = () => {
+  const handleRowOptionsClose = (e) => {
+    e.stopPropagation()
     setAnchorEl(null)
   }
 
@@ -207,6 +209,7 @@ const RowOptions = ({ lessonId, onDelete }) => {
   // }
 
   const handleItemClick = (lessonId) => {
+    lessonId.stopPropagation()
     handleRowOptionsClose();
     handleDelete(lessonId);
   };
@@ -386,7 +389,7 @@ const EnhancedTable = (props) => {
                     </TableCell>
                     <TableCell component='th' id={labelId} scope='row' padding='none'>
                       <Box sx={{ display: 'flex', alignItems: 'flex-start', flexDirection: 'column' }}>
-                        <LinkStyled href={`/courses/${guid}/subjects/${subjectId}/lesson/view/${row.guid}`}>{row.title}</LinkStyled>
+                        <LinkStyled href={`/courses/${guid}/subjects/${subjectId}/lesson/${row.guid}/sections`} onClick={e => e.stopPropagation()}>{row.title}</LinkStyled>
                         <Typography noWrap variant='caption'>{row.guid}</Typography>
                       </Box>
                     </TableCell>
