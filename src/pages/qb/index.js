@@ -22,42 +22,35 @@ const Page = () => {
   const [metaData, setMetaData] = useState([])
   const [responseStatus, setResponseStatus] = useState(false)
   const [responseMessage, setResponseMessage] = useState('')
-  const [drawerOpen, setDrawerOpen] = useState(false)
   const [isLoading, setLoading] = useState(true)
   const [searchTerm, setSearchTerm] = useState('')
   const [status, setStatus] = useState('')
   const [type, setType] = useState('')
 
   /** GET ALL TESTS */
-  const getTests = useCallback(async (searchTerm, status, type) => {
-    const data = {
-    }
-    if (status !== "")
-      data['status'] = status
-
-    if (searchTerm !== "")
-      data['search'] = searchTerm
-
-    if (type !== "")
-      data['test_type'] = type
-
-    const response = await ListQuestions(data)
-
-    return response
-  }, [])
-
   useEffect(() => {
-    getTests(searchTerm, status, type)
-      .then((response) => {
-        if (response.success === true) {
-          setDataList(response.payload.data)
-          setMetaData(response.payload.meta)
-          setLoading(false)
-        } else {
-          toast.error(response.message)
-        }
-      })
-  }, [getTests, searchTerm, status, type])
+    const getQuestions = async () => {
+      const data = {
+      }
+      if (status !== "")
+        data['status'] = status
+
+      if (searchTerm !== "")
+        data['search'] = searchTerm
+
+      if (type !== "")
+        data['test_type'] = type
+
+      const response = await ListQuestions(data)
+      setLoading(false)
+      if (!response.success) {
+        toast.error(response.message)
+      }
+      setDataList(response.payload.data)
+      setMetaData(response.payload.meta)
+    }
+    getQuestions()
+  }, [searchTerm, status, type])
 
 
   /** HANDLE SEARCH */
@@ -75,9 +68,6 @@ const Page = () => {
     setType(value)
   }, [])
 
-  /** HANDLE CREATE TEST DRAWER */
-  const toggleCreateDrawer = () => setDrawerOpen(!drawerOpen)
-
   return (
     <>
       <Grid container spacing={6}>
@@ -90,7 +80,9 @@ const Page = () => {
           />
           <Card>
             {isLoading ?
-              (<CircularProgress />) :
+              (<Box fullWidth className="loader" style={{ textAlign: "center", padding: "50px 0px" }}>
+                <CircularProgress />
+              </Box>) :
               (<form>
                 <CardContent>
                   <Toolbar
@@ -121,7 +113,6 @@ const Page = () => {
                     )}
                   </CardContent>
                 </Card>
-
               </form>)}
           </Card>
         </Grid>

@@ -2,6 +2,7 @@ import React, { useEffect, useState, useRef } from 'react'
 import { useForm, Controller } from 'react-hook-form'
 import toast from 'react-hot-toast'
 import { useRouter } from 'next/router'
+import NextLink from 'next/link'
 
 // ** MUI Imports
 import { Grid, Card, TextField, Button, Link, CardHeader, CardContent, FormControl } from '@mui/material'
@@ -138,7 +139,7 @@ const EditSubject = () => {
                   <Button variant='contained' size='medium' type='submit' sx={{ mt: 5 }}>
                     Update
                   </Button>
-                  <Button variant='outlined' size='medium' component={Link} href='/meetings' sx={{ mt: 5, ml: 3 }}>
+                  <Button variant='outlined' size='medium' component={NextLink} href={`/courses/${guid}/subjects`} sx={{ mt: 5, ml: 3 }}>
                     Cancel
                   </Button>
                 </Grid>

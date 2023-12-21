@@ -113,7 +113,7 @@ const headCells = [
 
 function EnhancedTableHead(props) {
   // ** Props
-  const { onSelectAllClick, order, orderBy, numSelected, rowCount, onRequestSort } = props
+  const { rows, onSelectAllClick, order, orderBy, numSelected, rowCount, onRequestSort } = props
 
   const createSortHandler = property => event => {
     onRequestSort(event, property)
@@ -307,7 +307,7 @@ const EnhancedTable = (props) => {
   const [reload, setReload] = useState(0)
   const doReload = () => setReload(r => r + 1)
   // ** Props
-  const { rows, responseStatus, responseMessage, meta } = props
+  const { rows, dataList, responseStatus, responseMessage } = props
 
   const handleRequestSort = (event, property) => {
     const isAsc = orderBy === property && order === 'asc'
@@ -359,6 +359,7 @@ const EnhancedTable = (props) => {
   const emptyRows = page > 0 ? Math.max(0, (1 + page) * rowsPerPage - rows.length) : 0
   /** HANDLE CREATE TEST DRAWER */
   const toggleCreateDrawer = () => setDrawerOpen(!drawerOpen)
+  console.log(dataList)
   return (
     <>
       <EnhancedTableToolbar numSelected={selected.length} />
@@ -397,12 +398,12 @@ const EnhancedTable = (props) => {
                     </TableCell>
                     <TableCell component='th' id={labelId} scope='row' padding='none'>
                       <Box sx={{ display: 'flex', alignItems: 'flex-start', flexDirection: 'column' }}>
-                        <LinkStyled href='/tests/manage'>{row.title}</LinkStyled>
+                        <LinkStyled href='/tests/manage'>{row.first_name} {row.last_name}</LinkStyled>
                         <Typography noWrap variant='caption'>{row.guid}</Typography>
                       </Box>
                     </TableCell>
-                    <TableCell >25 Dec 2023</TableCell>
-                    <TableCell >30 Dec 2023</TableCell>
+                    <TableCell >{row.start_date}</TableCell>
+                    <TableCell >{row.end_date}</TableCell>
                     {/* <TableCell >{row.type}</TableCell> */}
                     {/* <TableCell ><Switch defaultChecked={row.status === '1' ? true : false} onChange={event => handleChangeStatus(event, row.guid)} /></TableCell> */}
                     <TableCell><RowOptions guid={row.guid} /></TableCell>

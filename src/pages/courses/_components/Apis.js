@@ -32,7 +32,7 @@ export default class CourseApi {
   static filterMeetings = async ({ guid, data }) => await ApiRequest(`/course/zoom/get_meetings/${guid}`, 'POST', { data })
 
   // Get All Enrolled Users
-  static enrolledUsers = async ({ guid, data }) => await ApiRequest(`/course/enrolments/${guid}`, 'POST', { data })
+  static enrolledUsers = async guid => await ApiRequest(`/course/enrolments/${guid}`, 'POST')
 
   // Create Subject
   static createSubject = async ({ guid, data }) => await ApiRequest(`/course/${guid}/subject/create`, 'POST', { data })
@@ -61,4 +61,11 @@ export default class CourseApi {
 
   // Edit Lesson
   static editLesson = async ({ lessonId, data }) => await ApiRequest(`/course/lesson/${lessonId}/edit`, 'POST', { data })
+
+  // Delete Lesson
+  static deleteLesson = async lessonId => await ApiRequest(`/course/lesson/${lessonId}/delete`, 'DELETE')
+
+  // Status Lesson
+  static statusLesson = async ({ lessonId, data }) => await ApiRequest(`/course/lesson/${lessonId}/change_status`, 'POST', { data })
+
 }
