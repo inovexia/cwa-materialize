@@ -27,9 +27,9 @@ const Page = props => {
   const { open, toggle } = props
 
   // ** State
-  const [responseMessage, setResponseMessage] = useState('')
   const [isLoading, setLoading] = useState(false)
   const [categories, setCategories] = useState([])
+  const guid = ''
 
   const getCategories = useCallback(async () => {
     const response = await GetCategories()
@@ -72,9 +72,8 @@ const Page = props => {
           <CardContent>
             <CreateQuestionForm
               onSubmit={onSubmit}
-              isLoading={isLoading}
-              toggle={toggle}
               categories={categories}
+              guid={guid}
             />
           </CardContent>
         </Card>

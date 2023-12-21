@@ -35,6 +35,22 @@ export async function AddQuestion(data) {
 }
 
 /** EDIT QUESTION */
+export async function EditQuestion(guid, data) {
+
+  const formData = new FormData()
+  if (typeof data === "object") {
+    Object.entries(data).forEach(([key, value]) => {
+      formData.append(key, value)
+    })
+  }
+  const response = await API.editQuestion({ guid, data: formData })
+  var responseMessage = await MessageFormatter(response.message)
+  response.message = await responseMessage
+
+  return response
+}
+
+/** VIEW QUESTION */
 export async function ViewQuestion(guid, data) {
 
   const formData = new FormData()

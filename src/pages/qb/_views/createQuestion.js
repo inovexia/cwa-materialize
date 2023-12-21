@@ -1,4 +1,4 @@
-import { useState } from 'react'
+import { useEffect, useState } from 'react'
 import Grid from '@mui/material/Grid'
 import Link from '@mui/material/Link'
 import Select from '@mui/material/Select'
@@ -18,49 +18,30 @@ import { useForm, Controller } from 'react-hook-form'
 import { yupResolver } from '@hookform/resolvers/yup'
 import { Box, Checkbox, Divider, FormControlLabel, Radio } from '@mui/material'
 
-
-var defaultValues = {
-  question: 'asasa',
-  type: '',
-  difficulty: '',
-  feedback: '',
-  answer_feedback: '',
-  category_guid: ''
-}
-
-
-const schema = yup.object().shape({
-  question: yup.string().required().min(3),
-  question_type: yup.string().required(),
-  feedback: yup.string(),
-  answer_feedback: yup.string()
-})
-
-
 const CreateQuestionForm = (props) => {
+
   // ** Props
-  const { onSubmit, isLoading, data } = props
+  const { onSubmit, guid, question } = props
 
   // ** State
   const [count, setCount] = useState(1)
+  const [isSubmitting, setIsSubmitting] = useState(false)
 
-  if (data && data.length > 0) {
-    console.log('Oh yes')
-    reset(data)
-  }
+  const validationSchema = yup.object().shape({
+    question: yup.string().required().min(3),
+    question_type: yup.string().required(),
+    difficulty: yup.string().required(),
+    marks: yup.string(),
+    neg_marks: yup.string(),
+    time: yup.string(),
+    feedback: yup.string(),
+    answer_feedback: yup.string()
+  })
 
+  const defaultValues = question
 
   // ** Hooks
-  const {
-    reset,
-    control,
-    handleSubmit,
-    formState: { errors }
-  } = useForm({
-    defaultValues,
-    mode: 'onChange',
-    resolver: yupResolver(schema)
-  })
+  const { reset, control, handleSubmit, formState: { errors } } = useForm({ defaultValues, resolver: yupResolver(validationSchema) })
 
   const handleCancel = () => {
 
@@ -76,12 +57,13 @@ const CreateQuestionForm = (props) => {
               name='question'
               control={control}
               rules={{ required: true }}
-              render={({ field }) => (
+              render={({ field: { value, onChange } }) => (
                 <TextField
                   rows={4}
                   multiline
-                  {...field}
                   label='Question'
+                  value={value}
+                  onChange={e => (e.target.value)}
                   error={Boolean(errors.question)}
                   aria-describedby='validation-test-details'
                 />
@@ -97,39 +79,7 @@ const CreateQuestionForm = (props) => {
 
         <Grid item xs={12} md={6}>
           <FormControl fullWidth sx={{ mb: 6 }}>
-            <InputLabel id='test-type'>Difficulty</InputLabel>
-            <Controller
-              name='difficulty'
-              control={control}
-              rules={{ required: true }}
-              render={({ field: { value, onChange } }) => (
-                <Select
-                  fullWidth
-                  value={value}
-                  defaultValue='mcmc'
-                  label='Difficulty'
-                  labelId='typeLabel'
-                  onChange={onChange}
-                  error={Boolean(errors.difficulty)}
-                  inputProps={{ placeholder: 'Select Type' }}
-                >
-                  <MenuItem value='mcmc'>Easy</MenuItem>
-                  <MenuItem value='tf'>Medium</MenuItem>
-                  <MenuItem value='quiz'>Hard</MenuItem>
-                </Select>
-              )}
-            />
-            {errors.difficulty && (
-              <FormHelperText sx={{ color: 'error.main' }} id='validation-difficulty'>
-                {errors.difficulty.message}
-              </FormHelperText>
-            )}
-          </FormControl>
-        </Grid>
-
-        <Grid item xs={12} md={6}>
-          <FormControl fullWidth sx={{ mb: 6 }}>
-            <InputLabel id='test-type'>Question Type</InputLabel>
+            <InputLabel id='question-type'>Question Type</InputLabel>
             <Controller
               name='question_type'
               control={control}
@@ -142,6 +92,7 @@ const CreateQuestionForm = (props) => {
                   label='Question Type '
                   labelId='typeLabel'
                   onChange={onChange}
+                  selected={value}
                   error={Boolean(errors.question_type)}
                   inputProps={{ placeholder: 'Select Type' }}
                 >
@@ -155,6 +106,39 @@ const CreateQuestionForm = (props) => {
             {errors.question_type && (
               <FormHelperText sx={{ color: 'error.main' }} id='validation-question_type'>
                 {errors.question_type.message}
+              </FormHelperText>
+            )}
+          </FormControl>
+        </Grid>
+
+        <Grid item xs={12} md={6}>
+          <FormControl fullWidth sx={{ mb: 6 }}>
+            <InputLabel id='question-difficulty'>Difficulty</InputLabel>
+            <Controller
+              name='difficulty'
+              control={control}
+              rules={{ required: true }}
+              render={({ field: { value, onChange } }) => (
+                <Select
+                  fullWidth
+                  value={value}
+                  defaultValue='mcmc'
+                  label='Difficulty'
+                  labelId='typeLabel'
+                  onChange={onChange}
+                  selected={value}
+                  error={Boolean(errors.difficulty)}
+                  inputProps={{ placeholder: 'Select Type' }}
+                >
+                  <MenuItem value='mcmc'>Easy</MenuItem>
+                  <MenuItem value='tf'>Medium</MenuItem>
+                  <MenuItem value='quiz'>Hard</MenuItem>
+                </Select>
+              )}
+            />
+            {errors.difficulty && (
+              <FormHelperText sx={{ color: 'error.main' }} id='validation-difficulty'>
+                {errors.difficulty.message}
               </FormHelperText>
             )}
           </FormControl>
@@ -332,8 +316,8 @@ const CreateQuestionForm = (props) => {
 
 
         <Grid item xs={12} sx={{ display: 'flex', alignItems: 'center' }}>
-          <Button size='large' type='submit' variant='contained' disabled={isLoading ? true : false}>
-            {isLoading ? (
+          <Button size='large' type='submit' variant='contained' disabled={isSubmitting ? true : false}>
+            {isSubmitting ? (
               <CircularProgress
                 sx={{
                   color: 'common.white',

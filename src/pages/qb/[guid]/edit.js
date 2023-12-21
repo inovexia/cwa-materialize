@@ -21,60 +21,46 @@ import CreateQuestionForm from 'src/pages/qb/_views/createQuestion'
 import { ViewQuestion, GetCategories, EditQuestion } from 'src/pages/qb/_models/QuestionModel'
 
 import { useRouter } from 'next/router'
+import { CircularProgress } from '@mui/material'
 
-const Page = props => {
+const Page = () => {
 
   const router = useRouter()
   const { guid } = router.query
 
-  // ** Props
-  const { open, toggle } = props
-
   // ** State
-  const [isLoading, setLoading] = useState(true)
+  const [isLoading, setLoading] = useState(false)
   const [question, setQuestion] = useState([])
   const [categories, setCategories] = useState([])
 
   /** FETCH QUESTION  */
   useEffect(() => {
-    const fetchData = async () => {
+    const getQuestion = async () => {
       const response = await ViewQuestion(guid)
-      if (response.success) {
-        setQuestion(response.payload)
-      }
       setLoading(false)
+      if (!response.success) {
+        toast.error(response.message)
+      }
+      setQuestion(response.payload.data)
     }
-    fetchData()
-  }, [guid])
+    getQuestion()
+  }, [])
 
-  /*   const ques = useCallback(async () => {
-      const response = await ViewQuestion(`${guid}`)
-
-      return response
-    }, [])
-
-    useEffect(() => {
-      ques()
-        .then((response) => {
-          if (response.success) {
-            setQuestion(response.payload)
-          }
-        })
-        .then(setLoading(false))
-    }, [ques, question])
+  console.log(question)
 
 
-   */  /** SAVE QUESTION  */
+  /** SAVE QUESTION  */
   const onSubmit = async (data) => {
     setLoading(true)
-    const response = await EditQuestion(guid, data)
+    await EditQuestion(guid, data)
+      .then(response => {
+        if (response.success === true) {
+          toast.success(response.message)
+        } else {
+          toast.error(response.message)
+        }
+      })
     setLoading(false)
-    if (response.success === true) {
-      toast.success(response.message)
-    } else {
-      toggle()
-      toast.error(response.message)
-    }
   }
 
   return (
@@ -89,11 +75,13 @@ const Page = props => {
         <Card>
           <CardContent>
             {isLoading ?
-              ('Loading') :
+              (<Box className="loader" style={{ textAlign: "center", padding: "50px 0px" }}>
+                <CircularProgress />
+              </Box>) :
               (<CreateQuestionForm
                 onSubmit={onSubmit}
-                isLoading={isLoading}
-                data={question}
+                guid={guid}
+                question={question}
               />)}
           </CardContent>
         </Card>

@@ -15,6 +15,7 @@ import FormEditorField from 'src/layouts/components/common/formEditorField'
 const EditUser = () => {
   const router = useRouter()
   const { id } = router.query
+
   const {
     control,
     handleSubmit,
@@ -27,6 +28,7 @@ const EditUser = () => {
       created_by: 'ASI8'
     }
   })
+
   // ** Get Current Meeting Details
   useEffect(() => {
     const fetchData = async () => {
@@ -56,6 +58,7 @@ const EditUser = () => {
   }
 
   const editorRef = useRef(null)
+
   const log = () => {
     if (editorRef.current) {
       console.log(editorRef.current.getContent())
