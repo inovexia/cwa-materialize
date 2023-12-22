@@ -8,11 +8,9 @@ import StepLabel from '@mui/material/StepLabel'
 import Typography from '@mui/material/Typography'
 
 // ** Step Components
-import StepVerification from './StepVerification'
-import StepMobileNumber from './StepMobileNumber'
-import StepLoginInfo from './StepLoginInfo'
-
-
+import StepEmailVerify from './StepEmailVerify'
+import StepOtpVerification from './StepOtpVerification'
+import StepChangePassword from './StepChangePassword'
 
 // ** Custom Component Import
 import StepperCustomDot from './CustomDot'
@@ -22,7 +20,7 @@ import StepperWrapper from 'src/@core/styles/mui/stepper'
 
 const steps = [
   {
-    title: 'Mobile Number',
+    title: 'Username & Password',
     // subtitle: 'Account Details'
   },
   {
@@ -30,7 +28,7 @@ const steps = [
     // subtitle: 'Enter Information'
   },
   {
-    title: 'Login Details',
+    title: 'Change Password',
     // subtitle: 'Payment Details'
   }
 ]
@@ -53,11 +51,11 @@ const RegisterMultiSteps = () => {
   const getStepContent = step => {
     switch (step) {
       case 0:
-        return <StepMobileNumber handleNext={handleNext} />
+        return <StepEmailVerify handleNext={handleNext} />
       case 1:
-        return <StepVerification handleNext={handleNext} handlePrev={handlePrev} />
+        return <StepOtpVerification handleNext={handleNext} handlePrev={handlePrev} />
       case 2:
-        return <StepLoginInfo handlePrev={handlePrev} />
+        return <StepChangePassword handlePrev={handlePrev} />
       default:
         return null
     }

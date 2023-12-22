@@ -10,7 +10,7 @@ import BlankLayout from 'src/@core/layouts/BlankLayout'
 import { useSettings } from 'src/@core/hooks/useSettings'
 
 // ** Demo Components Imports
-import RegisterMultiStepsWizard from './_component/RegisterMultiSteps'
+import RegisterMultiStepsWizard from './_component/registermultisteps'
 
 // ** Styled Components
 const RegisterMultiStepsIllustration = styled('img')({

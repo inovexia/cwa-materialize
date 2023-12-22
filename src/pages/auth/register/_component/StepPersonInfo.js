@@ -16,7 +16,7 @@ import InputAdornment from '@mui/material/InputAdornment'
 // ** Icon Imports
 import Icon from 'src/@core/components/icon'
 
-const StepPersonInfo = ({ handleNext }) => {
+const StepPersonInfo = ({ handleNext, handlePrev }) => {
   // ** States
   const [values, setValues] = useState({
     showPassword: false,
@@ -37,21 +37,27 @@ const StepPersonInfo = ({ handleNext }) => {
         <Typography variant='h5'>Personal Details</Typography>
         <Typography sx={{ color: 'text.secondary' }}>Enter Your Name</Typography>
       </Box>
-
-      <Grid container spacing={5}>
-        <Grid item xs={12} sm={4}>
-          <TextField fullWidth placeholder='john' label='First Name' />
+      <form>
+        <Grid container spacing={5}>
+          <Grid item xs={12} sm={4}>
+            <TextField fullWidth placeholder='john' label='First Name' />
+          </Grid>
+          <Grid item xs={12} sm={4}>
+            <TextField fullWidth label='Middle Name' placeholder='Doe' />
+          </Grid>
+          <Grid item xs={12} sm={4}>
+            <TextField fullWidth label='Last Name' placeholder='Doe' />
+          </Grid>
         </Grid>
-        <Grid item xs={12} sm={4}>
-          <TextField fullWidth label='Middle Name' placeholder='Doe' />
-        </Grid>
-        <Grid item xs={12} sm={4}>
-          <TextField fullWidth label='Last Name' placeholder='Doe' />
-        </Grid>
-      </Grid>
+      </form>
       <Grid item xs={12} sx={{ mt: 4 }}>
         <Box sx={{ display: 'flex', justifyContent: 'space-between' }}>
-          <Button disabled variant='contained' startIcon={<Icon icon='mdi:chevron-left' fontSize={20} />}>
+          <Button
+            color='secondary'
+            variant='contained'
+            onClick={handlePrev}
+            startIcon={<Icon icon='mdi:chevron-left' fontSize={20} />}
+          >
             Previous
           </Button>
           <Button variant='contained' onClick={handleNext} endIcon={<Icon icon='mdi:chevron-right' fontSize={20} />}>

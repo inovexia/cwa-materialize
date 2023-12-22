@@ -17,7 +17,7 @@ import InputAdornment from '@mui/material/InputAdornment'
 // ** Icon Imports
 import Icon from 'src/@core/components/icon'
 
-const StepAccountDetails = ({ handleNext }) => {
+const StepEmailVerify = ({ handleNext }) => {
   // ** States
   const [values, setValues] = useState({
     showPassword: false,
@@ -50,7 +50,7 @@ const StepAccountDetails = ({ handleNext }) => {
               Previous
             </Button>
             <Button variant='contained' onClick={handleNext} endIcon={<Icon icon='mdi:chevron-right' fontSize={20} />}>
-              Next
+              Send OTP
             </Button>
           </Box>
         </Grid>
@@ -59,4 +59,4 @@ const StepAccountDetails = ({ handleNext }) => {
   )
 }
 
-export default StepAccountDetails
+export default StepEmailVerify

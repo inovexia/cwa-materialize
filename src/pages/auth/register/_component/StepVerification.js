@@ -79,7 +79,7 @@ const defaultValues = {
   val5: '',
   val6: ''
 }
-const StepPersonalDetails = ({ handleNext, handlePrev }) => {
+const StepVerification = ({ handleNext, handlePrev }) => {
   // ** State
   const [isBackspace, setIsBackspace] = useState(false)
 
@@ -194,7 +194,12 @@ const StepPersonalDetails = ({ handleNext, handlePrev }) => {
         </Grid>
         <Grid item xs={12}>
           <Box sx={{ display: 'flex', justifyContent: 'space-between' }}>
-            <Button disabled variant='contained' startIcon={<Icon icon='mdi:chevron-left' fontSize={20} />}>
+            <Button
+              color='secondary'
+              variant='contained'
+              onClick={handlePrev}
+              startIcon={<Icon icon='mdi:chevron-left' fontSize={20} />}
+            >
               Previous
             </Button>
             <Button variant='contained' onClick={handleNext} endIcon={<Icon icon='mdi:chevron-right' fontSize={20} />}>
@@ -207,4 +212,4 @@ const StepPersonalDetails = ({ handleNext, handlePrev }) => {
   )
 }
 
-export default StepPersonalDetails
+export default StepVerification

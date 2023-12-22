@@ -16,7 +16,7 @@ import InputAdornment from '@mui/material/InputAdornment'
 // ** Icon Imports
 import Icon from 'src/@core/components/icon'
 
-const StepAccountDetails = ({ handleNext }) => {
+const StepMobileNumbers = ({ handleNext }) => {
   // ** States
   const [values, setValues] = useState({
     showPassword: false,
@@ -37,31 +37,37 @@ const StepAccountDetails = ({ handleNext }) => {
         <Typography variant='h5'>Mobile Number</Typography>
         <Typography sx={{ color: 'text.secondary' }}>Enter Your Mobile Number</Typography>
       </Box>
-
-      <Grid container spacing={5}>
-        <Grid item xs={12}>
-          <TextField
-            fullWidth
-            label='Mobile'
-            placeholder='202 555 0111'
-            InputProps={{
-              startAdornment: <InputAdornment position='start'>India (+91)</InputAdornment>
-            }}
-          />
+      <form>
+        <Grid container spacing={5}>
+          <Grid item xs={12}>
+            <TextField
+              fullWidth
+              label='Mobile'
+              placeholder='202 555 0111'
+              InputProps={{
+                startAdornment: <InputAdornment position='start'>India (+91)</InputAdornment>
+              }}
+            />
+          </Grid>
+          <Grid item xs={12}>
+            <FormControl fullWidth>
+              <TextField type='email' label='Email' placeholder='john.doe@email.com' />
+            </FormControl>
+          </Grid>
+          <Grid item xs={12}>
+            <Box sx={{ display: 'flex', justifyContent: 'space-between' }}>
+              <Button disabled variant='contained' startIcon={<Icon icon='mdi:chevron-left' fontSize={20} />}>
+                Previous
+              </Button>
+              <Button variant='contained' onClick={handleNext} endIcon={<Icon icon='mdi:chevron-right' fontSize={20} />}>
+                Send OTP
+              </Button>
+            </Box>
+          </Grid>
         </Grid>
-        <Grid item xs={12}>
-          <Box sx={{ display: 'flex', justifyContent: 'space-between' }}>
-            <Button disabled variant='contained' startIcon={<Icon icon='mdi:chevron-left' fontSize={20} />}>
-              Previous
-            </Button>
-            <Button variant='contained' onClick={handleNext} endIcon={<Icon icon='mdi:chevron-right' fontSize={20} />}>
-              Send OTP
-            </Button>
-          </Box>
-        </Grid>
-      </Grid>
+      </form>
     </>
   )
 }
 
-export default StepAccountDetails
+export default StepMobileNumbers

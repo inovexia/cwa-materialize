@@ -18,7 +18,7 @@ import Checkbox from '@mui/material/Checkbox'
 // ** Icon Imports
 import Icon from 'src/@core/components/icon'
 
-const StepLoginInfo = ({ handleNext }) => {
+const StepLoginInfo = ({ handleNext, handlePrev }) => {
   // ** States
   const [values, setValues] = useState({
     showPassword: false,
@@ -46,11 +46,32 @@ const StepLoginInfo = ({ handleNext }) => {
       <Grid container spacing={5}>
         <Grid item xs={12}>
           <form noValidate autoComplete='off' onSubmit={e => e.preventDefault()}>
-            <TextField autoFocus fullWidth id='email' label='Email' sx={{ mb: 4 }} />
             <FormControl fullWidth>
               <InputLabel htmlFor='auth-login-password'>Password</InputLabel>
               <OutlinedInput
                 label='Password'
+                value={values.password}
+                id='auth-login-password'
+                onChange={handleChange('password')}
+                type={values.showPassword ? 'text' : 'password'}
+                endAdornment={
+                  <InputAdornment position='end'>
+                    <IconButton
+                      edge='end'
+                      onClick={handleClickShowPassword}
+                      onMouseDown={e => e.preventDefault()}
+                      aria-label='toggle password visibility'
+                    >
+                      <Icon icon={values.showPassword ? 'mdi:eye-outline' : 'mdi:eye-off-outline'} />
+                    </IconButton>
+                  </InputAdornment>
+                }
+              />
+            </FormControl>
+            <FormControl fullWidth sx={{ mt: 3 }}>
+              <InputLabel htmlFor='auth-login-password'>Confirmed Password</InputLabel>
+              <OutlinedInput
+                label='Confirmed Password'
                 value={values.password}
                 id='auth-login-password'
                 onChange={handleChange('password')}
@@ -77,24 +98,25 @@ const StepLoginInfo = ({ handleNext }) => {
                 control={<Checkbox />}
                 sx={{ '& .MuiFormControlLabel-label': { color: 'text.primary' } }}
               /> */}
-              <Typography variant='body2'>Generate Strong Password</Typography>
               <Typography
                 variant='body2'
                 component={Link}
                 href='./'
                 sx={{ color: 'primary.main', textDecoration: 'none' }}
               >
-                Generate
+                Generate Strong Password
               </Typography>
             </Box>
-            {/* <Button fullWidth size='large' type='submit' variant='contained' sx={{ mb: 7 }}>
-              Create Account
-            </Button> */}
           </form>
         </Grid>
         <Grid item xs={12}>
           <Box sx={{ display: 'flex', justifyContent: 'space-between' }}>
-            <Button disabled variant='contained' startIcon={<Icon icon='mdi:chevron-left' fontSize={20} />}>
+            <Button
+              color='secondary'
+              variant='contained'
+              onClick={handlePrev}
+              startIcon={<Icon icon='mdi:chevron-left' fontSize={20} />}
+            >
               Previous
             </Button>
             <Button variant='contained' onClick={handleNext} endIcon={<Icon icon='mdi:chevron-right' fontSize={20} />}>
