@@ -16,7 +16,7 @@ import PageHeader from 'src/layouts/components/page-header'
 import Icon from 'src/@core/components/icon'
 
 // ** Icon Imports
-import ViewQuestion from 'src/pages/qb/_views/singleQuestion'
+import ViewQuestion from 'src/pages/qb/_views/SingleQuestion'
 
 // ** Actions Imports
 import { AddTest, GetCategories } from 'src/pages/tests/_models/TestModel'

@@ -15,7 +15,7 @@ import toast from 'react-hot-toast'
 import PageHeader from 'src/layouts/components/page-header'
 
 // ** View Imports
-import CreateQuestionForm from 'src/pages/qb/_views/createQuestion'
+import CreateQuestionForm from 'src/pages/qb/_views/CreateQuestion'
 
 // ** Actions Imports
 import { ViewQuestion, GetCategories, EditQuestion } from 'src/pages/qb/_models/QuestionModel'
@@ -30,38 +30,8 @@ const Page = () => {
 
   // ** State
   const [isLoading, setLoading] = useState(false)
-  const [question, setQuestion] = useState([])
   const [categories, setCategories] = useState([])
 
-  /** FETCH QUESTION  */
-  useEffect(() => {
-    const getQuestion = async () => {
-      const response = await ViewQuestion(guid)
-      setLoading(false)
-      if (!response.success) {
-        toast.error(response.message)
-      }
-      setQuestion(response.payload.data)
-    }
-    getQuestion()
-  }, [])
-
-  console.log(question)
-
-
-  /** SAVE QUESTION  */
-  const onSubmit = async (data) => {
-    setLoading(true)
-    await EditQuestion(guid, data)
-      .then(response => {
-        if (response.success === true) {
-          toast.success(response.message)
-        } else {
-          toast.error(response.message)
-        }
-      })
-    setLoading(false)
-  }
 
   return (
     <Grid container spacing={6}>
@@ -74,15 +44,9 @@ const Page = () => {
       <Grid item xs={12} md={12}>
         <Card>
           <CardContent>
-            {isLoading ?
-              (<Box className="loader" style={{ textAlign: "center", padding: "50px 0px" }}>
-                <CircularProgress />
-              </Box>) :
-              (<CreateQuestionForm
-                onSubmit={onSubmit}
-                guid={guid}
-                question={question}
-              />)}
+            <CreateQuestionForm
+              guid={guid}
+            />
           </CardContent>
         </Card>
 

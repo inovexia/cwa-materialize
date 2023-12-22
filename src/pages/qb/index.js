@@ -8,13 +8,13 @@ import toast from 'react-hot-toast'
 import PageHeader from 'src/layouts/components/page-header'
 
 // ** Module Specific Imports
-import SingleQuestion from 'src/pages/qb/_views/singleQuestion'
+import SingleQuestion from 'src/pages/qb/_views/SingleQuestion'
 
 //import CreateQuestion from 'src/pages/qb/create'
 import Toolbar from 'src/pages/qb/_components/Toolbar'
 
 // ** Actions Imports
-import { ListQuestions } from 'src/pages/qb/_models/QuestionModel'
+import { GetQuestions } from 'src/pages/qb/_models/QuestionModel'
 
 
 const Page = () => {
@@ -29,7 +29,7 @@ const Page = () => {
 
   /** GET ALL TESTS */
   useEffect(() => {
-    const getQuestions = async () => {
+    const fetchData = async () => {
       const data = {
       }
       if (status !== "")
@@ -39,9 +39,9 @@ const Page = () => {
         data['search'] = searchTerm
 
       if (type !== "")
-        data['test_type'] = type
+        data['question_type'] = type
 
-      const response = await ListQuestions(data)
+      const response = await GetQuestions(data)
       setLoading(false)
       if (!response.success) {
         toast.error(response.message)
@@ -49,7 +49,7 @@ const Page = () => {
       setDataList(response.payload.data)
       setMetaData(response.payload.meta)
     }
-    getQuestions()
+    fetchData()
   }, [searchTerm, status, type])
 
 

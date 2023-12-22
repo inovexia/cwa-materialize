@@ -177,7 +177,7 @@ const EnhancedTableToolbar = props => {
       {numSelected > 0 ? (
         <Tooltip title='Delete'>
           <IconButton sx={{ color: 'text.secondary' }}>
-            <Icon icon='mdi:delete-outline' />
+            <Icon icon='mdi:delete-outline' /> Delete
           </IconButton>
         </Tooltip>
       ) : null}
@@ -197,11 +197,6 @@ const RowOptions = ({ guid }) => {
 
   const handleRowOptionsClose = () => {
     setAnchorEl(null)
-  }
-
-  const handleDelete = () => {
-    dispatch(deleteUser(id))
-    handleRowOptionsClose()
   }
 
   return (
