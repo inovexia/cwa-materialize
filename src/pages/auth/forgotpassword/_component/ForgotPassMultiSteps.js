@@ -11,7 +11,7 @@ import Typography from '@mui/material/Typography'
 import StepVerification from './StepVerification'
 import StepMobileNumber from './StepMobileNumber'
 import StepLoginInfo from './StepLoginInfo'
-import StepPersonInfo from './StepPersonInfo'
+
 
 
 // ** Custom Component Import
@@ -31,10 +31,6 @@ const steps = [
   },
   {
     title: 'Login Details',
-    // subtitle: 'Payment Details'
-  },
-  {
-    title: 'Personal Info',
     // subtitle: 'Payment Details'
   }
 ]
@@ -61,9 +57,7 @@ const RegisterMultiSteps = () => {
       case 1:
         return <StepVerification handleNext={handleNext} handlePrev={handlePrev} />
       case 2:
-        return <StepLoginInfo handleNext={handleNext} handlePrev={handlePrev} />
-      case 3:
-        return <StepPersonInfo handlePrev={handlePrev} />
+        return <StepLoginInfo handlePrev={handlePrev} />
       default:
         return null
     }

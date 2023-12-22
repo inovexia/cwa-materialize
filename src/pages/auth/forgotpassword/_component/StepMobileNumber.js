@@ -1,6 +1,7 @@
 // ** React Imports
 import { useState } from 'react'
-
+// ** Next Import
+import Link from 'next/link'
 // ** MUI Components
 import Box from '@mui/material/Box'
 import Grid from '@mui/material/Grid'
@@ -34,20 +35,14 @@ const StepAccountDetails = ({ handleNext }) => {
   return (
     <>
       <Box sx={{ mb: 5 }}>
-        <Typography variant='h5'>Mobile Number</Typography>
-        <Typography sx={{ color: 'text.secondary' }}>Enter Your Mobile Number</Typography>
+        <Typography variant='h5'>Email Or Username</Typography>
+        <Typography sx={{ color: 'text.secondary' }}>Enter Your Email Or Username</Typography>
       </Box>
-
       <Grid container spacing={5}>
         <Grid item xs={12}>
-          <TextField
-            fullWidth
-            label='Mobile'
-            placeholder='202 555 0111'
-            InputProps={{
-              startAdornment: <InputAdornment position='start'>India (+91)</InputAdornment>
-            }}
-          />
+          <form noValidate autoComplete='off' onSubmit={e => e.preventDefault()}>
+            <TextField autoFocus fullWidth id='email' label='Email' sx={{ mb: 4 }} />
+          </form>
         </Grid>
         <Grid item xs={12}>
           <Box sx={{ display: 'flex', justifyContent: 'space-between' }}>
