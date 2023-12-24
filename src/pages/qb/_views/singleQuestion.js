@@ -14,6 +14,8 @@ import { Box } from '@mui/system'
 import Icon from 'src/@core/components/icon'
 import { IconButton, Menu, MenuItem } from '@mui/material'
 
+import DeleteQuestion from 'src/pages/qb/_views/DeleteQuestion'
+
 const RowOptions = ({ guid }) => {
 
   // ** State
@@ -26,11 +28,6 @@ const RowOptions = ({ guid }) => {
 
   const handleRowOptionsClose = () => {
     setAnchorEl(null)
-  }
-
-  const handleDelete = () => {
-    dispatch(deleteUser(id))
-    handleRowOptionsClose()
   }
 
   return (
@@ -62,16 +59,9 @@ const RowOptions = ({ guid }) => {
           <Icon icon='mdi:pencil-outline' fontSize={20} />
           Edit
         </MenuItem>
-        <MenuItem
-          component={Link}
-          sx={{ '& svg': { mr: 2 } }}
-          onClick={handleRowOptionsClose}
-          href={`/qb/${guid}/delete`}
-        >
-          <Icon icon='mdi:pencil-outline' fontSize={20} />
-          Delete
-        </MenuItem>
+        <DeleteQuestion guid={guid} />
       </Menu>
+
     </>
   )
 }

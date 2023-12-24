@@ -16,7 +16,11 @@ const navigation = () => {
         },
         {
           title: 'Create Question',
-          path: '/qb/create_question'
+          path: '/qb/create'
+        },
+        {
+          title: 'Upload Questions',
+          path: '/qb/upload'
         }
       ]
     },

@@ -1,7 +1,5 @@
 
-const MessageFormatter = (props) => {
-
-  const { message } = props
+export default async function MessageFormatter(message) {
 
   var responseMessage = ''
   if (typeof message === "object") {
@@ -15,4 +13,4 @@ const MessageFormatter = (props) => {
   return responseMessage
 }
 
-export default MessageFormatter
+//export default MessageFormatter
