@@ -1,13 +1,20 @@
 // ** React Imports
 import { useState, useEffect, useRef } from 'react'
-
+import { useRouter } from 'next/router'
 // ** MUI Imports
-import { Drawer, Button, styled, TextField, IconButton, Typography } from '@mui/material'
+import Drawer from '@mui/material/Drawer'
+import Button from '@mui/material/Button'
+import { styled } from '@mui/material/styles'
+import TextField from '@mui/material/TextField'
+import IconButton from '@mui/material/IconButton'
+import Typography from '@mui/material/Typography'
 import Box from '@mui/material/Box'
 import FormControl from '@mui/material/FormControl'
 import FormHelperText from '@mui/material/FormHelperText'
 import LoadingButton from '@mui/lab/LoadingButton'
+import { EditorState } from 'draft-js'
 import 'react-draft-wysiwyg/dist/react-draft-wysiwyg.css'
+import ReactDraftWysiwyg from 'src/@core/components/react-draft-wysiwyg'
 
 // ** Third Party Imports
 import * as yup from 'yup'
@@ -22,7 +29,8 @@ import Icon from 'src/@core/components/icon'
 import FormEditorField from 'src/layouts/components/common/formEditorField'
 
 // ** API
-import CourseApi from 'src/pages/courses/_components/Apis'
+import MeetingApi from '../_components/apis'
+import AuthApi from 'src/configs/commonConfig'
 
 const Header = styled(Box)(({ theme }) => ({
   display: 'flex',
@@ -31,16 +39,27 @@ const Header = styled(Box)(({ theme }) => ({
   justifyContent: 'space-between'
 }))
 
+const showErrors = (field, valueLen, min) => {
+  if (valueLen === 0) {
+    return `${field} field is required`
+  } else if (valueLen > 0 && valueLen < min) {
+    return `${field} must be at least ${min} characters`
+  } else {
+    return ''
+  }
+}
 
 const schema = yup.object().shape({
   title: yup.string(),
-  description: yup.string().required(),
+  details: yup.string().required(),
   created_by: yup.string().required()
 })
 
-const SidebarAddSubject = props => {
+const SidebarAddMeeting = props => {
+  const router = useRouter()
+  const { guid } = router.query
   // ** Props
-  const { open, toggle, setReload, doReload } = props
+  const { open, toggle, setReload } = props
 
   // ** State
   const [responseMessage, setResponseMessage] = useState('')
@@ -48,28 +67,47 @@ const SidebarAddSubject = props => {
   // ** Hooks
   const {
     reset,
+    register,
     control,
     handleSubmit,
     formState: { errors }
   } = useForm({
     defaultValues: {
       title: '',
-      description: '',
-      created_by: 'ASI8'
+      details: '',
+      // created_by: 'ASI8'
     },
-    mode: 'onChange',
-    resolver: yupResolver(schema)
+    // mode: 'onChange',
+    // resolver: yupResolver(schema)
   })
 
+  // const handleFormSubmit = async data => {
+  //   setLoading(true)
+  //   const response = await MeetingApi.createMeeting(data)
+  //   setLoading(false)
+  //   if (!response.success) return toast.success(response.message)
+  //   setReload(true)
+  //   toggle()
+  //   reset()
+  // }
+
   const handleFormSubmit = async data => {
-    setLoading(true)
-    const response = await CourseApi.createCourse(data)
-    setLoading(false)
-    if (!response.success) return toast.success(response.message)
-    doReload(true)
-    toggle()
-    reset()
+    const formData = new FormData()
+    Object.entries(data).forEach(([key, value]) => {
+      formData.append(key, value)
+    })
+    const res = await MeetingApi.createMeeting({ guid, data })
+    if (res.success === true) {
+      toast.success('online class created successfully')
+      setTimeout(() => {
+        router.push(`/courses/${guid}/onlineClass`)
+      }, 500)
+    } else {
+      toast.error('Failed to create online class')
+    }
   }
+
+
 
   const handleClose = () => {
     toggle()
@@ -77,6 +115,11 @@ const SidebarAddSubject = props => {
   }
 
   const editorRef = useRef(null)
+  const log = () => {
+    if (editorRef.current) {
+      console.log(editorRef.current.getContent())
+    }
+  }
   return (
     <Drawer
       open={open}
@@ -85,7 +128,7 @@ const SidebarAddSubject = props => {
       sx={{ '& .MuiDrawer-paper': { width: { xs: 300, sm: 400 } } }}
     >
       <Header>
-        <Typography variant='h6'>Create Subject</Typography>
+        <Typography variant='h6'>Create Online Class</Typography>
         <IconButton size='small' onClick={handleClose} sx={{ color: 'text.primary' }}>
           <Icon icon='mdi:close' fontSize={20} />
         </IconButton>
@@ -117,7 +160,7 @@ const SidebarAddSubject = props => {
             {errors.title && <FormHelperText sx={{ color: 'error.main' }}>{errors.title.message}</FormHelperText>}
           </FormControl>
           <label
-            htmlFor='description'
+            htmlFor='details'
             style={{
               fontSize: 16,
               fontWeight: 500,
@@ -126,9 +169,9 @@ const SidebarAddSubject = props => {
               display: "block"
             }}
           >
-            Description
+            Class Details
           </label>
-          <FormEditorField control={control} name='description' onInit={(evt, editor) => (editorRef.current = editor)} />
+          <FormEditorField control={control} name='details' onInit={(evt, editor) => (editorRef.current = editor)} />
           <Box sx={{ display: 'flex', alignItems: 'center', justifyContent: 'space-between', marginTop: '30px' }}>
             <LoadingButton
               type='submit'
@@ -150,4 +193,4 @@ const SidebarAddSubject = props => {
   )
 }
 
-export default SidebarAddSubject
+export default SidebarAddMeeting

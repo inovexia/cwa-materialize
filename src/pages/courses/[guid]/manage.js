@@ -96,7 +96,7 @@ const Page = () => {
   ]
 
   const MeetingSettingsCard = [
-    createData('All Meeting', `/courses/${guid}/meetings`, 'mdi:virtual-meeting'),
+    createData('All Meeting', `/courses/${guid}/onlineClass`, 'mdi:virtual-meeting'),
     createData('Add Meeting', `/courses/${guid}/meetings/create`, 'gg:add'),
   ]
 

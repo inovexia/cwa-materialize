@@ -45,32 +45,16 @@ const StepChangePassword = ({ handleNext, handlePrev }) => {
       <Grid container spacing={5}>
         <Grid item xs={12}>
           <form noValidate autoComplete='off' onSubmit={e => e.preventDefault()}>
-            <FormControl fullWidth>
+            <TextField autoFocus fullWidth id='email' label='Email' sx={{ mb: 4 }} />
+            <TextField
+              fullWidth
+              label='Token'
+              placeholder='Token'
+            />
+            <FormControl fullWidth sx={{ mt: 4 }}>
               <InputLabel htmlFor='auth-login-password'>Password</InputLabel>
               <OutlinedInput
                 label='Password'
-                value={values.password}
-                id='auth-login-password'
-                onChange={handleChange('password')}
-                type={values.showPassword ? 'text' : 'password'}
-                endAdornment={
-                  <InputAdornment position='end'>
-                    <IconButton
-                      edge='end'
-                      onClick={handleClickShowPassword}
-                      onMouseDown={e => e.preventDefault()}
-                      aria-label='toggle password visibility'
-                    >
-                      <Icon icon={values.showPassword ? 'mdi:eye-outline' : 'mdi:eye-off-outline'} />
-                    </IconButton>
-                  </InputAdornment>
-                }
-              />
-            </FormControl>
-            <FormControl fullWidth sx={{ mt: 3 }}>
-              <InputLabel htmlFor='auth-login-password'>Confirmed Password</InputLabel>
-              <OutlinedInput
-                label='Confirmed Password'
                 value={values.password}
                 id='auth-login-password'
                 onChange={handleChange('password')}

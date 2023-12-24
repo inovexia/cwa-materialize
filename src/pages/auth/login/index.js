@@ -196,7 +196,7 @@ const LoginV1 = () => {
               <Typography sx={{ mr: 2, color: 'text.secondary' }}>New on our platform?</Typography>
               <Typography
                 component={Link}
-                href='/pages/auth/register-v1'
+                href='./register'
                 sx={{ color: 'primary.main', textDecoration: 'none' }}
               >
                 Create an account

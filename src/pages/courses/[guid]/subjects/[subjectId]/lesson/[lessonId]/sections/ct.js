@@ -13,15 +13,15 @@ const MyForm = () => {
     },
   });
 
-  const { fields, append, remove } = useFieldArray({
+  const { fields, append, remove, update } = useFieldArray({
     control,
     name: 'blocks',
   });
 
   const onSubmit = (data) => {
-    const formData = serialize(data, { indices: true });
+    const formData = serialize(data, { indices: false });
     // Handle form submission with data
-    console.log(formData);
+    console.log(formData, data);
   };
 
   return (

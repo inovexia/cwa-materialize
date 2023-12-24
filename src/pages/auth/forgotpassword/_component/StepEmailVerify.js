@@ -35,13 +35,21 @@ const StepEmailVerify = ({ handleNext }) => {
   return (
     <>
       <Box sx={{ mb: 5 }}>
-        <Typography variant='h5'>Email Or Username</Typography>
-        <Typography sx={{ color: 'text.secondary' }}>Enter Your Email Or Username</Typography>
+        <Typography variant='h5'>Email Or Mobile No.</Typography>
+        <Typography sx={{ color: 'text.secondary' }}>Enter Your Email Or Mobile No.</Typography>
       </Box>
       <Grid container spacing={5}>
         <Grid item xs={12}>
           <form noValidate autoComplete='off' onSubmit={e => e.preventDefault()}>
             <TextField autoFocus fullWidth id='email' label='Email' sx={{ mb: 4 }} />
+            <TextField
+              fullWidth
+              label='Mobile'
+              placeholder='202 555 0111'
+              InputProps={{
+                startAdornment: <InputAdornment position='start'>India (+91)</InputAdornment>
+              }}
+            />
           </form>
         </Grid>
         <Grid item xs={12}>

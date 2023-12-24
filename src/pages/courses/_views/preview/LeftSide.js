@@ -52,15 +52,6 @@ const schema = yup.object().shape({
   category: yup.string()
 })
 
-
-const LeftSide = () => {
-
-
-  return (
-    <>
-      <SectionContent />
-    </>
-  )
-}
+const LeftSide = () => <SectionContent />
 
 export default LeftSide
