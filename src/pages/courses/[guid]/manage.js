@@ -141,7 +141,7 @@ const Page = () => {
       <Grid item xs={12} md={6}>
         <CardComponent
           guid={guid}
-          CardTitle='Meeting'
+          CardTitle='Online Class'
           Count={meetings && meetings ? meetings.length : "0"}
           ListItems={MeetingSettingsCard}
           dataList={meetings}
