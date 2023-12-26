@@ -17,7 +17,7 @@ export default class TestApis {
   static viewCategory = async ({ catId }) => await ApiRequest(`qb/category/${catId}/view`, 'POST')
   static deleteCategory = async ({ catId }) => await ApiRequest(`qb/category/${catId}/delete`, 'DELETE')
   static uploadQuestionsInCategory = async ({ catId, data }) => await ApiRequest(`qb/questions/import/${catId}`, 'POST', { data })
-  static addQuestionsToDifficulty = async ({ data }) => await ApiRequest(`qb/categories/add_to_questions`, 'POST', { data })
+  static addQuestionsToCategory = async ({ data }) => await ApiRequest(`qb/categories/add_to_questions`, 'POST', { data })
   static removeQuestionsFromCategory = async ({ data }) => await ApiRequest(`qb/categories/remove_from_questions`, 'POST', { data })
 
   /** DIFFICULTIES */

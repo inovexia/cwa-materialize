@@ -8,24 +8,24 @@ import toast from 'react-hot-toast'
 import PageHeader from 'src/layouts/components/page-header'
 
 // ** Module Specific Imports
-import SingleQuestion from 'src/pages/qb/_views/SingleQuestion'
+import CategoriesComponent from 'src/pages/qb/_views/categories/Index'
+import CreateCategoryComponent from 'src/pages/qb/_views/categories/Create'
 
 //import CreateQuestion from 'src/pages/qb/create'
 import Toolbar from 'src/pages/qb/_components/Toolbar'
 
 // ** Actions Imports
-import { GetQuestions } from 'src/pages/qb/_models/QuestionModel'
+import { GetCategories } from 'src/pages/qb/_models/CategoriesModel'
 
 
 const Page = () => {
   const [dataList, setDataList] = useState([])
   const [metaData, setMetaData] = useState([])
+  const [drawerOpen, setDrawerOpen] = useState(false)
   const [responseStatus, setResponseStatus] = useState(false)
   const [responseMessage, setResponseMessage] = useState('')
   const [isLoading, setLoading] = useState(true)
-  const [searchTerm, setSearchTerm] = useState('')
-  const [status, setStatus] = useState('')
-  const [type, setType] = useState('')
+  const [status, setStatus] = useState(0)
 
   /** GET ALL TESTS */
   useEffect(() => {
@@ -35,88 +35,66 @@ const Page = () => {
       if (status !== "")
         data['status'] = status
 
-      if (searchTerm !== "")
-        data['search'] = searchTerm
-
-      if (type !== "")
-        data['question_type'] = type
-
-      const response = await GetQuestions(data)
+      const response = await GetCategories(data)
       setLoading(false)
       if (!response.success) {
         toast.error(response.message)
       }
-      setDataList(response.payload.data)
-      setMetaData(response.payload.meta)
+      setDataList(response.payload)
     }
     fetchData()
-  }, [searchTerm, status, type])
-
-
-  /** HANDLE SEARCH */
-  const handleSearch = useCallback(value => {
-    setSearchTerm(value)
   }, [])
+
+
 
   /** HANDLE STATUS CHANGE */
   const handleStatus = useCallback(value => {
     setStatus(value)
   }, [])
 
-  /** HANDLE TEST_TYPE CHANGE */
-  const handleType = useCallback(value => {
-    setType(value)
-  }, [])
+  /** HANDLE CREATE TEST DRAWER */
+  const toggleCreateDrawer = () => setDrawerOpen(!drawerOpen)
 
   return (
     <>
       <Grid container spacing={6}>
         <Grid item xs={12}>
           <PageHeader
-            title={<Typography variant='h5'>Question Bank</Typography>}
-            subtitle={<Typography variant='body2'>List All Questions</Typography>}
-            buttonTitle='Add Question'
-            buttonHref='/qb/create'
+            title={<Typography variant='h5'>Categories</Typography>}
+            subtitle={<Typography variant='body2'>List All Categories</Typography>}
+            buttonTitle='Add Category'
+            toggleDrawer={toggleCreateDrawer}
           />
           <Card>
             {isLoading ?
-              (<Box className="loader" style={{ textAlign: "center", padding: "50px 0px" }}>
+              (<Box fullWidth className="loader" style={{ textAlign: "center", padding: "50px 0px" }}>
                 <CircularProgress />
               </Box>) :
               (<form>
                 <CardContent>
                   <Toolbar
-                    searchTerm={searchTerm}
-                    handleSearch={handleSearch}
                     status={status}
                     handleStatus={handleStatus}
-                    type={type}
-                    handleType={handleType}
                   />
                 </CardContent>
                 <Card>
                   <CardContent>
-                    {dataList && dataList.length > 0 && dataList.map((row, i) =>
-                    (
-                      <>
-                        <SingleQuestion
-                          key={i}
-                          count={i + 1}
-                          question={row}
-                          responseStatus={responseStatus}
-                          responseMessage={responseMessage}
-                          meta={metaData}
-                        />
-                        <Divider />
-                      </>
-                    )
-                    )}
+                    <CategoriesComponent
+                      rows={dataList}
+                      responseStatus={responseStatus}
+                      responseMessage={responseMessage}
+                      meta={metaData}
+                    />
                   </CardContent>
                 </Card>
               </form>)}
           </Card>
         </Grid>
       </Grid>
+      <CreateCategoryComponent
+        open={drawerOpen}
+        toggle={toggleCreateDrawer}
+      />
     </>
   )
 }

@@ -22,18 +22,6 @@ import { UploadQuestions } from 'src/pages/qb/_models/QuestionModel'
 
 const maxUploadSize = 200000000 // In Kb (200 MB)
 
-// Styled component for the upload image inside the dropzone area
-const Img = styled('img')(({ theme }) => ({
-  [theme.breakpoints.up('md')]: {
-    marginRight: theme.spacing(10)
-  },
-  [theme.breakpoints.down('md')]: {
-    marginBottom: theme.spacing(4)
-  },
-  [theme.breakpoints.down('sm')]: {
-    width: 250
-  }
-}))
 
 // Styled component for the heading inside the dropzone area
 const HeadingTypography = styled(Typography)(({ theme }) => ({
@@ -49,11 +37,12 @@ const UploadQuestionComponent = () => {
 
   // ** Hooks
   const { getRootProps, getInputProps } = useDropzone({
-    name: "userfile",
+    multiple: false,
     maxFiles: 1,
     maxSize: maxUploadSize,
     accept: {
-      'application/*': ['.docx']
+      'text/plain': ['.txt'],
+      'application/vnd.openxmlformats-officedocument.wordprocessingml.document': ['.docx']
     },
     onDrop: acceptedFiles => {
       setFiles(acceptedFiles.map(file => Object.assign(file)))
@@ -103,17 +92,15 @@ const UploadQuestionComponent = () => {
   }
 
   const handleUploadFile = async () => {
-    if (guid) {
-      await UploadQuestions(guid)
-        .then(response => {
-          if (response.success === true) {
-            toast.success(response.message)
-          } else {
-            toast.error(response.message)
-          }
-        })
-    }
-    handleClose()
+
+    await UploadQuestions(files)
+      .then(response => {
+        if (response.success === true) {
+          toast.success(response.message)
+        } else {
+          toast.error(response.message)
+        }
+      })
   }
 
   return (
