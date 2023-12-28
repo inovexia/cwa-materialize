@@ -50,7 +50,6 @@ const CreateTestForm = props => {
     reset()
   }
 
-  console.log(categories)
 
   return (
 

@@ -25,36 +25,6 @@ const Page = props => {
 
   // ** State
   const [isLoading, setLoading] = useState(false)
-  const [categories, setCategories] = useState([])
-  const guid = ''
-
-  const getCategories = useCallback(async () => {
-    const response = await GetCategories()
-
-    return response
-  }, [])
-
-  useEffect(() => {
-    getCategories()
-      .then((response) => {
-        if (response.success) {
-          setCategories(response.payload)
-        }
-      })
-  }, [getCategories])
-
-
-  const onSubmit = async (data) => {
-    setLoading(true)
-    const response = await AddTest(data)
-    setLoading(false)
-    if (response.success === true) {
-      toast.success(response.message)
-    } else {
-      toggle()
-      toast.error(response.message)
-    }
-  }
 
   return (
     <Grid container spacing={6}>

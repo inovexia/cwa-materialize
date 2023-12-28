@@ -21,6 +21,10 @@ const navigation = () => {
         {
           title: 'Upload Questions',
           path: '/qb/upload'
+        },
+        {
+          title: 'Categories',
+          path: '/qb/categories'
         }
       ]
     },

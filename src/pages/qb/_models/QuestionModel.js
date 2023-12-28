@@ -44,15 +44,13 @@ export async function AddQuestion(data) {
   return response
 }
 
-/** CREATE QUESTION */
-export async function UploadQuestions(data) {
+/** UPLOAD QUESTION */
+export async function UploadQuestions(files) {
 
   const formData = new FormData()
-  if (typeof data === "object") {
-    Object.entries(data).forEach(([key, value]) => {
-      formData.append(key, value)
-    })
-  }
+  files.length > 0 && files.map((file) => {
+    formData.set("userfile", file)
+  })
   const response = await API.uploadQuestions({ data: formData })
 
   response.message = await MessageFormatter(response.message)
@@ -126,20 +124,3 @@ export async function ChangeStatus(checked, guid) {
 
   return response
 }
-
-
-/** GET CATEGORIES */
-export async function GetCategories() {
-  const formData = new FormData()
-  if (typeof data === "object") {
-    Object.entries(data).forEach(([key, value]) => {
-      formData.append(key, value)
-    })
-  }
-  const response = await API.getCategories({ data: formData })
-  var responseMessage = await MessageFormatter(response.message)
-  response.message = await responseMessage
-
-  return response
-}
-
