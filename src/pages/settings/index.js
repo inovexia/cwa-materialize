@@ -17,7 +17,8 @@ import PageHeader from 'src/layouts/components/page-header'
 import TabRegister from './_component/TabRegister'
 import TabLogin from './_component/TabLogin'
 import TabGeneral from './_component/TabGeneral'
-
+// ** Icon Imports
+import Icon from 'src/@core/components/icon'
 // Styled TabList component
 const TabList = styled(MuiTabList)(({ theme }) => ({
   '& .MuiTabs-indicator': {
@@ -38,7 +39,7 @@ const TabList = styled(MuiTabList)(({ theme }) => ({
 
 const Page = () => {
   // ** State
-  const [value, setValue] = useState('1')
+  const [value, setValue] = useState('general')
 
   const handleChange = (event, newValue) => {
     setValue(newValue)
@@ -55,17 +56,17 @@ const Page = () => {
       <Grid item xs={12}>
         <TabContext value={value}>
           <TabList onChange={handleChange} aria-label='customized tabs example'>
-            <Tab value='1' label='General' />
-            <Tab value='2' label='Register' />
-            <Tab value='3' label='Login' />
+            <Tab value='general' label='General' icon={<Icon icon="icon-park-outline:setting-web" />} iconPosition='start' sx={{ alignItems: 'center' }} />
+            <Tab value='register' label='Register' icon={<Icon icon="mdi:user-outline" />} iconPosition='start' sx={{ alignItems: 'center' }} />
+            <Tab value='login' label='Login' />
           </TabList>
-          <TabPanel value='1' sx={{ px: 0 }}>
+          <TabPanel value='general' sx={{ px: 0 }}>
             <TabGeneral />
           </TabPanel>
-          <TabPanel value='2'>
+          <TabPanel value='register' sx={{ px: 0 }}>
             <TabRegister />
           </TabPanel>
-          <TabPanel value='3'>
+          <TabPanel value='login' sx={{ px: 0 }}>
             <TabLogin />
           </TabPanel>
         </TabContext>

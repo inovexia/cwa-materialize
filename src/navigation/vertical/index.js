@@ -45,7 +45,7 @@ const navigation = () => {
       icon: 'lucide:book'
     },
     {
-      title: 'Meetings',
+      title: 'Online Class',
       path: '/meetings',
       icon: 'healthicons:i-training-class'
     },
@@ -53,6 +53,11 @@ const navigation = () => {
       title: 'Users',
       path: '/users',
       icon: 'mdi:users-outline'
+    },
+    {
+      title: 'Settings',
+      path: '/settings',
+      icon: 'icon-park-outline:setting-web'
     }
   ]
 }

@@ -85,6 +85,7 @@ const EditUser = () => {
         formData.append(key, value)
       })
       const res = await UserApi.updateUser({ id, data: formData })
+
       if (res.success === true) {
         toast.success('User updated successfully')
         setTimeout(() => {
