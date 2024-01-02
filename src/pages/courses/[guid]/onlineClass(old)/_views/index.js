@@ -22,12 +22,12 @@ import ReactHtmlParser from 'react-html-parser'
 // ** Utils Import
 import { getInitials } from 'src/@core/utils/get-initials'
 
-import SwitchField from 'src/pages/meetings/_components/Switch'
+import SwitchField from '../_components/Switch'
 import ActionMenu from '../_components/actionMenu'
-import DeleteMeeting from 'src/pages/meetings/_views/deleteMeeting'
+import DeleteOnlineClass from '../_views/deleteonlineclass'
 
 // APIs
-import MeetingApi from '../_components/apis'
+import OnlineClassApi from '../_components/apis'
 
 export default function BasicTable({
   dataList,
@@ -86,7 +86,7 @@ export default function BasicTable({
   }
   // Delete user
   const handleItemDeleted = async () => {
-    const updatedData = await MeetingApi.meetingList()
+    const updatedData = await OnlineClassApi.onlineClassList()
     if (!updatedData.success) return
     setDataList(updatedData.payload.data)
     setMetaData(updatedData.payload.meta)
@@ -95,7 +95,7 @@ export default function BasicTable({
 
   // Archive User
   const handleUserArchived = async () => {
-    const updatedUsers = await MeetingApi.getAllUsers()
+    const updatedUsers = await OnlineClassApi.getAllUsers()
     if (!updatedUsers.success) return
     setDataList(updatedUsers.payload.data)
     setMetaData(updatedUsers.payload.meta)
@@ -206,14 +206,14 @@ export default function BasicTable({
             ) : (
               <TableRow key='none' sx={{ '&:last-child td, &:last-child th': { border: 0 } }}>
                 <TableCell colSpan='5'>
-                  <Translations text={responseMessage} message='Meeting not found' />
+                  <Translations text={responseMessage} message='Online Class not found' />
                 </TableCell>
               </TableRow>
             )}
           </TableBody>
         </Table>
       </TableContainer>
-      <DeleteMeeting
+      <DeleteOnlineClass
         mdOpen={openModal}
         handleClose={handleCloseModal}
         guidToDelete={guidToDelete}

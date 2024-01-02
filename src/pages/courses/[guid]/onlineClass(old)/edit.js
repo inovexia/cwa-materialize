@@ -140,7 +140,7 @@ const EditUser = () => {
                   <Button variant='contained' size='medium' type='submit' sx={{ mt: 5 }}>
                     Update
                   </Button>
-                  <Button variant='contained' size='medium' component={Link} href='/meetings' sx={{ mt: 5, ml: 3 }}>
+                  <Button variant='outlined' size='medium' component={Link} href='/meetings' sx={{ mt: 5, ml: 3 }}>
                     Cancel
                   </Button>
                 </Grid>

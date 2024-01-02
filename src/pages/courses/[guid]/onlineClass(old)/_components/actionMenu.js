@@ -3,7 +3,7 @@ import { Menu, MenuItem, Link, IconButton } from '@mui/material'
 
 import Icon from 'src/@core/components/icon'
 
-export default function ActionMenu({ id, onDeleteClick, onArchiveClick, guid }) {
+export default function ActionMenu({ id, itemId, onDeleteClick, onRemoveClick, onArchiveClick, guid }) {
   const [anchorEl, setAnchorEl] = useState(null)
   const open = Boolean(anchorEl)
   const handleClick = event => {
@@ -12,6 +12,7 @@ export default function ActionMenu({ id, onDeleteClick, onArchiveClick, guid }) 
   const handleClose = () => {
     setAnchorEl(null)
   }
+
 
   return (
     <div>
@@ -53,6 +54,7 @@ export default function ActionMenu({ id, onDeleteClick, onArchiveClick, guid }) 
           <Icon icon='mdi:delete-outline' style={{ marginRight: '10px' }} />
           Delete
         </MenuItem>
+
       </Menu>
     </div>
   )

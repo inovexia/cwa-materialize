@@ -2,9 +2,9 @@
 import { useState, useEffect, useRef } from 'react'
 import { useRouter } from 'next/router'
 // ** MUI Imports
-import Drawer from '@mui/material/Drawer'
+import { Drawer, useTheme, Grid, styled } from '@mui/material'
 import Button from '@mui/material/Button'
-import { styled } from '@mui/material/styles'
+// import { styled } from '@mui/material/styles'
 import TextField from '@mui/material/TextField'
 import IconButton from '@mui/material/IconButton'
 import Typography from '@mui/material/Typography'
@@ -27,11 +27,15 @@ import Icon from 'src/@core/components/icon'
 
 // ** Component
 import FormEditorField from 'src/layouts/components/common/formEditorField'
+import CardSnippet from 'src/@core/components/card-snippet'
 
+// ** Styled Component
+import DatePickerWrapper from 'src/@core/styles/libs/react-datepicker'
 // ** API
-import MeetingApi from '../_components/apis'
+import OnlineClassApi from '../_components/apis'
 import AuthApi from 'src/configs/commonConfig'
-
+// ** date picker component 
+import PickersBasic from 'src/lib/common/datepicker/PickersBasic'
 const Header = styled(Box)(({ theme }) => ({
   display: 'flex',
   alignItems: 'center',
@@ -58,12 +62,26 @@ const schema = yup.object().shape({
 const SidebarAddMeeting = props => {
   const router = useRouter()
   const { guid } = router.query
+  //popperPlacement
+  const theme = useTheme()
+  const { direction } = theme
+  const popperPlacement = direction === 'ltr' ? 'bottom-start' : 'bottom-end'
   // ** Props
   const { open, toggle, setReload } = props
 
   // ** State
   const [responseMessage, setResponseMessage] = useState('')
   const [loading, setLoading] = useState(false)
+  const [startDate, setStartDate] = useState(new Date()); // Initial start date
+  const [endDate, setEndDate] = useState(new Date());     // Initial end date
+
+  const handleStartDateChange = (date) => {
+    setStartDate(date);
+  };
+
+  const handleEndDateChange = (date) => {
+    setEndDate(date);
+  };
   // ** Hooks
   const {
     reset,
@@ -75,6 +93,7 @@ const SidebarAddMeeting = props => {
     defaultValues: {
       title: '',
       details: '',
+      created_on: ''
       // created_by: 'ASI8'
     },
     // mode: 'onChange',
@@ -96,7 +115,7 @@ const SidebarAddMeeting = props => {
     Object.entries(data).forEach(([key, value]) => {
       formData.append(key, value)
     })
-    const res = await MeetingApi.createMeeting({ guid, data })
+    const res = await OnlineClassApi.createOnlineClass({ guid, data })
     if (res.success === true) {
       toast.success('online class created successfully')
       setTimeout(() => {
@@ -142,36 +161,61 @@ const SidebarAddMeeting = props => {
       )}
       <Box sx={{ p: 5 }}>
         <form onSubmit={handleSubmit(handleFormSubmit)}>
-          <FormControl fullWidth sx={{ mb: 6 }}>
-            <Controller
-              name='title'
-              control={control}
-              rules={{ required: true }}
-              render={({ field: { value, onChange } }) => (
-                <TextField
-                  label='Title'
-                  value={value}
-                  onChange={onChange}
-                  placeholder='Title'
-                  error={Boolean(errors.title)}
+          <Grid container spacing={2}>
+            <Grid item xs={12}>
+              <FormControl fullWidth sx={{ mb: 6 }}>
+                <Controller
+                  name='title'
+                  control={control}
+                  rules={{ required: true }}
+                  render={({ field: { value, onChange } }) => (
+                    <TextField
+                      label='Title'
+                      value={value}
+                      onChange={onChange}
+                      placeholder='Title'
+                      error={Boolean(errors.title)}
+                    />
+                  )}
                 />
-              )}
-            />
-            {errors.title && <FormHelperText sx={{ color: 'error.main' }}>{errors.title.message}</FormHelperText>}
-          </FormControl>
-          <label
-            htmlFor='details'
-            style={{
-              fontSize: 16,
-              fontWeight: 500,
-              fontFamily: 'Arial',
-              marginBottom: '10px',
-              display: "block"
-            }}
-          >
-            Class Details
-          </label>
-          <FormEditorField control={control} name='details' onInit={(evt, editor) => (editorRef.current = editor)} />
+                {errors.title && <FormHelperText sx={{ color: 'error.main' }}>{errors.title.message}</FormHelperText>}
+              </FormControl>
+            </Grid>
+            <Grid item xs={12}>
+              <label
+                htmlFor='details'
+                style={{
+                  fontSize: 16,
+                  fontWeight: 500,
+                  fontFamily: 'Arial',
+                  marginBottom: '10px',
+                  display: "block"
+                }}
+              >
+                Class Details
+              </label>
+              <FormEditorField control={control} name='details' onInit={(evt, editor) => (editorRef.current = editor)} />
+            </Grid>
+          </Grid>
+
+          <Grid container spacing={2} sx={{ mt: 5 }}>
+            <Grid item xs={12} md={6}>
+              <PickersBasic
+                popperPlacement={popperPlacement}
+                label='Start Date'
+                value={startDate}
+                onChange={handleStartDateChange}
+              />
+            </Grid>
+            <Grid item xs={12} md={6}>
+              <PickersBasic
+                popperPlacement={popperPlacement}
+                label='End Date'
+                value={endDate}
+                onChange={handleEndDateChange}
+              />
+            </Grid>
+          </Grid>
           <Box sx={{ display: 'flex', alignItems: 'center', justifyContent: 'space-between', marginTop: '30px' }}>
             <LoadingButton
               type='submit'

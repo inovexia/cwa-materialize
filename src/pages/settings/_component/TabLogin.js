@@ -5,14 +5,7 @@ import Link from 'next/link'
 import React, { useEffect, useState, useCallback } from 'react'
 
 // ** MUI Imports
-import Box from '@mui/material/Box'
-import Grid from '@mui/material/Grid'
-import Card from '@mui/material/Card'
-import Switch from '@mui/material/Switch'
-import Button from '@mui/material/Button'
-import Typography from '@mui/material/Typography'
-import CardHeader from '@mui/material/CardHeader'
-import CardContent from '@mui/material/CardContent'
+import { Box, Grid, Card, Switch, Button, Typography, CardHeader, CardContent } from '@mui/material'
 
 // ** Icon Imports
 import Icon from 'src/@core/components/icon'
@@ -38,21 +31,24 @@ const connectedAccountsArr = [
 const TabLogin = () => {
 
   // ** State
-  const [isLoading, setLoading] = useState(false);
-  const [switched, setSwitched] = useState(false);
-
+  // const [isLoading, setLoading] = useState(false);
+  // const [switched, setSwitched] = useState(false);
+  // const [singleDevice, setSingleDevice] = useState(false);
   const {
-    register,
     watch,
     handleSubmit,
-    formState: { errors },
-  } = useForm();
+    setValue,
+  } = useForm({
+    defaultValues: {
+      single_device_login_only: false
+    }
+  });
 
-  const formData = watch();
 
-  const formSubmit = async (data) => {
+
+  const formSubmit = async ({ single_device_login_only }) => {
     const formData = new FormData();
-    formData.append('single_device_login_only', switched);
+    formData.append('single_device_login_only', single_device_login_only);
     // Call the API to send data to the server
     const res = await SettingsApi.SingleDevice(formData);
     console.log(res);
@@ -63,7 +59,19 @@ const TabLogin = () => {
     }
   };
 
+  useEffect(() => {
+    // Fetch data from the API and update the state
+    const fetchData = async () => {
+      try {
+        const res = await SettingsApi.SingleDeviceGet();
+        setValue("single_device_login_only", res.payload.single_device_login_only === 'true');
+      } catch (error) {
+        console.error('Error fetching data:', error);
+      }
+    };
 
+    fetchData();
+  }, []);
 
   return (
 
@@ -101,14 +109,13 @@ const TabLogin = () => {
                         </Typography>
                       </div>
                     </Box>
-                    <Switch defaultChecked={account.checked} />
+                    <Switch checked={watch("single_device_login_only")} onChange={(_e, checked) => setValue("single_device_login_only", checked)} />
                   </Box>
                 )
               })}
               <Button size='large' type='submit' variant='contained' sx={{ mt: 4 }}>
                 Submit
               </Button>
-
             </CardContent>
           </Card>
         </form>

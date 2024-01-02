@@ -96,8 +96,8 @@ const Page = () => {
   ]
 
   const MeetingSettingsCard = [
-    createData('All Meeting', `/courses/${guid}/onlineClass`, 'mdi:virtual-meeting'),
-    createData('Add Meeting', `/courses/${guid}/meetings/create`, 'gg:add'),
+    createData('All Online Class', `/courses/${guid}/onlineClass`, 'mdi:virtual-meeting'),
+    createData('Add Online Class', `/courses/${guid}/meetings/create`, 'gg:add'),
   ]
 
   const enrolmentCard = [

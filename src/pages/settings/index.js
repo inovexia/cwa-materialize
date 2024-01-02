@@ -57,8 +57,8 @@ const Page = () => {
         <TabContext value={value}>
           <TabList onChange={handleChange} aria-label='customized tabs example'>
             <Tab value='general' label='General' icon={<Icon icon="icon-park-outline:setting-web" />} iconPosition='start' sx={{ alignItems: 'center' }} />
-            <Tab value='register' label='Register' icon={<Icon icon="mdi:user-outline" />} iconPosition='start' sx={{ alignItems: 'center' }} />
-            <Tab value='login' label='Login' />
+            <Tab value='register' label='Register' icon={<Icon icon="mdi:register-outline" />} iconPosition='start' sx={{ alignItems: 'center' }} />
+            <Tab value='login' label='Login' icon={<Icon icon="mdi:user-outline" />} iconPosition='start' sx={{ alignItems: 'center' }} />
           </TabList>
           <TabPanel value='general' sx={{ px: 0 }}>
             <TabGeneral />

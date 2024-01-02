@@ -1,5 +1,5 @@
 import React, { useEffect, useState, useRef, useCallback } from 'react'
-
+import { useRouter } from 'next/router'
 // ** MUI Imports
 import { Grid, Card, CardHeader, CardContent, Button, Box, Link, Typography } from '@mui/material'
 import MenuItem from '@mui/material/MenuItem'
@@ -20,7 +20,7 @@ import PageHeader from 'src/layouts/components/page-header'
 
 // ** Module Specific Imports
 import MeetingList from './_views/index'
-import MeetingApi from './_components/apis'
+import OnlineClassApi from './_components/apis'
 import CreateMeeting from './_views/createonlineclass'
 import Toolbar from './_components/toolbar'
 
@@ -93,7 +93,10 @@ const RowOptions = ({ id }) => {
   )
 }
 
+
 const Page = () => {
+  const router = useRouter()
+  const { guid } = router.query
   const [currentPage, setCurrentPage] = useState('1')
   const [itemPerPage, setItemPerPage] = useState('10')
   const [checkedIds, setCheckedIds] = useState([])
@@ -117,14 +120,14 @@ const Page = () => {
   // Get all meeting
   useEffect(() => {
     const fetchData = async () => {
-      const res = await MeetingApi.meetingList()
+      const res = await OnlineClassApi.onlineClassList(guid)
       setDataList(res && res.payload.data)
       setMetaData(res && res.payload.meta)
       setResponseMessage(res.message)
-      console.log(res)
+      console.log(res.payload)
     }
     fetchData()
-  }, [])
+  }, [guid])
 
   // Single Checkbox
   const handleCheckboxChange = userId => {
@@ -162,14 +165,17 @@ const Page = () => {
 
   // Filter data based on searchQuery
   useEffect(() => {
-    const filteredResults = dataList.filter(
-      item =>
-        item.title.toLowerCase().includes(searchQuery.toLowerCase()) ||
-        item.details.toLowerCase().includes(searchQuery.toLowerCase())
-    )
+    // Check if dataList is defined before filtering
+    if (dataList) {
+      const filteredResults = dataList.filter(
+        item =>
+          item.title.toLowerCase().includes(searchQuery.toLowerCase()) ||
+          item.details.toLowerCase().includes(searchQuery.toLowerCase())
+      );
 
-    setDataList(filteredResults)
-  }, [searchQuery, dataList])
+      setDataList(filteredResults);
+    }
+  }, [searchQuery, dataList]);
 
   const handleSearchChange = e => {
     const newSearchQuery = e.target.value
@@ -185,6 +191,17 @@ const Page = () => {
             toggleDrawer={toggleCreateDrawer}
             buttonTitle='Create'
           />
+          <Card style={{ marginTop: '30px' }}>
+            <CardHeader title='Existing Online Class' sx={{ pb: 4, '& .MuiCardHeader-title': { letterSpacing: '.15px' } }} />
+            <CardContent sx={{ display: 'flex', alignItems: 'center', justifyContent: 'space-between' }}>
+              <Typography>If you want to add existing online class in the Course</Typography>
+              <Link href={`/courses/${guid}/onlineClass/existingclass`}>
+                <Button size='medium' variant='contained' color='primary'>
+                  Add Existing Class
+                </Button>
+              </Link>
+            </CardContent>
+          </Card>
           <Card style={{ marginTop: '30px' }}>
             <CardHeader title='Search Filters' sx={{ pb: 4, '& .MuiCardHeader-title': { letterSpacing: '.15px' } }} />
             <CardContent>

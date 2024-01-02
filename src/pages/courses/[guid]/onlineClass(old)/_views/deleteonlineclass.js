@@ -1,16 +1,12 @@
 import React, { useEffect, useState } from 'react'
-import Grid from '@mui/material/Grid'
-import Button from '@mui/material/Button'
-import Dialog from '@mui/material/Dialog'
-import DialogActions from '@mui/material/DialogActions'
-import DialogContent from '@mui/material/DialogContent'
+import { Grid, Button, Dialog, DialogActions, DialogContent } from '@mui/material'
 import DialogContentText from '@mui/material/DialogContentText'
 import DialogTitle from '@mui/material/DialogTitle'
 import toast from 'react-hot-toast'
 // ** API
-import MeetingApi from 'src/pages/meetings/_components/apis'
+import OnlineClassApi from '../_components/apis'
 
-const DeleteMeeting = ({ mdOpen, handleClose, guidToDelete, onItemDeleted }) => {
+const DeleteMeeting = ({ mdOpen, handleClose, guidToDelete, onItemDeleted, onItemRemove }) => {
   const [open, setOpen] = useState(mdOpen)
 
   useEffect(() => {
@@ -18,22 +14,23 @@ const DeleteMeeting = ({ mdOpen, handleClose, guidToDelete, onItemDeleted }) => 
   }, [mdOpen])
 
   const handleDeleteMeeting = async () => {
-    const res = await MeetingApi.deleteMeeting(guidToDelete)
+    const res = await OnlineClassApi.deleteOnlineClass(guidToDelete)
+    console.log(res)
     if (res.success === true) {
       setOpen(false)
-      toast.success('Meeting deleted successfully')
+      toast.success('Online Class deleted successfully')
       if (onItemDeleted) {
         onItemDeleted()
       }
     } else {
       setOpen(false)
-      toast.error('Failed to delete meeting')
+      toast.error('Failed to delete Online Class')
     }
   }
 
-  useEffect(() => {
-    setOpen(mdOpen)
-  }, [mdOpen])
+  // useEffect(() => {
+  //   setOpen(mdOpen)
+  // }, [mdOpen])
 
   return (
     <Grid container spacing={6}>
@@ -44,7 +41,7 @@ const DeleteMeeting = ({ mdOpen, handleClose, guidToDelete, onItemDeleted }) => 
           aria-labelledby='alert-dialog-title'
           aria-describedby='alert-dialog-description'
         >
-          <DialogTitle id='alert-dialog-title'>{'Delete Meeting'}</DialogTitle>
+          <DialogTitle id='alert-dialog-title'>{'Delete Online Class'}</DialogTitle>
           <DialogContent>
             <DialogContentText id='alert-dialog-description'>Confirm to delete ?</DialogContentText>
           </DialogContent>

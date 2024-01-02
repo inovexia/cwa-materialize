@@ -1,18 +1,21 @@
 // ** Next Import
 import Link from 'next/link'
-
+// ** React Imports
+import React, { useEffect, useState, useCallback } from 'react'
 // ** MUI Imports
-import { Box, FormControl, InputLabel, Select, MenuItem } from '@mui/material'
-import Grid from '@mui/material/Grid'
-import Card from '@mui/material/Card'
-import Switch from '@mui/material/Switch'
-import Button from '@mui/material/Button'
-import Typography from '@mui/material/Typography'
-import CardHeader from '@mui/material/CardHeader'
-import CardContent from '@mui/material/CardContent'
+import { Box, FormControl, InputLabel, Select, MenuItem, Grid, Card, Switch, Button, Typography, CardHeader, CardContent } from '@mui/material'
 
 // ** Icon Imports
 import Icon from 'src/@core/components/icon'
+import toast from 'react-hot-toast'
+
+// ** Third Party Imports
+import * as yup from 'yup'
+import { useForm, Controller } from 'react-hook-form'
+import { yupResolver } from '@hookform/resolvers/yup'
+
+// ** API
+import SettingsApi from './Apis'
 
 const connectedAccountsArr = [
   {
@@ -49,15 +52,56 @@ const connectedRegisterArr = [
     subtitle: 'Use Mobile Number Field',
 
   },
-  {
-    checked: true,
-    title: 'Mobile',
-    icon: 'ic:outline-phone',
-    subtitle: 'Use Email Field'
-  }
+  // {
+  //   checked: true,
+  //   title: 'Mobile',
+  //   icon: 'ic:outline-phone',
+  //   subtitle: 'Use Email Field'
+  // }
 ]
-
 const TabRegister = () => {
+  // ** State
+  const [isLoading, setLoading] = useState(false);
+  const [switched, setSwitched] = useState(false);
+  const [singleDevice, setSingleDevice] = useState([]);
+
+  const {
+    watch,
+    handleSubmit,
+    setValue,
+  } = useForm({
+    defaultValues: {
+      email: false,
+    },
+  });
+
+
+  const formSubmit = async ({ email }) => {
+    const formData = new FormData();
+    formData.append('email', email);
+    // Call the API to send data to the server
+    const res = await SettingsApi.RequiredPost(formData);
+    console.log(res);
+    if (res.success === true) {
+      toast.success('Required Field updated successfully');
+    } else {
+      toast.error('Failed to update Required Field');
+    }
+  };
+
+  useEffect(() => {
+    // Fetch data from the API and update the state
+    const fetchData = async () => {
+      try {
+        const res = await SettingsApi.RequiredGet();
+        setValue('email', res.payload.email === 'true');
+      } catch (error) {
+        console.error('Error fetching data:', error);
+      }
+    };
+
+    fetchData();
+  }, []);
   return (
     <Grid container spacing={6}>
       {/* Connected Accounts Cards */}
@@ -144,7 +188,7 @@ const TabRegister = () => {
         <Card>
           <CardHeader title='Required Registration' />
           <CardContent>
-            <form>
+            <form onSubmit={handleSubmit(formSubmit)}>
               {connectedRegisterArr.map(account => {
                 return (
                   <Box
@@ -168,7 +212,7 @@ const TabRegister = () => {
                         </Typography>
                       </div>
                     </Box>
-                    <Switch defaultChecked={account.checked} />
+                    <Switch checked={watch("email")} onChange={(_e, checked) => setValue("email", checked)} />
                   </Box>
                 )
               })}

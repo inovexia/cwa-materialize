@@ -22,7 +22,7 @@ import { ListCourses } from 'src/pages/courses/_models/CourseModel'
 import CourseApi from 'src/pages/courses/_components/Apis'
 
 // ** date picker component 
-import PickersBasic from '../../../lib/common/datepicker/PickersBasic'
+import PickersBasic from 'src/lib/common/datepicker/PickersBasic'
 
 
 

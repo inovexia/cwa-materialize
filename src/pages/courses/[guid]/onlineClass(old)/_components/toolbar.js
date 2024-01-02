@@ -1,19 +1,17 @@
 import { useEffect, useState } from 'react'
 
 // ** MUI Imports
-import Grid from '@mui/material/Grid'
-import Box from '@mui/material/Box'
+
 import Icon from 'src/@core/components/icon'
-import MenuItem from '@mui/material/MenuItem'
-import { Button, Link } from '@mui/material'
-import TextField from '@mui/material/TextField'
-import IconButton from '@mui/material/IconButton'
+
+import { Button, Link, Box, Grid, MenuItem, TextField, IconButton } from '@mui/material'
+
 import toast from 'react-hot-toast'
 
 // ** API
-import MeetingApi from 'src/pages/meetings/_components/apis'
+import OnlineClassApi from './apis'
 
-const ShareToolbar = ({
+const Toolbar = ({
   searchTerm,
   setSearchTerm,
   setLoader,
@@ -21,10 +19,13 @@ const ShareToolbar = ({
   onRoleFilterChange,
   onOrderFilterChange,
   onSelectedBulkAction,
-  checkedIds,
+  checkedLength,
   onSelectedBulkDelete,
   bulkAction,
-  setBulkAction
+  setBulkAction,
+  handleSearchChange,
+  searchQuery,
+  setSearchQuery
 }) => {
   const [statusFilter, setStatusFilter] = useState('')
   const [roleFilter, setRoleFilter] = useState('')
@@ -78,11 +79,12 @@ const ShareToolbar = ({
           variant='outlined'
           size='small'
           fullWidth
-          value={searchTerm}
-          onChange={event => setSearchTerm(event.target.value)}
+          value={searchQuery}
+          onChange={handleSearchChange}
+          //onChange={event => setSearchQuery(event.target.value)}
           InputProps={{
             endAdornment: (
-              <IconButton onClick={handleSearchButtonClick}>
+              <IconButton>
                 <Icon icon='ic:baseline-search' />
               </IconButton>
             )
@@ -101,31 +103,15 @@ const ShareToolbar = ({
         }}
       >
         <Box>
-          <TextField select label='By Status' size='small' value={statusFilter} onChange={handleStatusFilterChange}>
-            <MenuItem value=''>All</MenuItem>
-            <MenuItem value='1'>Active</MenuItem>
-            <MenuItem value='0'>Inactive</MenuItem>
-            <MenuItem value='2'>Pending</MenuItem>
-            <MenuItem value='3'>Archive</MenuItem>
-          </TextField>
-        </Box>
-        <Box>
-          <TextField select label='Filter By Role' size='small' value={roleFilter} onChange={handleRoleFilterChange}>
-            <MenuItem value=''>All</MenuItem>
-            <MenuItem value='admin'>Admin</MenuItem>
-            <MenuItem value='teacher'>Instructor</MenuItem>
-            <MenuItem value='student'>Student</MenuItem>
-          </TextField>
-        </Box>
-        <Box>
-          <TextField select label='Order By' size='small' value={orderFilter} onChange={handleOrderFilterChange}>
-            <MenuItem value=''>All</MenuItem>
-            <MenuItem value='newest_first'>Newest First</MenuItem>
-            <MenuItem value='newest_last'>Newest Last</MenuItem>
-            <MenuItem value='last_name_asc'>Last Name ASC</MenuItem>
-            <MenuItem value='last_name_desc'>Last Name DESC</MenuItem>
-            <MenuItem value='first_name_asc'>First Name ASC</MenuItem>
-            <MenuItem value='first_name_desc'>First Name DESC</MenuItem>
+          <TextField
+            select
+            label='Action'
+            size='small'
+            disabled={checkedLength.length === 0}
+            value={selectedBulkAct}
+            onChange={handleBulkAction}
+          >
+            <MenuItem value='delete'>Remove</MenuItem>
           </TextField>
         </Box>
       </Grid>
@@ -133,4 +119,4 @@ const ShareToolbar = ({
   )
 }
 
-export default ShareToolbar
+export default Toolbar
