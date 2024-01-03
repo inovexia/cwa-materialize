@@ -2,15 +2,8 @@
 import { useState, useEffect, useRef } from 'react'
 import { useRouter } from 'next/router'
 // ** MUI Imports
-import { Drawer, useTheme, Grid, styled } from '@mui/material'
-import Button from '@mui/material/Button'
-// import { styled } from '@mui/material/styles'
-import TextField from '@mui/material/TextField'
-import IconButton from '@mui/material/IconButton'
-import Typography from '@mui/material/Typography'
-import Box from '@mui/material/Box'
-import FormControl from '@mui/material/FormControl'
-import FormHelperText from '@mui/material/FormHelperText'
+import { Drawer, useTheme, Grid, styled, TextField, Button, IconButton, Typography, Box, FormControl, FormHelperText } from '@mui/material'
+
 import LoadingButton from '@mui/lab/LoadingButton'
 import { EditorState } from 'draft-js'
 import 'react-draft-wysiwyg/dist/react-draft-wysiwyg.css'
@@ -31,27 +24,19 @@ import CardSnippet from 'src/@core/components/card-snippet'
 
 // ** Styled Component
 import DatePickerWrapper from 'src/@core/styles/libs/react-datepicker'
+
 // ** API
-import OnlineClassApi from '../_components/apis'
-import AuthApi from 'src/configs/commonConfig'
+import { AddOnlineClass } from 'src/pages/onlineclass/_models/OnlineClassModel'
+
 // ** date picker component 
 import PickersBasic from 'src/lib/common/datepicker/PickersBasic'
+
 const Header = styled(Box)(({ theme }) => ({
   display: 'flex',
   alignItems: 'center',
   padding: theme.spacing(3, 4),
   justifyContent: 'space-between'
 }))
-
-const showErrors = (field, valueLen, min) => {
-  if (valueLen === 0) {
-    return `${field} field is required`
-  } else if (valueLen > 0 && valueLen < min) {
-    return `${field} must be at least ${min} characters`
-  } else {
-    return ''
-  }
-}
 
 const schema = yup.object().shape({
   title: yup.string(),
@@ -93,40 +78,25 @@ const SidebarAddMeeting = props => {
     defaultValues: {
       title: '',
       details: '',
-      created_on: ''
-      // created_by: 'ASI8'
+      created_on: '',
+      created_by: 'ASI8'
     },
     // mode: 'onChange',
     // resolver: yupResolver(schema)
   })
 
-  // const handleFormSubmit = async data => {
-  //   setLoading(true)
-  //   const response = await MeetingApi.createMeeting(data)
-  //   setLoading(false)
-  //   if (!response.success) return toast.success(response.message)
-  //   setReload(true)
-  //   toggle()
-  //   reset()
-  // }
-
-  const handleFormSubmit = async data => {
-    const formData = new FormData()
-    Object.entries(data).forEach(([key, value]) => {
-      formData.append(key, value)
-    })
-    const res = await OnlineClassApi.createOnlineClass({ guid, data })
-    if (res.success === true) {
-      toast.success('online class created successfully')
-      setTimeout(() => {
-        router.push(`/courses/${guid}/onlineClass`)
-      }, 500)
-    } else {
-      toast.error('Failed to create online class')
-    }
+  /** Create Online Class  */
+  const onSubmit = async (data) => {
+    await AddOnlineClass(data)
+      .then(response => {
+        console.log(response)
+        if (response.success === true) {
+          toast.success(response.message)
+        } else {
+          toast.error(response.message)
+        }
+      })
   }
-
-
 
   const handleClose = () => {
     toggle()
@@ -139,7 +109,7 @@ const SidebarAddMeeting = props => {
       console.log(editorRef.current.getContent())
     }
   }
-  const toggleCreateDrawer = () => setDrawerOpen(!drawerOpen)
+
   return (
     <Drawer
       open={open}
@@ -161,7 +131,7 @@ const SidebarAddMeeting = props => {
         ''
       )}
       <Box sx={{ p: 5 }}>
-        <form onSubmit={handleSubmit(handleFormSubmit)}>
+        <form onSubmit={handleSubmit(onSubmit)}>
           <Grid container spacing={2}>
             <Grid item xs={12}>
               <FormControl fullWidth sx={{ mb: 6 }}>
