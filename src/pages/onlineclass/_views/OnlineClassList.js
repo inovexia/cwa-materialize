@@ -28,6 +28,7 @@ import Link from 'next/link'
 import ReactHtmlParser from 'react-html-parser'
 
 import Translations from 'src/layouts/components/Translations'
+// import extractUrlFromHtml from 'src/lib/common/extractUrlFromHtml'
 
 // ** Icon Imports
 import Icon from 'src/@core/components/icon'
@@ -35,7 +36,7 @@ import Icon from 'src/@core/components/icon'
 // ** Actions Imports
 import { changeStatus } from 'src/pages/courses/_models/CourseModel'
 
-import DeleteOnlineClassComponent from './DeleteOnlineClass'
+import DeleteOnlineClassComponent from './deleteonlineclass'
 
 const LinkStyled = styled(Link)(({ theme }) => ({
   fontWeight: 600,
@@ -156,52 +157,7 @@ function EnhancedTableHead(props) {
   )
 }
 
-// const EnhancedTableToolbar = props => {
-//   // ** Prop
-//   const { numSelected } = props
 
-//   return (
-//     numSelected !== 0 ?
-//       <Toolbar
-//         sx={{
-//           px: theme => `${theme.spacing(5)} !important`,
-//           ...(numSelected > 0 && {
-//             bgcolor: theme => alpha(theme.palette.primary.main, theme.palette.action.activatedOpacity)
-//           })
-//         }}
-//       >
-//         {numSelected > 0 ? (
-//           <Typography sx={{ flex: '1 1 100%' }} color='inherit' variant='subtitle1' component='div'>
-//             {numSelected} selected
-//           </Typography>
-//         ) : (
-//           ''
-//         )}
-//         {numSelected > 0 ? (
-//           <>
-//             <Tooltip title='Delete'>
-//               <IconButton sx={{ color: 'text.secondary' }}>
-//                 <Icon icon='mdi:delete-outline' />
-//               </IconButton>
-//             </Tooltip>
-//             <Tooltip title='Date'>
-//               <IconButton sx={{ color: 'text.secondary' }}>
-//                 <Icon icon="simple-line-icons:calender" fontSize={20} />
-//               </IconButton>
-//             </Tooltip>
-//             <Tooltip title='Enrolment'>
-//               <IconButton sx={{ color: 'text.secondary' }}>
-//                 <Icon icon="mdi:user" fontSize={20} />
-//               </IconButton>
-//             </Tooltip>
-//           </>
-
-//         ) : null}
-//       </Toolbar>
-//       : ""
-
-//   )
-// }
 
 const RowOptions = ({ guid }) => {
   const [anchorEl, setAnchorEl] = useState(null)
@@ -212,21 +168,7 @@ const RowOptions = ({ guid }) => {
   const handleClose = () => {
     setAnchorEl(null)
   }
-  // // ** State
-  // const rowOptionsOpen = Boolean(anchorEl)
 
-  // const handleRowOptionsClick = event => {
-  //   setAnchorEl(event.currentTarget)
-  // }
-
-  // const handleRowOptionsClose = () => {
-  //   setAnchorEl(null)
-  // }
-
-  // const handleDelete = () => {
-  //   dispatch(deleteUser(id))
-  //   handleRowOptionsClose()
-  // }
   const [drawerOpen, setDrawerOpen] = useState(false)
   /** HANDLE CREATE TEST DRAWER */
   const toggleCreateDrawer = () => setDrawerOpen(!drawerOpen)
@@ -248,19 +190,19 @@ const RowOptions = ({ guid }) => {
         anchorOrigin={{ vertical: 'top', horizontal: 'right' }}
         transformOrigin={{ vertical: 'top', horizontal: 'right' }}
       >
-        <Link href={`/meetings/`} style={{ textDecoration: 'none', color: 'inherit' }}>
+        <Link href={`/onlineclass/${guid}/preview/`} style={{ textDecoration: 'none', color: 'inherit' }}>
           <MenuItem onClick={handleClose}>
-            <Icon icon='mdi:users' style={{ marginRight: '10px' }} />
-            Users
+            <Icon icon='carbon:view' style={{ marginRight: '10px' }} />
+            View
           </MenuItem>
         </Link>
-        <Link href={`/meetings/`} style={{ textDecoration: 'none', color: 'inherit' }}>
+        <Link href={`/onlineclass/${guid}/edit/`} style={{ textDecoration: 'none', color: 'inherit' }}>
           <MenuItem onClick={handleClose}>
             <Icon icon='tabler:edit' style={{ marginRight: '10px' }} />
             Edit
           </MenuItem>
         </Link>
-        <Link href={`/meetings/`} style={{ textDecoration: 'none', color: 'inherit' }}>
+        <Link href={`/onlineclass/${guid}/share/`} style={{ textDecoration: 'none', color: 'inherit' }}>
           <MenuItem onClick={handleClose}>
             <Icon icon='ri:share-line' style={{ marginRight: '10px' }} />
             Share
@@ -278,7 +220,7 @@ const EnhancedTable = (props) => {
   // ** States
   const [page, setPage] = useState(0)
   const [order, setOrder] = useState('asc')
-  const [rowsPerPage, setRowsPerPage] = useState('10')
+  const [rowsPerPage, setRowsPerPage] = useState(10)
   const [orderBy, setOrderBy] = useState('calories')
   const [selected, setSelected] = useState([])
   const [guid, setGuid] = useState('')

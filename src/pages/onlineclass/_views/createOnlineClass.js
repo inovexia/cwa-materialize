@@ -1,13 +1,11 @@
 // ** React Imports
-import { useState, useEffect, useRef } from 'react'
+import { useState, useRef } from 'react'
 import { useRouter } from 'next/router'
 // ** MUI Imports
 import { Drawer, useTheme, Grid, styled, TextField, Button, IconButton, Typography, Box, FormControl, FormHelperText } from '@mui/material'
 
 import LoadingButton from '@mui/lab/LoadingButton'
-import { EditorState } from 'draft-js'
 import 'react-draft-wysiwyg/dist/react-draft-wysiwyg.css'
-import ReactDraftWysiwyg from 'src/@core/components/react-draft-wysiwyg'
 
 // ** Third Party Imports
 import * as yup from 'yup'
@@ -20,12 +18,8 @@ import Icon from 'src/@core/components/icon'
 
 // ** Component
 import FormEditorField from 'src/layouts/components/common/formEditorField'
-import CardSnippet from 'src/@core/components/card-snippet'
 
-// ** Styled Component
-import DatePickerWrapper from 'src/@core/styles/libs/react-datepicker'
-
-// ** API
+// ** Action Module
 import { AddOnlineClass } from 'src/pages/onlineclass/_models/OnlineClassModel'
 
 // ** date picker component 
@@ -79,10 +73,10 @@ const SidebarAddMeeting = props => {
       title: '',
       details: '',
       created_on: '',
-      created_by: 'ASI8'
+      created_by: '{{admin_guid}}'
     },
-    // mode: 'onChange',
-    // resolver: yupResolver(schema)
+    mode: 'onChange',
+    resolver: yupResolver(schema)
   })
 
   /** Create Online Class  */
@@ -198,6 +192,7 @@ const SidebarAddMeeting = props => {
             >
               <span>SAVE</span>
             </LoadingButton>
+
             <Button size='large' variant='outlined' color='secondary' onClick={handleClose}>
               Cancel
             </Button>

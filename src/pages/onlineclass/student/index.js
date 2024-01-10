@@ -1,15 +1,14 @@
-import React, { useEffect, useState } from 'react'
+import React, { useEffect, useState, useCallback } from 'react'
 
 // ** MUI Imports
-import { Grid, Card, CardContent, Box, Typography, CircularProgress, Divider } from '@mui/material'
+import { Grid, Card, CardHeader, CardContent, Button, Box, Link, Typography, CircularProgress, Divider } from '@mui/material'
 import toast from 'react-hot-toast'
 
 // ** Component Imports
 import PageHeader from 'src/layouts/components/page-header'
 
 // ** Module Specific Imports
-import OnlineClassList from 'src/pages/onlineclass/_views/onlineclasslist'
-import CreateOnlineClass from 'src/pages/onlineclass/_views/createonlineclass'
+import OnlineClassList from 'src/pages/onlineclass/student/_views/onlineclasslist'
 
 // ** Actions Imports
 import { GetOnlineClass } from 'src/pages/onlineclass/_models/OnlineClassModel'
@@ -25,21 +24,12 @@ const Page = () => {
   const [type, setType] = useState('')
   const [drawerOpen, setDrawerOpen] = useState(false)
   const [reload, setReload] = useState(0)
-  const toggleCreateDrawer = () => setDrawerOpen(!drawerOpen)
+
   /** GET ALL Online Class */
   useEffect(() => {
     const fetchData = async () => {
       const data = {
       }
-      // if (status !== "")
-      //   data['status'] = status
-
-      // if (searchTerm !== "")
-      //   data['search'] = searchTerm
-
-      // if (type !== "")
-      //   data['question_type'] = type
-
       const response = await GetOnlineClass(data)
       setLoading(false)
       if (!response.success) {
@@ -58,8 +48,6 @@ const Page = () => {
           <PageHeader
             title={<Typography variant='h5'>Online Class List</Typography>}
             subtitle={<Typography variant='body2'>List All Online Class</Typography>}
-            toggleDrawer={toggleCreateDrawer}
-            buttonTitle='Create'
           />
           <Card sx={{ mt: 4 }}>
             {isLoading ?
@@ -68,28 +56,12 @@ const Page = () => {
               </Box>) :
               (<form>
                 <CardContent>
-                  {/* <Toolbar
-                    searchTerm={searchTerm}
-                    handleSearch={handleSearch}
-                    status={status}
-                    handleStatus={handleStatus}
-                    type={type}
-                    handleType={handleType}
-                  /> */}
-                </CardContent>
-                <CardContent>
-
                   <>
                     <OnlineClassList
-                      // key={i}
-                      // count={i + 1}
-                      // question={row}
-
                       rows={dataList}
                       responseStatus={responseStatus}
                       responseMessage={responseMessage}
                       meta={metaData}
-                    // doReload={doReload}
                     />
                     <Divider />
                   </>
@@ -99,7 +71,6 @@ const Page = () => {
           </Card>
         </Grid>
       </Grid>
-      <CreateOnlineClass open={drawerOpen} toggle={toggleCreateDrawer} setReload={setReload} />
     </>
   )
 }
