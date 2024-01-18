@@ -8,7 +8,7 @@ import CustomAvatar from 'src/@core/components/mui/avatar'
 import Icon from 'src/@core/components/icon'
 
 // ** Actions Imports
-import { GetUser, ShareOnlineClass } from 'src/pages/onlineclass/_models/OnlineClassModel'
+import { GetUnEnrolUserList, ShareOnlineClass } from 'src/pages/courses/_models/OnlineClassModel'
 import Translations from 'src/layouts/components/Translations'
 
 //import CreateQuestion from 'src/pages/qb/create'
@@ -16,7 +16,7 @@ import Toolbar from 'src/pages/onlineclass/_components/Toolbar'
 
 const Page = (props) => {
   const router = useRouter()
-  const { guid } = props
+  const { guid, classguid } = props
   const [dataList, setDataList] = useState([])
   const [metaData, setMetaData] = useState([])
   const [responseStatus, setResponseStatus] = useState(false)
@@ -45,27 +45,29 @@ const Page = (props) => {
     if (checkedIds.length === dataList.length) {
       setCheckedIds([]);
     } else {
-      setCheckedIds(dataList.data.map((item) => item.guid));
+      setCheckedIds(dataList.map((item) => item.guid));
     }
   };
 
   /** GET ALL user in Online Class */
   useEffect(() => {
     const fetchData = async () => {
-      const data = {
+      if (guid, classguid) {
+        const data = {
+        }
+        // if (searchTerm !== "")
+        //   data['search'] = searchTerm
+        const response = await GetUnEnrolUserList(guid, classguid)
+        setLoading(false)
+        if (!response.success) {
+          toast.error(response.message)
+        }
+        setDataList(response.payload)
+        setMetaData(response.payload)
       }
-      if (searchTerm !== "")
-        data['search'] = searchTerm
-      const response = await GetUser(guid)
-      setLoading(false)
-      if (!response.success) {
-        toast.error(response.message)
-      }
-      setDataList(response.payload)
-      setMetaData(response.payload)
     }
     fetchData()
-  }, [guid, searchTerm])
+  }, [guid, classguid])
 
   /** Share ONLINE CLASS  */
   const onSubmit = async (data) => {
@@ -73,20 +75,22 @@ const Page = (props) => {
       toast.error('Please select at least one user to share the online class.');
       return;
     }
-    // console.log(checkedIds)
-    // return
-    await ShareOnlineClass(guid, checkedIds)
-      .then(response => {
-        console.log(response);
-        if (response.success === true) {
-          toast.success(response.message);
-          setTimeout(() => {
-            router.push(`/onlineclass/${guid}/share`)
-          }, 3000)
-        } else {
-          toast.error(response.message);
-        }
-      });
+    if (classguid) {
+      // console.log(checkedIds)
+      // return
+      await ShareOnlineClass(classguid, checkedIds)
+        .then(response => {
+          console.log(response);
+          if (response.success === true) {
+            toast.success(response.message);
+            setTimeout(() => {
+              router.push(`/courses/${guid}/onlineclass/${classguid}/share`)
+            }, 3000)
+          } else {
+            toast.error(response.message);
+          }
+        });
+    }
   };
   /** HANDLE SEARCH */
   const handleSearch = useCallback(value => {
@@ -95,14 +99,6 @@ const Page = (props) => {
 
   return (
     <>
-      <Toolbar
-        searchTerm={searchTerm}
-        handleSearch={handleSearch}
-      // status={status}
-      // handleStatus={handleStatus}
-      // type={type}
-      // handleType={handleType}
-      />
       {
         isLoading ?
           (<Box className="loader" style={{ textAlign: "center", padding: "50px 0px" }} >
@@ -127,7 +123,7 @@ const Page = (props) => {
                 </TableHead>
                 <TableBody>
                   {dataList && dataList.length !== 0 ? (
-                    dataList.data.map((item, index) => {
+                    dataList.map((item, index) => {
                       return (
                         <TableRow
                           key={item.guid}
@@ -186,7 +182,7 @@ const Page = (props) => {
               <Button variant='contained' size='medium' type='submit' sx={{ mt: 5 }}>
                 Share
               </Button>
-              <Button variant='outlined' size='medium' component={Link} href='/onlineclass' sx={{ mt: 5, ml: 3 }}>
+              <Button variant='outlined' size='medium' component={Link} href={`/courses/${guid}/onlineclass/`} sx={{ mt: 5, ml: 3 }}>
                 Cancel
               </Button>
             </Grid>

@@ -1,7 +1,7 @@
 import React, { useEffect, useState, useCallback } from 'react'
-
+import { useRouter } from 'next/router'
 // ** MUI Imports
-import { Grid, Card, CardContent, Box, Typography, CircularProgress, Divider } from '@mui/material'
+import { Grid, Card, CardContent, Box, Typography, CardHeader, Link, CircularProgress, Divider, Button } from '@mui/material'
 import toast from 'react-hot-toast'
 
 // ** Component Imports
@@ -11,12 +11,12 @@ import PageHeader from 'src/layouts/components/page-header'
 import OnlineClassList from 'src/pages/onlineclass/_views/OnlineClassList'
 import CreateOnlineClass from 'src/pages/onlineclass/_views/CreateOnlineClass'
 
-import Toolbar from 'src/pages/onlineclass/_components/Toolbar'
-
 // ** Actions Imports
-import { GetOnlineClass } from 'src/pages/onlineclass/_models/OnlineClassModel'
+import { GetOnlineClassInCourse } from 'src/pages/courses/_models/OnlineClassModel'
 
 const Page = () => {
+  const router = useRouter()
+  const { guid } = router.query
   const [dataList, setDataList] = useState([])
   const [metaData, setMetaData] = useState([])
   const [responseStatus, setResponseStatus] = useState(false)
@@ -31,21 +31,19 @@ const Page = () => {
   /** GET ALL Online Class */
   useEffect(() => {
     const fetchData = async () => {
-      const data = {
+      if (guid) {
+        setLoading(true)
+        const response = await GetOnlineClassInCourse(guid)
+        setLoading(false)
+        if (!response.success) {
+          toast.error(response.message)
+        }
+        setDataList(response.payload.data)
+        setMetaData(response.payload.meta)
       }
-      if (searchTerm !== "")
-        data['search'] = searchTerm
-
-      const response = await GetOnlineClass(data)
-      setLoading(false)
-      if (!response.success) {
-        toast.error(response.message)
-      }
-      setDataList(response.payload.data)
-      setMetaData(response.payload.meta)
     }
     fetchData()
-  }, [searchTerm])
+  }, [guid])
   /** HANDLE SEARCH */
   const handleSearch = useCallback(value => {
     setSearchTerm(value)
@@ -60,6 +58,17 @@ const Page = () => {
             toggleDrawer={toggleCreateDrawer}
             buttonTitle='Create'
           />
+          <Card style={{ marginTop: '30px' }}>
+            <CardHeader title='Existing Online Class' sx={{ pb: 4, '& .MuiCardHeader-title': { letterSpacing: '.15px' } }} />
+            <CardContent sx={{ display: 'flex', alignItems: 'center', justifyContent: 'space-between' }}>
+              <Typography>If you want to add existing online class in the Course</Typography>
+              <Link href={`./addclass`}>
+                <Button size='medium' variant='contained' color='primary'>
+                  Add Existing Class
+                </Button>
+              </Link>
+            </CardContent>
+          </Card>
           <Card sx={{ mt: 4 }}>
             {isLoading ?
               (<Box className="loader" style={{ textAlign: "center", padding: "50px 0px" }}>
@@ -67,32 +76,15 @@ const Page = () => {
               </Box>) :
               (<form>
                 <CardContent>
-                  <Toolbar
-                    searchTerm={searchTerm}
-                    handleSearch={handleSearch}
-                  // status={status}
-                  // handleStatus={handleStatus}
-                  // type={type}
-                  // handleType={handleType}
+
+                  <OnlineClassList
+                    courseGuid={guid}
+                    rows={dataList}
+                    responseStatus={responseStatus}
+                    responseMessage={responseMessage}
+                    meta={metaData}
+                  // doReload={doReload}
                   />
-                </CardContent>
-                <CardContent>
-
-                  <>
-                    <OnlineClassList
-                      // key={i}
-                      // count={i + 1}
-                      // question={row}
-
-                      rows={dataList}
-                      responseStatus={responseStatus}
-                      responseMessage={responseMessage}
-                      meta={metaData}
-                    // doReload={doReload}
-                    />
-                    <Divider />
-                  </>
-
                 </CardContent>
               </form>)}
           </Card>

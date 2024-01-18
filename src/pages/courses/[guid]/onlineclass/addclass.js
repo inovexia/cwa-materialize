@@ -5,14 +5,14 @@ import { useRouter } from 'next/router'
 import { Grid, Card, CardContent, Typography } from '@mui/material'
 
 // ** Module Specific Imports
-import UnEnrolUser from 'src/pages/onlineclass/_views/UnenrolUserList'
+import AllOnlineClasses from 'src/pages/courses/[guid]/onlineclass/_views/AllOnlineClasses'
 
 // ** Core Imports
 import PageHeader from 'src/layouts/components/page-header'
 
-const AddUserOnlineClasses = () => {
+const ExistingOnlineClasses = () => {
   const router = useRouter()
-  const { guid } = router.query
+  const { guid, courseGuid } = router.query
 
 
   return (
@@ -21,14 +21,14 @@ const AddUserOnlineClasses = () => {
       <Grid container spacing={6}>
         <Grid item xs={12}>
           <PageHeader
-            title={<Typography variant='h5'>Add user in online class</Typography>}
-            subtitle={<Typography variant='body2'>List all Enrolment</Typography>}
+            title={<Typography variant='h5'>Add existing class into the course</Typography>}
+            subtitle={<Typography variant='body2'>List of all online classes</Typography>}
           // setReload={setReload}
           // doReload={doReload}
           />
           <Card sx={{ mt: 4 }}>
             <CardContent>
-              <UnEnrolUser guid={guid} />
+              <AllOnlineClasses guid={guid} courseGuid={courseGuid} />
             </CardContent>
           </Card>
         </Grid>
@@ -37,4 +37,4 @@ const AddUserOnlineClasses = () => {
   )
 }
 
-export default AddUserOnlineClasses
+export default ExistingOnlineClasses

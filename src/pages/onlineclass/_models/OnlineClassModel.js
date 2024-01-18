@@ -1,5 +1,5 @@
 import API from 'src/pages/onlineclass/_components/Apis'
-import MessageFormatter from 'src/lib/common/MessageFormatter'
+import MessageFormatter from 'src/lib/common/messageFormatter'
 
 /** GET Online Class */
 export async function GetOnlineClass(data) {

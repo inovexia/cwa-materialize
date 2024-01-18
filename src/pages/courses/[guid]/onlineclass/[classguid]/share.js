@@ -7,13 +7,13 @@ import { useRouter } from 'next/router'
 import { Grid, Card, CardContent, useTheme, Typography } from '@mui/material'
 
 // ** Module Specific Imports
-import EnrolUser from 'src/pages/onlineclass/_views/EnrolUserList'
+import EnrolUser from 'src/pages/courses/[guid]/onlineclass/_views/EnrolUserList'
 
 // ** Core Imports
 import PageHeader from 'src/layouts/components/page-header'
 const ShareOnlineClasses = () => {
   const router = useRouter()
-  const { guid } = router.query
+  const { guid, classguid } = router.query
 
   //popperPlacement
   const theme = useTheme()
@@ -28,7 +28,7 @@ const ShareOnlineClasses = () => {
           <PageHeader
             title={<Typography variant='h5'>User already in online class</Typography>}
             subtitle={<Typography variant='body2'>List all Enrolment</Typography>}
-            buttonHref={`/onlineclass/${guid}/addUsers`}
+            buttonHref={`/courses/${guid}/onlineclass/${classguid}/addusers`}
             // toggleDrawer={toggleCreateDrawer}
             buttonTitle='Add Users'
           // setReload={setReload}
@@ -37,7 +37,7 @@ const ShareOnlineClasses = () => {
           <Card sx={{ mt: 4 }}>
             {/* <CardHeader title='User already in online class' /> */}
             <CardContent>
-              <EnrolUser guid={guid} />
+              <EnrolUser guid={guid} classguid={classguid} />
             </CardContent>
           </Card>
         </Grid>

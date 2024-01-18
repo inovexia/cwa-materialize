@@ -14,7 +14,7 @@ import Translations from 'src/layouts/components/Translations'
 
 const Page = (props) => {
 
-  const { guid } = props
+  const { guid, classguid } = props
   const [dataList, setDataList] = useState([])
   const [metaData, setMetaData] = useState([])
   const [responseStatus, setResponseStatus] = useState(false)
@@ -24,16 +24,19 @@ const Page = (props) => {
   /** GET ALL user in Online Class */
   useEffect(() => {
     const fetchData = async () => {
-      const response = await GetEnrolUserList(guid)
-      setLoading(false)
-      if (!response.success) {
-        toast.error(response.message)
+      if (classguid, guid) {
+        const response = await GetEnrolUserList(classguid, guid)
+        setLoading(false)
+        if (!response.success) {
+          toast.error(response.message)
+        }
+        setDataList(response.payload)
+        setMetaData(response.payload)
       }
-      setDataList(response.payload)
-      setMetaData(response.payload)
+
     }
     fetchData()
-  }, [guid])
+  }, [classguid, guid])
 
   return (
     <>

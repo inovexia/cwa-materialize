@@ -1,6 +1,7 @@
 import React, { useEffect, useState, useCallback } from 'react'
 import { useForm } from 'react-hook-form'
 import { useRouter } from 'next/router'
+import ReactHtmlParser from 'react-html-parser'
 // ** MUI Imports
 import { Grid, Button, Box, Link, Typography, CircularProgress, Paper, TableRow, TableHead, TableBody, TableCell, TableContainer, Table, Checkbox, Card, CardContent } from '@mui/material'
 import toast from 'react-hot-toast'
@@ -8,7 +9,7 @@ import CustomAvatar from 'src/@core/components/mui/avatar'
 import Icon from 'src/@core/components/icon'
 
 // ** Actions Imports
-import { GetUser, ShareOnlineClass } from 'src/pages/onlineclass/_models/OnlineClassModel'
+import { GetOnlineClasses, AddExistingOnlineClass } from 'src/pages/courses/_models/OnlineClassModel'
 import Translations from 'src/layouts/components/Translations'
 
 //import CreateQuestion from 'src/pages/qb/create'
@@ -16,7 +17,7 @@ import Toolbar from 'src/pages/onlineclass/_components/Toolbar'
 
 const Page = (props) => {
   const router = useRouter()
-  const { guid } = props
+  const { guid, classguid } = props
   const [dataList, setDataList] = useState([])
   const [metaData, setMetaData] = useState([])
   const [responseStatus, setResponseStatus] = useState(false)
@@ -45,70 +46,85 @@ const Page = (props) => {
     if (checkedIds.length === dataList.length) {
       setCheckedIds([]);
     } else {
-      setCheckedIds(dataList.data.map((item) => item.guid));
+      setCheckedIds(dataList.map((item) => item.guid));
     }
   };
 
   /** GET ALL user in Online Class */
   useEffect(() => {
     const fetchData = async () => {
-      const data = {
+      if (guid) {
+        const data = {
+        }
+        // if (searchTerm !== "")
+        //   data['search'] = searchTerm
+        const response = await GetOnlineClasses(guid)
+        setLoading(false)
+        if (!response.success) {
+          toast.error(response.message)
+        }
+        setDataList(response.payload.data)
+        setMetaData(response.payload.data)
       }
-      if (searchTerm !== "")
-        data['search'] = searchTerm
-      const response = await GetUser(guid)
-      setLoading(false)
-      if (!response.success) {
-        toast.error(response.message)
-      }
-      setDataList(response.payload)
-      setMetaData(response.payload)
     }
     fetchData()
-  }, [guid, searchTerm])
+  }, [guid, classguid])
 
   /** Share ONLINE CLASS  */
   const onSubmit = async (data) => {
     if (checkedIds.length === 0) {
-      toast.error('Please select at least one user to share the online class.');
+      toast.error('Please select at least one online class into the course.');
       return;
     }
-    // console.log(checkedIds)
-    // return
-    await ShareOnlineClass(guid, checkedIds)
-      .then(response => {
-        console.log(response);
-        if (response.success === true) {
-          toast.success(response.message);
-          setTimeout(() => {
-            router.push(`/onlineclass/${guid}/share`)
-          }, 3000)
-        } else {
-          toast.error(response.message);
-        }
-      });
+    if (guid) {
+      // console.log(checkedIds)
+      // return
+      await AddExistingOnlineClass(guid, checkedIds)
+        .then(response => {
+          console.log(response);
+          if (response.success === true) {
+            toast.success(response.message);
+            setTimeout(() => {
+              router.push(`/courses/${guid}/onlineclass/${classguid}/share`)
+            }, 3000)
+          } else {
+            toast.error(response.message);
+          }
+        });
+    }
   };
   /** HANDLE SEARCH */
   const handleSearch = useCallback(value => {
     setSearchTerm(value)
   }, [])
+  function extractUrlFromHtml(htmlContent) {
+    const urlPattern = /https?:\/\/\S+(?=<\/p>)/; // Match URL until </p>
+    const match = htmlContent && htmlContent.match(urlPattern); // Check if htmlContent is defined
+    return match ? match[0] : '';
+  }
 
+  const extractedUrl = extractUrlFromHtml(dataList.details)
   return (
     <>
-      <Toolbar
-        searchTerm={searchTerm}
-        handleSearch={handleSearch}
-      // status={status}
-      // handleStatus={handleStatus}
-      // type={type}
-      // handleType={handleType}
-      />
       {
         isLoading ?
           (<Box className="loader" style={{ textAlign: "center", padding: "50px 0px" }} >
             <CircularProgress />
           </Box >) :
           (<form onSubmit={handleSubmit(onSubmit)}>
+            <Grid container spacing={2}>
+              <Grid item xs={6}></Grid>
+              <Grid item xs={6} sx={{ display: 'flex', justifyContent: 'end' }}>
+                <Button variant='contained' size='medium' type='submit' sx={{ mt: 5 }}>
+                  Add
+                </Button>
+                <Button variant='outlined' size='medium' component={Link} href={`/courses/${guid}/onlineclass/`} sx={{ mt: 5, ml: 3 }}>
+                  Cancel
+                </Button>
+              </Grid>
+
+
+            </Grid>
             <TableContainer component={Paper}>
               <Table sx={{ minWidth: 650 }} aria-label='simple table'>
                 <TableHead>
@@ -120,14 +136,15 @@ const Page = (props) => {
                         onChange={handleBulkCheckboxChange}
                       />
                     </TableCell>
-                    <TableCell>Guid</TableCell>
-                    <TableCell>First Name</TableCell>
-                    <TableCell>Last Name</TableCell>
+                    <TableCell>Title</TableCell>
+                    <TableCell>Details</TableCell>
+                    <TableCell>Start Date</TableCell>
+                    <TableCell>End Date</TableCell>
                   </TableRow>
                 </TableHead>
                 <TableBody>
                   {dataList && dataList.length !== 0 ? (
-                    dataList.data.map((item, index) => {
+                    dataList.map((item, index) => {
                       return (
                         <TableRow
                           key={item.guid}
@@ -146,11 +163,11 @@ const Page = (props) => {
                                 color={item.avatarColor || 'primary'}
                                 sx={{ mr: 3, width: 34, height: 34, fontSize: '1rem' }}
                               >
-                                <Icon icon="mdi:user-outline" />
+                                <Icon icon="healthicons:i-training-class-outline" />
                               </CustomAvatar>
                               <Box>
                                 <Typography variant='body2' component='h5'>
-                                  {item.guid}
+                                  {item.title}
                                 </Typography>
                               </Box>
                             </Box>
@@ -158,14 +175,21 @@ const Page = (props) => {
                           <TableCell>
                             <Box>
                               <Typography variant='body1' component='p'>
-                                {item.first_name}
+                                {ReactHtmlParser(item.details)}
                               </Typography>
                             </Box>
                           </TableCell>
                           <TableCell>
                             <Box>
                               <Typography variant='body1' component='p'>
-                                {item.last_name}
+                                {item.created_on}
+                              </Typography>
+                            </Box>
+                          </TableCell>
+                          <TableCell>
+                            <Box>
+                              <Typography variant='body1' component='p'>
+                                {item.updated_on}
                               </Typography>
                             </Box>
                           </TableCell>
@@ -182,14 +206,7 @@ const Page = (props) => {
                 </TableBody>
               </Table>
             </TableContainer>
-            <Grid container spacing={2} style={{ marginTop: '20px' }}>
-              <Button variant='contained' size='medium' type='submit' sx={{ mt: 5 }}>
-                Share
-              </Button>
-              <Button variant='outlined' size='medium' component={Link} href='/onlineclass' sx={{ mt: 5, ml: 3 }}>
-                Cancel
-              </Button>
-            </Grid>
+
           </form>)}
     </>
   )
