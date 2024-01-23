@@ -26,6 +26,9 @@ import Toolbar from 'src/pages/users/_components/toolbar'
 import Pagination from 'src/pages/users/_components/pagination'
 import UserContextProvider, { useUserContextData } from './_context/UserContext'
 
+// ** Models
+import { GetUsers } from 'src/pages/users/_models/UsersModel'
+
 // ** renders client column
 
 const RowOptions = ({ id }) => {
@@ -142,33 +145,46 @@ const Page = () => {
     }
   }
 
-  //  Multiple Filter
-  const handleFiltersChange = useCallback(async () => {
-    setLoader(true)
-    const formData = new FormData()
-    formData.append('search', searchTerm)
-    formData.append('status', statusFilter)
-    formData.append('role', roleFilter)
-    formData.append('order_by', orderFilter)
-    formData.append('results_per_page', itemPerPage)
-    formData.append('page', currentPage)
-    setLoader(true)
-    const res = await UserApi.filterUsers(formData)
-    setLoader(false)
-    if (!res.success) return
-    setDataList(res.payload.data)
-    setMetaData(res.payload.meta)
-    setResponseStatus(res.status)
-    setResponseMessage(res.message)
-  }, [searchTerm, statusFilter, roleFilter, orderFilter, reload, itemPerPage, currentPage])
-
-  useEffect(() => {
-    handleFiltersChange()
-  }, [handleFiltersChange])
-
   const handlePageChange = page => {
     setCurrentPage(page)
   }
+
+  /** GET ALL USERS */
+  useEffect(() => {
+    const fetchData = async () => {
+      const data = {
+      }
+      setLoader(true)
+      if (statusFilter !== "")
+        data['status'] = statusFilter
+
+      if (searchTerm !== "")
+        data['search'] = searchTerm
+
+      if (roleFilter !== "")
+        data['role'] = roleFilter
+
+      if (orderFilter !== "")
+        data['order_by'] = orderFilter
+
+      if (itemPerPage !== "")
+        data['results_per_page'] = itemPerPage
+
+      if (currentPage !== "")
+        data['page'] = currentPage
+
+      const response = await GetUsers(data)
+      setLoader(false)
+      if (!response.success) {
+        toast.error(response.message)
+      }
+      setDataList(response.payload.data)
+      setMetaData(response.payload.meta)
+      setResponseStatus(response.status)
+      setResponseMessage(response.message)
+    }
+    fetchData()
+  }, [searchTerm, statusFilter, roleFilter, orderFilter, itemPerPage, currentPage])
 
   //  Bulk Action
   const handleBulkAction = useCallback(async () => {
@@ -180,9 +196,9 @@ const Page = () => {
       })
 
       const res = await UserApi.changeStatus(formData)
-      setReload(true)
       setResponseStatus(res.status)
       setResponseMessage(res.message)
+
     }
   }, [bulkAction, checkedIds])
 
@@ -190,9 +206,39 @@ const Page = () => {
     handleBulkAction()
   }, [handleBulkAction, bulkAction, checkedIds])
 
+
+  /** HANDLE SEARCH */
+  const handleSearch = useCallback(value => {
+    setSearchTerm(value)
+  }, [])
+
+  /** HANDLE STATUS */
+  const handleStatus = useCallback(value => {
+    setStatusFilter(value)
+  }, [])
+
+  /** HANDLE ROLE */
+  const handleRole = useCallback(value => {
+    setRoleFilter(value)
+  }, [])
+
+  /** HANDLE ORDER FILTER */
+  const handleOrder = useCallback(value => {
+    setOrderFilter(value)
+  }, [])
+
+  /** HANDLE ITEM PER PAGE */
+  const handleItemPerPage = useCallback(value => {
+    setItemPerPage(value)
+  }, [])
+
+  /** HANDLE CURRENT */
+  const handleCurrentPage = useCallback(value => {
+    setCurrentPage(value)
+  }, [])
+
   return (
     <UserContextProvider>
-      <UserContent />
       <Grid container spacing={6}>
         <Grid item xs={12}>
           <PageHeader
@@ -207,14 +253,20 @@ const Page = () => {
               <Toolbar
                 checkedIds={checkedIds}
                 setCheckedIds={setCheckedIds}
-                setSearchTerm={setSearchTerm}
-/*                 searchTerm={searchTerm}
- */                setLoader={setLoader}
-                onStatusFilterChange={setStatusFilter}
-                onRoleFilterChange={setRoleFilter}
-                onOrderFilterChange={setOrderFilter}
+                searchTerm={searchTerm}
+                handleSearch={handleSearch}
+                statusFilter={statusFilter}
+                handleStatus={handleStatus}
+                roleFilter={roleFilter}
+                handleRole={handleRole}
+                orderFilter={orderFilter}
+                handleOrder={handleOrder}
+                itemPerPage={itemPerPage}
+                handleItemPerPage={handleItemPerPage}
+                currentPage={currentPage}
+                handleCurrentPage={handleCurrentPage}
 
-                //onSelectedBulkAction={setBulkAction}
+                setLoader={setLoader}
                 checkedLength={checkedIds}
                 bulkAction={bulkAction}
                 setBulkAction={setBulkAction}
@@ -246,10 +298,10 @@ const Page = () => {
   )
 }
 
-const UserContent = () => {
-  const { searchTerm } = useUserContextData()
+// const UserContent = () => {
+//   const { searchTerm } = useUserContextData()
 
-  return <div>'Hello'</div>
-}
+//   return <div>{searchTerm}</div>
+// }
 
 export default Page

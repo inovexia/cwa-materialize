@@ -76,20 +76,7 @@ const ContentPdf = props => {
     resolver: yupResolver(schema)
   })
 
-  const handleFormSubmit = async data => {
-    setLoading(true)
-    const response = await CourseApi.createCourse(data)
-    setLoading(false)
-    if (!response.success) return toast.success(response.message)
-    doReload(true)
-    toggle()
-    reset()
-  }
 
-  const handleClose = () => {
-    toggle()
-    reset()
-  }
 
   const editorRef = useRef(null)
   return (

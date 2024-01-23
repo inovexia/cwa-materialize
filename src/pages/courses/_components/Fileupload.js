@@ -47,7 +47,7 @@ const FileUploaderSingle = () => {
   })
 
   const img = files.map(file => (
-    <img key={file.name} alt={file.name} className='single-file-image' src={URL.createObjectURL(file)} />
+    <img key={file.name} alt={file.name} className='single-file-image' src={URL.createObjectURL(file)} style={{ width: "auto", height: "100px" }} />
   ))
 
   return (

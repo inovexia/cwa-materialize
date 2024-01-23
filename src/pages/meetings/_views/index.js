@@ -22,6 +22,9 @@ import ReactHtmlParser from 'react-html-parser'
 // ** Utils Import
 import { getInitials } from 'src/@core/utils/get-initials'
 
+//**Functions */
+import extractUrlFromHtml from 'src/lib/common/extractUrlFromHtml'
+
 import SwitchField from 'src/pages/meetings/_components/Switch'
 import ActionMenu from 'src/pages/meetings/_components/actionMenu'
 import DeleteMeeting from 'src/pages/meetings/_views/deleteMeeting'
@@ -101,13 +104,6 @@ export default function BasicTable({
     setMetaData(updatedUsers.payload.meta)
     setOpenModal(false)
   }
-
-  function extractUrlFromHtml(htmlContent) {
-    const urlPattern = /https?:\/\/\S+(?=<\/p>)/ // Match URL until </p>
-    const match = htmlContent.match(urlPattern)
-    return match ? match[0] : ''
-  }
-  console.log(responseMessage)
   return (
     <>
       <TableContainer component={Paper}>

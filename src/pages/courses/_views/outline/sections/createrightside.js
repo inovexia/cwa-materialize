@@ -50,6 +50,16 @@ const CreateSectionRight = ({ updateValue }) => {
   const [bulkAction, setBulkAction] = useState('')
   const [contentType, setContentType] = useState('html')
   const doReload = () => setReload(r => r + 1)
+
+  const buttonData = [
+    { type: 'html', label: 'HTML CODE', icon: "gala:editor" },
+    { type: 'image', label: 'IMAGE', icon: "ph:image" },
+    { type: 'video', label: 'VIDEO', icon: "ph:video-bold" },
+    { type: 'pdf', label: 'PDF', icon: "mingcute:pdf-line" },
+    { type: 'url', label: 'URL', icon: "material-symbols:link" },
+    { type: 'youtube', label: 'YOUTUBE URL', icon: "ant-design:youtube-outlined" },
+    // Add more button data as needed
+  ];
   /** HANDLE CREATE TEST DRAWER */
 
   const handleDrawerContent = (value) => {
@@ -66,27 +76,28 @@ const CreateSectionRight = ({ updateValue }) => {
       {/* <p onClick={() => hello("Hello")}>Click</p> */}
       <CardContent>
         <Grid container spacing={1} sx={{ justifyContent: 'center' }}>
-          <Grid item xs={6}>
-            <Button
-              value='html'
-              variant='text'
-              className='no-radius'
-              onClick={() => handleDrawerContent("html")}
-              sx={{ display: 'block', width: '100%' }}
-            >
-              <Icon icon="gala:editor" />
-              <Typography
-                variant='body2'
-                sx={{
-                  width: '100%',
-                  display: 'block',
-                  textAlign: 'center',
-                }}
+          {buttonData.map((button) => (
+            <Grid item xs={6} key={button.type}>
+              <Button
+                variant='text'
+                className='no-radius'
+                onClick={() => handleDrawerContent(button.type)}
+                sx={{ display: 'block', width: '100%' }}
               >
-                HTML Code
-              </Typography>
-            </Button>
-          </Grid>
+                <Icon icon={button.icon} />
+                <Typography
+                  variant='body2'
+                  sx={{
+                    width: '100%',
+                    display: 'block',
+                    textAlign: 'center',
+                  }}
+                >
+                  {button.label}
+                </Typography>
+              </Button>
+            </Grid>
+          ))}
           <Grid item xs={6}>
             <Button
               variant='text'

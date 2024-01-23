@@ -41,7 +41,6 @@ const CreateSectionLeft = ({ passedValue, contentType }) => {
       created_by: 'ASI8'
     }
   })
-  console.log(passedValue)
   const handleFormSubmit = async data => {
     console.log('Content Type:', contentType);
     return;

@@ -45,6 +45,7 @@ const SidebarAddCourse = props => {
   // ** State
   const [responseMessage, setResponseMessage] = useState('')
   const [loading, setLoading] = useState(false)
+
   // ** Hooks
   const {
     reset,
@@ -77,6 +78,7 @@ const SidebarAddCourse = props => {
   }
 
   const editorRef = useRef(null)
+
   return (
     <Drawer
       open={open}

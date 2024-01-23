@@ -46,36 +46,6 @@ const ContentImage = props => {
   // ** State
   const [responseMessage, setResponseMessage] = useState('')
   const [loading, setLoading] = useState(false)
-  // ** Hooks
-  const {
-    reset,
-    control,
-    handleSubmit,
-    formState: { errors }
-  } = useForm({
-    defaultValues: {
-      title: '',
-      description: '',
-      created_by: 'ASI8'
-    },
-    mode: 'onChange',
-    resolver: yupResolver(schema)
-  })
-
-  const handleFormSubmit = async data => {
-    setLoading(true)
-    const response = await CourseApi.createCourse(data)
-    setLoading(false)
-    if (!response.success) return toast.success(response.message)
-    doReload(true)
-    toggle()
-    reset()
-  }
-
-  const handleClose = () => {
-    toggle()
-    reset()
-  }
 
   const editorRef = useRef(null)
   return (

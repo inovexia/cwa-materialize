@@ -27,12 +27,13 @@ import CourseApi from 'src/pages/courses/_components/Apis'
 // ** Component Imports
 import PageHeader from 'src/layouts/components/page-header'
 import CreateSectionLeft from 'src/pages/courses/_views/outline/sections/createleftside'
-import CreateSectionRight from 'src/pages/courses/_views/outline/sections/createrightside'
+import ButtonRightSidebar from 'src/pages/courses/_views/outline/sections/buttonType'
 
 
 const SidebarAddSection = props => {
   const router = useRouter()
   const { id } = router.query
+  const [selectedType, setSelectedType] = useState(null);
   const [valueToPass, setValueToPass] = useState('');
   const [contentType, setContentType] = useState('');
   const {
@@ -81,6 +82,9 @@ const SidebarAddSection = props => {
     setValueToPass(newValue);
     setContentType(newContentType);
   };
+  const handleDrawerContent = (type) => {
+    setSelectedType(type);
+  };
 
   return (
     <>
@@ -96,7 +100,7 @@ const SidebarAddSection = props => {
           <CreateSectionLeft passedValue={valueToPass} contentType={contentType} />
         </Grid>
         <Grid item xs={12} md={3.5}>
-          <CreateSectionRight updateValue={updateValue} />
+          <ButtonRightSidebar handleDrawerContent={handleDrawerContent} />
         </Grid>
       </Grid >
     </>

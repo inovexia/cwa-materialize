@@ -86,9 +86,9 @@ const HtmlCode = props => {
           display: "block"
         }}
       >
-        Description
+        HTML
       </label>
-      <FormEditorField control={control} name='description' onInit={(evt, editor) => (editorRef.current = editor)} />
+      <FormEditorField control={control} name="content" onInit={(evt, editor) => (editorRef.current = editor)} />
     </Box>
   )
 }

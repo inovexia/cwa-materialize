@@ -1,61 +1,30 @@
-import { useEffect, useState } from 'react'
+import { useState } from 'react'
 
 // ** MUI Imports
-import Grid from '@mui/material/Grid'
-import Box from '@mui/material/Box'
+import { Grid, Box, MenuItem, TextField, IconButton } from '@mui/material'
 import Icon from 'src/@core/components/icon'
-import MenuItem from '@mui/material/MenuItem'
-import { Button, Link } from '@mui/material'
-import TextField from '@mui/material/TextField'
-import IconButton from '@mui/material/IconButton'
-import toast from 'react-hot-toast'
 
 // ** API
-import UserApi from 'src/pages/users/_components/apis'
-import { useUserContextApi, useUserContextData } from '../_context/UserContext'
+//import { useUserContextApi, useUserContextData } from '../_context/UserContext'
 
 const Toolbar = ({
-  setLoader,
-  onStatusFilterChange,
-  onRoleFilterChange,
-  onOrderFilterChange,
-  onSelectedBulkAction,
   checkedLength,
-  onSelectedBulkDelete,
-  bulkAction,
-  setBulkAction
+  setBulkAction,
+  searchTerm,
+  handleSearch,
+  statusFilter,
+  handleStatus,
+  roleFilter,
+  handleRole,
+  orderFilter,
+  handleOrder,
 }) => {
-  const [statusFilter, setStatusFilter] = useState('')
-  const [roleFilter, setRoleFilter] = useState('')
-  const [orderFilter, setOrderFilter] = useState('')
+
   const [selectedBulkAct, setSelectedBulkAct] = useState('')
-  const { searchTerm } = useUserContextData()
-  const { setSearchTerm } = useUserContextApi()
 
-  const handleSearchButtonClick = () => {
-    handleSearch()
-  }
+  // const { searchTerm } = useUserContextData()
+  // const { setSearchTerm } = useUserContextApi()
 
-  // Filter By Status
-  const handleStatusFilterChange = event => {
-    const selectedStatus = event.target.value
-    setStatusFilter(selectedStatus)
-    onStatusFilterChange(selectedStatus)
-  }
-
-  // Filter By Role
-  const handleRoleFilterChange = event => {
-    const selectedRole = event.target.value
-    setRoleFilter(selectedRole)
-    onRoleFilterChange(selectedRole)
-  }
-
-  // Filter By Order
-  const handleOrderFilterChange = event => {
-    const selectedOrder = event.target.value
-    setOrderFilter(selectedOrder)
-    onOrderFilterChange(selectedOrder)
-  }
 
   // Bulk Action
   const handleBulkAction = event => {
@@ -81,10 +50,10 @@ const Toolbar = ({
           size='small'
           fullWidth
           value={searchTerm}
-          onChange={event => setSearchTerm(event.target.value)}
+          onChange={e => handleSearch(e.target.value)}
           InputProps={{
             endAdornment: (
-              <IconButton onClick={handleSearchButtonClick}>
+              <IconButton>
                 <Icon icon='ic:baseline-search' />
               </IconButton>
             )
@@ -103,7 +72,7 @@ const Toolbar = ({
         }}
       >
         <Box>
-          <TextField select label='By Status' size='small' value={statusFilter} onChange={handleStatusFilterChange}>
+          <TextField select label='By Status' size='small' value={statusFilter} onChange={e => handleStatus(e.target.value)}>
             <MenuItem value=''>All</MenuItem>
             <MenuItem value='1'>Active</MenuItem>
             <MenuItem value='0'>Inactive</MenuItem>
@@ -112,7 +81,7 @@ const Toolbar = ({
           </TextField>
         </Box>
         <Box>
-          <TextField select label='Filter By Role' size='small' value={roleFilter} onChange={handleRoleFilterChange}>
+          <TextField select label='Filter By Role' size='small' value={roleFilter} onChange={e => handleRole(e.target.value)}>
             <MenuItem value=''>All</MenuItem>
             <MenuItem value='admin'>Admin</MenuItem>
             <MenuItem value='teacher'>Instructor</MenuItem>
@@ -120,7 +89,7 @@ const Toolbar = ({
           </TextField>
         </Box>
         <Box>
-          <TextField select label='Order By' size='small' value={orderFilter} onChange={handleOrderFilterChange}>
+          <TextField select label='Order By' size='small' value={orderFilter} onChange={e => handleOrder(e.target.value)}>
             <MenuItem value=''>All</MenuItem>
             <MenuItem value='newest_first'>Newest First</MenuItem>
             <MenuItem value='newest_last'>Newest Last</MenuItem>
