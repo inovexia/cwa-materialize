@@ -49,9 +49,9 @@ const TabLogin = () => {
   const formSubmit = async ({ single_device_login_only }) => {
     const formData = new FormData();
     formData.append('single_device_login_only', single_device_login_only);
+
     // Call the API to send data to the server
     const res = await SettingsApi.SingleDevice(formData);
-    console.log(res);
     if (res.success === true) {
       toast.success('Single Device updated successfully')
     } else {

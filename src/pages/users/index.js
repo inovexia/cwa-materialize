@@ -265,7 +265,6 @@ const Page = () => {
                 handleItemPerPage={handleItemPerPage}
                 currentPage={currentPage}
                 handleCurrentPage={handleCurrentPage}
-
                 setLoader={setLoader}
                 checkedLength={checkedIds}
                 bulkAction={bulkAction}
@@ -282,14 +281,14 @@ const Page = () => {
               setDataList={setDataList}
               setMetaData={setMetaData}
             />
-            <Pagination
+            {/* <Pagination
               itemPerPage={itemPerPage}
               setItemPerPage={setItemPerPage}
               currentPage={currentPage}
               onPageChange={handlePageChange}
               checkedIds={checkedIds}
               metaData={metaData}
-            />
+            /> */}
           </Card>
         </Grid>
       </Grid>

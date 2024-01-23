@@ -1,5 +1,5 @@
 import { useState } from 'react'
-import { Menu, MenuItem, IconButton } from '@mui/material'
+import { Menu, MenuItem, IconButton, Box } from '@mui/material'
 import NextLink from 'next/link'
 
 import Icon from 'src/@core/components/icon'
@@ -7,18 +7,25 @@ import Icon from 'src/@core/components/icon'
 export default function ActionMenu({ id, onDeleteClick, onArchiveClick }) {
   const [anchorEl, setAnchorEl] = useState(null)
   const open = Boolean(anchorEl)
+
   const handleClick = event => {
+    event.stopPropagation()
     setAnchorEl(event.currentTarget)
   }
-  const handleClose = () => {
-    setAnchorEl(null)
+
+  const handleClose = (event) => {
+    if (event) {
+      event.stopPropagation();
+    }
+    setAnchorEl(null);
   }
 
   return (
-    <div>
-      <IconButton onClick={handleClick}>
-        <Icon icon='pepicons-pop:dots-y' />
+    <>
+      <IconButton size='small' onClick={handleClick}>
+        <Icon icon='mdi:dots-vertical' />
       </IconButton>
+
       <Menu
         open={open}
         anchorEl={anchorEl}
@@ -39,11 +46,11 @@ export default function ActionMenu({ id, onDeleteClick, onArchiveClick }) {
           <Icon icon='mdi:delete-outline' style={{ marginRight: '10px' }} />
           Delete
         </MenuItem>
-        <MenuItem onClick={() => onArchiveClick(id, handleClose)}>
+        <MenuItem onClick={(event) => onArchiveClick(id, handleClose)}>
           <Icon icon='ic:outline-archive' style={{ marginRight: '10px' }} />
           Archive
         </MenuItem>
       </Menu>
-    </div>
+    </>
   )
 }

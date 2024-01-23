@@ -10,7 +10,7 @@ import PageHeader from 'src/layouts/components/page-header'
 // ** Module Specific Imports
 import TestList from 'src/pages/tests/_views'
 import CreateTest from 'src/pages/tests/create_test'
-import Toolbar from 'src/pages/tests/_components/Toolbar'
+import Toolbar from 'src/pages/tests/_components/toolbar'
 
 // ** Actions Imports
 import { ListTests } from 'src/pages/tests/_models/TestModel'

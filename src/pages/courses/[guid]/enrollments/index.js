@@ -71,7 +71,7 @@ const Page = () => {
 
   /** HANDLE CREATE TEST DRAWER */
   const toggleCreateDrawer = () => setDrawerOpen(!drawerOpen)
-  console.log(guid)
+
   return (
     <>
       <Grid container spacing={6}>
@@ -80,7 +80,6 @@ const Page = () => {
             title={<Typography variant='h5'>Enrolment</Typography>}
             subtitle={<Typography variant='body2'>List all Enrolment</Typography>}
             buttonHref='./addenrolment'
-            // toggleDrawer={toggleCreateDrawer}
             buttonTitle='Enrol Users'
             setReload={setReload}
             doReload={doReload}

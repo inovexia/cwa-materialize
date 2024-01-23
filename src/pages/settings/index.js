@@ -8,6 +8,7 @@ import TabContext from '@mui/lab/TabContext'
 import { styled } from '@mui/material/styles'
 import Typography from '@mui/material/Typography'
 import MuiTabList from '@mui/lab/TabList'
+
 // ** MUI Imports
 import { Grid } from '@mui/material'
 import toast from 'react-hot-toast'
@@ -17,8 +18,10 @@ import PageHeader from 'src/layouts/components/page-header'
 import TabRegister from './_component/TabRegister'
 import TabLogin from './_component/TabLogin'
 import TabGeneral from './_component/TabGeneral'
+
 // ** Icon Imports
 import Icon from 'src/@core/components/icon'
+
 // Styled TabList component
 const TabList = styled(MuiTabList)(({ theme }) => ({
   '& .MuiTabs-indicator': {

@@ -1,5 +1,5 @@
 import API from 'src/pages/users/_components/apis'
-import MessageFormatter from 'src/lib/common/MessageFormatter'
+import MessageFormatter from 'src/lib/common/messageFormatter'
 
 /** GET USERS */
 export async function GetUsers(data) {
