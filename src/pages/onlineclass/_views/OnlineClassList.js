@@ -3,7 +3,7 @@ import React, { Fragment, useState, useCallback } from 'react'
 
 // ** MUI Imports
 import {
-  Button,
+
   Box,
   Table,
   TableRow,
@@ -16,8 +16,7 @@ import {
   TableSortLabel,
   TablePagination,
   Paper,
-  Toolbar,
-  Tooltip,
+
   Checkbox,
   Switch,
   Menu, MenuItem, styled
@@ -28,6 +27,7 @@ import Link from 'next/link'
 import ReactHtmlParser from 'react-html-parser'
 
 import Translations from 'src/layouts/components/Translations'
+// import extractUrlFromHtml from 'src/lib/common/extractUrlFromHtml'
 
 // ** Icon Imports
 import Icon from 'src/@core/components/icon'
@@ -36,6 +36,8 @@ import Icon from 'src/@core/components/icon'
 import { changeStatus } from 'src/pages/courses/_models/CourseModel'
 
 import DeleteOnlineClassComponent from './DeleteOnlineClass'
+import RemoveOnlineClassComponent from 'src/pages/courses/[guid]/onlineclass/[classguid]/RemoveOnlineClass'
+import ChangeDateOnlineClass from 'src/pages/courses/[guid]/onlineclass/[classguid]/ChangeDate'
 
 const LinkStyled = styled(Link)(({ theme }) => ({
   fontWeight: 600,
@@ -156,52 +158,7 @@ function EnhancedTableHead(props) {
   )
 }
 
-// const EnhancedTableToolbar = props => {
-//   // ** Prop
-//   const { numSelected } = props
 
-//   return (
-//     numSelected !== 0 ?
-//       <Toolbar
-//         sx={{
-//           px: theme => `${theme.spacing(5)} !important`,
-//           ...(numSelected > 0 && {
-//             bgcolor: theme => alpha(theme.palette.primary.main, theme.palette.action.activatedOpacity)
-//           })
-//         }}
-//       >
-//         {numSelected > 0 ? (
-//           <Typography sx={{ flex: '1 1 100%' }} color='inherit' variant='subtitle1' component='div'>
-//             {numSelected} selected
-//           </Typography>
-//         ) : (
-//           ''
-//         )}
-//         {numSelected > 0 ? (
-//           <>
-//             <Tooltip title='Delete'>
-//               <IconButton sx={{ color: 'text.secondary' }}>
-//                 <Icon icon='mdi:delete-outline' />
-//               </IconButton>
-//             </Tooltip>
-//             <Tooltip title='Date'>
-//               <IconButton sx={{ color: 'text.secondary' }}>
-//                 <Icon icon="simple-line-icons:calender" fontSize={20} />
-//               </IconButton>
-//             </Tooltip>
-//             <Tooltip title='Enrolment'>
-//               <IconButton sx={{ color: 'text.secondary' }}>
-//                 <Icon icon="mdi:user" fontSize={20} />
-//               </IconButton>
-//             </Tooltip>
-//           </>
-
-//         ) : null}
-//       </Toolbar>
-//       : ""
-
-//   )
-// }
 
 const RowOptions = ({ guid }) => {
   const [anchorEl, setAnchorEl] = useState(null)
@@ -212,21 +169,7 @@ const RowOptions = ({ guid }) => {
   const handleClose = () => {
     setAnchorEl(null)
   }
-  // // ** State
-  // const rowOptionsOpen = Boolean(anchorEl)
 
-  // const handleRowOptionsClick = event => {
-  //   setAnchorEl(event.currentTarget)
-  // }
-
-  // const handleRowOptionsClose = () => {
-  //   setAnchorEl(null)
-  // }
-
-  // const handleDelete = () => {
-  //   dispatch(deleteUser(id))
-  //   handleRowOptionsClose()
-  // }
   const [drawerOpen, setDrawerOpen] = useState(false)
   /** HANDLE CREATE TEST DRAWER */
   const toggleCreateDrawer = () => setDrawerOpen(!drawerOpen)
@@ -248,19 +191,19 @@ const RowOptions = ({ guid }) => {
         anchorOrigin={{ vertical: 'top', horizontal: 'right' }}
         transformOrigin={{ vertical: 'top', horizontal: 'right' }}
       >
-        <Link href={`/meetings/`} style={{ textDecoration: 'none', color: 'inherit' }}>
+        <Link href={`/onlineclass/${guid}/preview/`} style={{ textDecoration: 'none', color: 'inherit' }}>
           <MenuItem onClick={handleClose}>
-            <Icon icon='mdi:users' style={{ marginRight: '10px' }} />
-            Users
+            <Icon icon='carbon:view' style={{ marginRight: '10px' }} />
+            View
           </MenuItem>
         </Link>
-        <Link href={`/meetings/`} style={{ textDecoration: 'none', color: 'inherit' }}>
+        <Link href={`/onlineclass/${guid}/edit/`} style={{ textDecoration: 'none', color: 'inherit' }}>
           <MenuItem onClick={handleClose}>
             <Icon icon='tabler:edit' style={{ marginRight: '10px' }} />
             Edit
           </MenuItem>
         </Link>
-        <Link href={`/meetings/`} style={{ textDecoration: 'none', color: 'inherit' }}>
+        <Link href={`/onlineclass/${guid}/share/`} style={{ textDecoration: 'none', color: 'inherit' }}>
           <MenuItem onClick={handleClose}>
             <Icon icon='ri:share-line' style={{ marginRight: '10px' }} />
             Share
@@ -273,22 +216,80 @@ const RowOptions = ({ guid }) => {
     </>
   )
 }
+const RowOptionsCourse = ({ courseGuid, guid }) => {
+  const [anchorEl, setAnchorEl] = useState(null)
+  const open = Boolean(anchorEl)
+  const handleClick = event => {
+    setAnchorEl(event.currentTarget)
+  }
+  const handleClose = () => {
+    setAnchorEl(null)
+  }
 
+  const [drawerOpen, setDrawerOpen] = useState(false)
+  /** HANDLE CREATE TEST DRAWER */
+  const toggleCreateDrawer = () => setDrawerOpen(!drawerOpen)
+  return (
+    <>
+      <IconButton
+        id='basic-button'
+        aria-controls={open ? 'basic-menu' : undefined}
+        aria-haspopup='true'
+        aria-expanded={open ? 'true' : undefined}
+        onClick={handleClick}
+      >
+        <Icon icon='pepicons-pop:dots-y' />
+      </IconButton>
+      <Menu
+        anchorEl={anchorEl}
+        open={open}
+        onClose={handleClose}
+        anchorOrigin={{ vertical: 'top', horizontal: 'right' }}
+        transformOrigin={{ vertical: 'top', horizontal: 'right' }}
+      >
+        <Link href={`/courses/${courseGuid}/onlineclass/${guid}/preview/`} style={{ textDecoration: 'none', color: 'inherit' }}>
+          <MenuItem onClick={handleClose}>
+            <Icon icon='carbon:view' style={{ marginRight: '10px' }} />
+            View
+          </MenuItem>
+        </Link>
+        <Link href={`/courses/${courseGuid}/onlineclass/${guid}/edit/`} style={{ textDecoration: 'none', color: 'inherit' }}>
+          <MenuItem onClick={handleClose}>
+            <Icon icon='tabler:edit' style={{ marginRight: '10px' }} />
+            Edit
+          </MenuItem>
+        </Link>
+        <Link href={`/courses/${courseGuid}/onlineclass/${guid}/share/`} style={{ textDecoration: 'none', color: 'inherit' }}>
+          <MenuItem onClick={handleClose}>
+            <Icon icon='ri:share-line' style={{ marginRight: '10px' }} />
+            Share
+          </MenuItem>
+        </Link>
+        <MenuItem>
+          <RemoveOnlineClassComponent guid={guid} courseGuid={courseGuid} />
+        </MenuItem>
+        <MenuItem>
+          <ChangeDateOnlineClass guid={guid} courseGuid={courseGuid} />
+        </MenuItem>
+      </Menu>
+    </>
+  )
+}
 const EnhancedTable = (props) => {
   // ** States
   const [page, setPage] = useState(0)
   const [order, setOrder] = useState('asc')
-  const [rowsPerPage, setRowsPerPage] = useState('10')
+  const [rowsPerPage, setRowsPerPage] = useState(10)
   const [orderBy, setOrderBy] = useState('calories')
   const [selected, setSelected] = useState([])
-  const [guid, setGuid] = useState('')
+  // const [guid, setGuid] = useState('')
   const [testStatus, setTestStatus] = useState(0)
   const [checked, setChecked] = useState(false)
   const [drawerOpen, setDrawerOpen] = useState(false)
   const [reload, setReload] = useState(0)
   const doReload = () => setReload(r => r + 1)
   // ** Props
-  const { rows, dataList, responseStatus, responseMessage } = props
+  const { rows, responseStatus, responseMessage, courseGuid, meta } = props
 
   const handleRequestSort = (event, property) => {
     const isAsc = orderBy === property && order === 'asc'
@@ -344,85 +345,96 @@ const EnhancedTable = (props) => {
     const match = htmlContent.match(urlPattern)
     return match ? match[0] : ''
   }
-  console.log(dataList)
+
   return (
     <>
       {/* <EnhancedTableToolbar numSelected={selected.length} /> */}
 
       <TableContainer component={Paper}>
-        <Table sx={{ minWidth: 750 }} aria-labelledby='tableTitle'>
-          <EnhancedTableHead
-            order={order}
-            orderBy={orderBy}
-            rowCount={rows.length}
-            numSelected={selected.length}
-            onRequestSort={handleRequestSort}
-            onSelectAllClick={handleSelectAllClick}
-          />
-          <TableBody>
+        {rows && rows.length > 0 ? (
+          <Table sx={{ minWidth: 750 }} aria-labelledby='tableTitle'>
+            <EnhancedTableHead
+              order={order}
+              orderBy={orderBy}
+              rowCount={rows.length}
+              numSelected={selected.length}
+              onRequestSort={handleRequestSort}
+              onSelectAllClick={handleSelectAllClick}
+            />
+            <TableBody>
 
-            {/* if you don't need to support IE11, you can replace the `stableSort` call with: rows.slice().sort(getComparator(order, orderBy)) */}
-            {stableSort(rows, getComparator(order, orderBy))
-              .slice(page * rowsPerPage, page * rowsPerPage + rowsPerPage)
-              .map((row, index) => {
-                const isItemSelected = isSelected(row.guid)
-                const labelId = `enhanced-table-checkbox-${index}`
-                const extractedUrl = extractUrlFromHtml(row.details)
-                return (
-                  <TableRow
-                    hover
-                    tabIndex={-1}
-                    key={row.guid}
-                    role='checkbox'
-                    selected={isItemSelected}
-                    aria-checked={isItemSelected}
-                    onClick={event => handleClick(event, row.guid)}
-                  >
-                    <TableCell padding='checkbox'>
-                      <Checkbox checked={isItemSelected} inputProps={{ 'aria-labelledby': labelId }} />
-                    </TableCell>
-                    <TableCell component='th' id={labelId} scope='row' padding='none'>
-                      <Box sx={{ display: 'flex', alignItems: 'flex-start', flexDirection: 'column' }}>
-                        <Typography variant='body1'>{row.title}</Typography>
-                        <Typography noWrap variant='caption'>{row.guid}</Typography>
-                      </Box>
-                    </TableCell>
-                    <TableCell >{ReactHtmlParser(row.details)}</TableCell>
-                    <TableCell >{row.updated_on}</TableCell>
-                    <TableCell>
-                      <Link
-                        sx={{ display: 'inline-block' }}
-                        variant='outlined'
-                        component={Link}
-                        href={extractedUrl}
-                        target='_blank'
-                        rel='noopener noreferrer'
-                      >
-                        <Icon icon='octicon:play-24' style={{ marginRight: '10px' }} />
-                      </Link>
-                    </TableCell>
-                    <TableCell><RowOptions guid={row.guid} /></TableCell>
-                  </TableRow>
-                )
-              })}
-            {emptyRows > 0 && (
-              <TableRow
-                sx={{
-                  height: 53 * emptyRows
-                }}
-              >
-                <TableCell colSpan={6}>
-                  <Translations text={responseMessage} message='No test found' />
-                </TableCell>
-              </TableRow>
-            )}
-          </TableBody>
-        </Table>
+              {/* if you don't need to support IE11, you can replace the `stableSort` call with: rows.slice().sort(getComparator(order, orderBy)) */}
+              {stableSort(rows, getComparator(order, orderBy))
+                .slice(page * rowsPerPage, page * rowsPerPage + rowsPerPage)
+                .map((row, index) => {
+                  const isItemSelected = isSelected(row.guid)
+                  const labelId = `enhanced-table-checkbox-${index}`
+                  const extractedUrl = extractUrlFromHtml(row.details)
+                  return (
+                    <TableRow
+                      hover
+                      tabIndex={-1}
+                      key={row.guid}
+                      role='checkbox'
+                      selected={isItemSelected}
+                      aria-checked={isItemSelected}
+                      onClick={event => handleClick(event, row.guid)}
+                    >
+                      <TableCell padding='checkbox'>
+                        <Checkbox checked={isItemSelected} inputProps={{ 'aria-labelledby': labelId }} />
+                      </TableCell>
+                      <TableCell component='th' id={labelId} scope='row' padding='none'>
+                        <Box sx={{ display: 'flex', alignItems: 'flex-start', flexDirection: 'column' }}>
+                          <Typography variant='body1'>{row.title}</Typography>
+                          <Typography noWrap variant='caption'>{row.guid}</Typography>
+                        </Box>
+                      </TableCell>
+                      <TableCell >{ReactHtmlParser(row.details)}</TableCell>
+                      <TableCell >{row.updated_on}</TableCell>
+                      <TableCell>
+                        <Link
+                          sx={{ display: 'inline-block' }}
+                          variant='outlined'
+                          component={Link}
+                          href={extractedUrl}
+                          target='_blank'
+                          rel='noopener noreferrer'
+                        >
+                          <Icon icon='octicon:play-24' style={{ marginRight: '10px' }} />
+                        </Link>
+                      </TableCell>
+                      <TableCell>
+                        {courseGuid && (
+                          <RowOptionsCourse courseGuid={courseGuid} guid={row.guid} />
+                        )}
+                        {!courseGuid && (
+                          <RowOptions guid={row.guid} />
+                        )}
+                      </TableCell>
+                    </TableRow>
+                  )
+                })}
+              {emptyRows > 0 && (
+                <TableRow
+                  sx={{
+                    height: 53 * emptyRows
+                  }}
+                >
+                  <TableCell colSpan={6}>
+                    <Translations text={responseMessage} message='No online classes found' />
+                  </TableCell>
+                </TableRow>
+              )}
+            </TableBody>
+          </Table>
+        ) : (
+          <div>No data found</div>
+        )}
       </TableContainer>
       <TablePagination
         page={page}
         component='div'
-        count={rows.length}
+        count={rows ? rows.length : 0}
         rowsPerPage={rowsPerPage}
         onPageChange={handleChangePage}
         rowsPerPageOptions={[10, 25, 50, 100]}

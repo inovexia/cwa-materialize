@@ -50,7 +50,7 @@ const navigation = () => {
     },
     {
       title: 'Online Class',
-      path: '/meetings',
+      path: '/onlineclass',
       icon: 'healthicons:i-training-class'
     },
     {
