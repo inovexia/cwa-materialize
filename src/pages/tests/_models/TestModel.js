@@ -1,4 +1,4 @@
-import API from 'src/pages/tests/_components/Apis'
+import API from 'src/pages/tests/_components/apis'
 
 /** GET TESTS */
 export async function ListTests(data) {

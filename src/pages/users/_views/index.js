@@ -43,6 +43,7 @@ import { ChangeStatus } from 'src/pages/tests/_models/TestModel'
 import ActionMenu from 'src/pages/users/_components/actionMenu'
 import DeleteUser from 'src/pages/users/_views/deleteUser'
 import ArchiveUser from 'src/pages/users/_views/archiveUser'
+import SwitchField from 'src/pages/users/_components/Switch'
 
 const LinkStyled = styled(Link)(({ theme }) => ({
   fontWeight: 600,
@@ -201,15 +202,12 @@ const EnhancedTable = (props) => {
   const [rowsPerPage, setRowsPerPage] = useState(5)
   const [orderBy, setOrderBy] = useState('calories')
   const [selected, setSelected] = useState([])
-  const [guid, setGuid] = useState('')
-  const [testStatus, setTestStatus] = useState(0)
-  const [checked, setChecked] = useState(false)
   const [guidToDelete, setGuidToDelete] = useState('')
   const [openModal, setOpenModal] = useState(false)
   const [openArcModal, setOpenArcModal] = useState(false)
 
   // ** Props
-  const { rows, responseStatus, responseMessage, meta, dataList, setDataList, setMetaData } = props
+  const { responseMessage, dataList, setDataList, setMetaData } = props
 
   const handleRequestSort = (event, property) => {
     const isAsc = orderBy === property && order === 'asc'
@@ -251,16 +249,6 @@ const EnhancedTable = (props) => {
     setRowsPerPage(parseInt(event.target.value, 10))
     setPage(0)
   }
-
-  const handleChangeStatus = (async (event, guid) => {
-
-    const response = await ChangeStatus(event.target.checked, guid)
-    if (response.status) {
-      toast.success(response.message)
-    } else {
-      toast.error(response.message)
-    }
-  })
 
   const isSelected = guid => selected.indexOf(guid) !== -1
 
@@ -381,7 +369,9 @@ const EnhancedTable = (props) => {
                         {row.mobile}
                       </Typography></TableCell>
                     <TableCell >{row.role === "admin" ? "Admin" : row.role === "teacher" ? "Teacher" : row.role === "parent" ? "Parent" : row.role === "superadmin" ? "Super Admin" : "Student"}</TableCell>
-                    <TableCell ><Switch defaultChecked={row.status === '1' ? true : false} onChange={event => handleChangeStatus(event, row.guid)} onClick={e => { e.stopPropagation() }} /></TableCell>
+                    <TableCell>
+                      <SwitchField id={row.guid} status={row.status} />
+                    </TableCell>
                     <TableCell>
                       <ActionMenu
                         id={row.guid}
@@ -399,7 +389,7 @@ const EnhancedTable = (props) => {
                 }}
               >
                 <TableCell colSpan={6}>
-                  <Translations text={responseMessage} message='No test found' />
+                  <Translations text={responseMessage} message='No user found' />
                 </TableCell>
               </TableRow>
             )}

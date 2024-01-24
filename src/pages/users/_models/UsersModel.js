@@ -49,3 +49,14 @@ export async function EditUser(id, data) {
 
   return response
 }
+
+/** VIEW USER */
+export async function GetUserDetails(id) {
+  const response = await API.viewUser(id)
+  var responseMessage = await MessageFormatter(response.message)
+  response.message = await responseMessage
+
+  return response
+}
+
+

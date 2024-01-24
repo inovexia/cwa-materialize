@@ -35,7 +35,7 @@ const SwitchField = ({ id, status }) => {
   return (
     <Box>
       <FormGroup row>
-        <Switch color='primary' checked={switchValue} onChange={handleSwitchChange} />
+        <Switch color='primary' checked={switchValue} onChange={handleSwitchChange} onClick={e => { e.stopPropagation() }} />
       </FormGroup>
     </Box>
   )
