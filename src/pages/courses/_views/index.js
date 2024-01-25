@@ -271,16 +271,13 @@ const RowOptions = ({ guid, onDelete }) => {
   )
 }
 
-const EnhancedTable = ({ dataList, setDataList, responseStatus, responseMessage, meta, doReload }) => {
+const EnhancedTable = ({ dataList, setDataList, responseMessage, doReload }) => {
   // ** States
   const [page, setPage] = useState(0)
   const [order, setOrder] = useState('asc')
   const [rowsPerPage, setRowsPerPage] = useState('10')
   const [orderBy, setOrderBy] = useState('calories')
   const [selected, setSelected] = useState([])
-  const [guid, setGuid] = useState('')
-  const [testStatus, setTestStatus] = useState(0)
-  const [checked, setChecked] = useState(false)
   const [guidToDelete, setGuidToDelete] = useState('')
   const [openModal, setOpenModal] = useState(false)
   const [openArcModal, setOpenArcModal] = useState(false)

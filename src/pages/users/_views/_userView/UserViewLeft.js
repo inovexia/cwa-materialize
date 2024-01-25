@@ -121,14 +121,14 @@ const UserViewLeft = ({ dataList }) => {
             <CardContent sx={{ my: 1 }}>
               <Box sx={{ display: 'flex', alignItems: 'center', justifyContent: 'center' }}>
                 <Box sx={{ mr: 8, display: 'flex', alignItems: 'center' }}>
-                  <CustomAvatar skin='light' variant='rounded' sx={{ mr: 3 }}>
+                  {dataList.status === "1" ? (<CustomAvatar skin='light' variant='rounded' sx={{ mr: 3 }} color="success">
                     <Icon icon='mdi:check' />
-                  </CustomAvatar>
+                  </CustomAvatar>) : (<CustomAvatar skin='light' variant='rounded' sx={{ mr: 3 }} color="primary">
+                    <Icon icon='gridicons:cross' />
+                  </CustomAvatar>)}
+
                   <div>
-                    <Typography variant='h6' sx={{ lineHeight: 1.3 }}>
-                      1.23k
-                    </Typography>
-                    <Typography variant='body2'>Task Done</Typography>
+                    <Typography variant='body2'>{dataList.status === "1" ? "Active" : "Inactive"}</Typography>
                   </div>
                 </Box>
                 <Box sx={{ display: 'flex', alignItems: 'center' }}>
@@ -137,9 +137,9 @@ const UserViewLeft = ({ dataList }) => {
                   </CustomAvatar>
                   <div>
                     <Typography variant='h6' sx={{ lineHeight: 1.3 }}>
-                      568
+                      2
                     </Typography>
-                    <Typography variant='body2'>Project Done</Typography>
+                    <Typography variant='body2'>Course Subscribed</Typography>
                   </div>
                 </Box>
               </Box>
@@ -168,8 +168,8 @@ const UserViewLeft = ({ dataList }) => {
                   <CustomChip
                     skin='light'
                     size='small'
-                    label={dataList.status}
-                    color={statusColors[dataList.status]}
+                    label={dataList.status === "1" ? "Active" : "Inactive"}
+                    color={statusColors[dataList.status === "1" ? "active" : "pending"]}
                     sx={{
                       height: 20,
                       fontWeight: 500,
@@ -196,9 +196,7 @@ const UserViewLeft = ({ dataList }) => {
               <Button variant='contained' sx={{ mr: 2 }} onClick={handleEditClickOpen}>
                 Edit
               </Button>
-              <Button color='error' variant='outlined' onClick={() => setSuspendDialogOpen(true)}>
-                Suspend
-              </Button>
+
             </CardActions>
 
             <Dialog
@@ -231,7 +229,7 @@ const UserViewLeft = ({ dataList }) => {
                 <form>
                   <Grid container spacing={6}>
                     <Grid item xs={12} sm={6}>
-                      <TextField fullWidth label='Full Name' defaultValue={data.fullName} />
+                      <TextField fullWidth label='First Name' defaultValue={dataList.first_name} />
                     </Grid>
                     <Grid item xs={12} sm={6}>
                       <TextField
@@ -301,13 +299,6 @@ const UserViewLeft = ({ dataList }) => {
                         </Select>
                       </FormControl>
                     </Grid>
-                    <Grid item xs={12}>
-                      <FormControlLabel
-                        label='Use as a billing address?'
-                        control={<Switch defaultChecked />}
-                        sx={{ '& .MuiTypography-root': { fontWeight: 500 } }}
-                      />
-                    </Grid>
                   </Grid>
                 </form>
               </DialogContent>
@@ -319,7 +310,7 @@ const UserViewLeft = ({ dataList }) => {
                 }}
               >
                 <Button variant='contained' sx={{ mr: 2 }} onClick={handleEditClose}>
-                  Submit
+                  Update
                 </Button>
                 <Button variant='outlined' color='secondary' onClick={handleEditClose}>
                   Cancel

@@ -46,6 +46,7 @@ export async function changeStatus(checked, lessonId) {
   formData.append('status', lessonStatus)
   const response = await API.statusLesson({ lessonId, data: formData })
   if (!response.success) return toast.error(response.message)
+
   // var responseMessage = await responseMessages(response.message)
   // response.message = await responseMessage
   toast.success(response.message)

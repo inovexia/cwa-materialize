@@ -54,6 +54,8 @@ export async function GetUnEnrolUserList(guid) {
 
   return response
 }
+
+
 /** Share Online Class */
 export async function ShareOnlineClass(guid, data) {
   const formData = new FormData()
@@ -74,6 +76,7 @@ export async function RemoveOnlineClass(guid, data) {
   Object.entries(data).forEach(([key, value]) => {
     formData.append('meeting[]', value)
   })
+
   // if (typeof data === "object") {
   //   Object.entries(data).forEach(([key, value]) => {
   //     formData.append('meeting[]', value)
@@ -85,6 +88,8 @@ export async function RemoveOnlineClass(guid, data) {
 
   return response
 }
+
+
 /** Add Existing online class list in course */
 export async function AddExistingOnlineClass(guid, data) {
   const formData = new FormData();
@@ -118,6 +123,8 @@ export async function GetOnlineClasses(data) {
 
   return response
 }
+
+
 /** Change date online class */
 export async function ChangeDateOnlineClass(guid, data) {
   const formData = new FormData();
@@ -128,8 +135,9 @@ export async function ChangeDateOnlineClass(guid, data) {
       formData.append(`meeting[end_date]`, 'endDate');
     })
   }
+
   // data.length > 0 && data.map((item, index) => {
-    
+
   // });
 
   const response = await API.getChangeDateOnlineClass({ guid, data: formData });
