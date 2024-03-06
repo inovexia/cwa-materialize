@@ -8,34 +8,60 @@ const navigation = () => {
     {
       title: 'Question Bank',
       path: '/qb',
-      icon: 'mdi:email-outline'
+      icon: 'ri:question-line',
+      children: [
+        {
+          title: 'All Questions',
+          path: '/qb'
+        },
+        {
+          title: 'Create Question',
+          path: '/qb/create'
+        },
+        {
+          title: 'Upload Questions',
+          path: '/qb/upload'
+        },
+        {
+          title: 'Categories',
+          path: '/qb/categories'
+        }
+      ]
     },
     {
       title: 'Tests',
       path: '/tests',
-      icon: 'mdi:email-outline'
+      icon: 'material-symbols:quiz-outline',
+      children: [
+        {
+          title: 'All Tests',
+          path: '/tests'
+        },
+        {
+          title: 'Create Test',
+          path: '/qb/create_test'
+        }
+      ]
     },
     {
       title: 'Courses',
       path: '/courses',
-      icon: 'mdi:email-outline'
+      icon: 'lucide:book'
     },
     {
-      title: 'Meetings',
-      path: '/meetings',
-      icon: 'mdi:email-outline'
+      title: 'Online Class',
+      path: '/onlineclass',
+      icon: 'healthicons:i-training-class'
     },
     {
       title: 'Users',
       path: '/users',
-      icon: 'mdi:email-outline'
+      icon: 'mdi:users-outline'
     },
     {
-      path: '/acl',
-      action: 'read',
-      subject: 'acl-page',
-      title: 'Access Control',
-      icon: 'mdi:shield-outline'
+      title: 'Settings',
+      path: '/settings',
+      icon: 'icon-park-outline:setting-web'
     }
   ]
 }

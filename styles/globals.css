@@ -22,3 +22,13 @@ code:not([class*='language-']):after {
 code[class*='language-'] {
   padding: 0;
 }
+.sidebar {
+  width: 0;
+  overflow: hidden;
+  transition: width 0.3s ease;
+}
+
+.sidebar.open {
+  width: 250px; /* Adjust the width as needed */
+}
+

@@ -19,6 +19,8 @@ import HorizontalAppBarContent from './components/horizontal/AppBarContent'
 // ** Hook Import
 import { useSettings } from 'src/@core/hooks/useSettings'
 
+import Footer from 'src/layouts/components/footer'
+
 const UserLayout = ({ children, contentHeightFixed }) => {
   // ** Hooks
   const { settings, saveSettings } = useSettings()
@@ -54,12 +56,14 @@ const UserLayout = ({ children, contentHeightFixed }) => {
         },
         appBar: {
           content: props => (
-            <VerticalAppBarContent
-              hidden={hidden}
-              settings={settings}
-              saveSettings={saveSettings}
-              toggleNavVisibility={props.toggleNavVisibility}
-            />
+            <>
+              <VerticalAppBarContent
+                hidden={hidden}
+                settings={settings}
+                saveSettings={saveSettings}
+                toggleNavVisibility={props.toggleNavVisibility}
+              />
+            </>
           )
         }
       }}
@@ -76,9 +80,11 @@ const UserLayout = ({ children, contentHeightFixed }) => {
           }
         }
       })}
+      footerProps={{
+        content: () => <Footer settings={settings} saveSettings={saveSettings} />
+      }}
     >
       {children}
-      
     </Layout>
   )
 }

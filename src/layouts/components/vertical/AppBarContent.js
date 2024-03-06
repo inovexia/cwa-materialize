@@ -7,7 +7,8 @@ import Icon from 'src/@core/components/icon'
 
 // ** Components
 import ModeToggler from 'src/@core/layouts/components/shared-components/ModeToggler'
-import UserDropdown from 'src/@core/layouts/components/shared-components/UserDropdown'
+
+//import UserDropdown from 'src/@core/layouts/components/shared-components/UserDropdown'
 
 const AppBarContent = props => {
   // ** Props
@@ -24,12 +25,9 @@ const AppBarContent = props => {
 
         <ModeToggler settings={settings} saveSettings={saveSettings} />
       </Box>
-      <Box className='actions-right' sx={{ display: 'flex', alignItems: 'center' }}>
-        <UserDropdown settings={settings} />
-      </Box>
+      <Box className='actions-right' sx={{ display: 'flex', alignItems: 'center' }}></Box>
     </Box>
   )
 }
 
 export default AppBarContent
-

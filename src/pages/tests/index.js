@@ -1,52 +1,122 @@
-import React, { useEffect, useState, useRef } from 'react'
+import React, { useEffect, useState, useCallback } from 'react'
 
 // ** MUI Imports
-import { Grid, Card, CardHeader, CardContent, Button, Box, Link, Typography } from '@mui/material'
+import { Grid, Card, CardHeader, CardContent, Button, Box, Link, Typography, CircularProgress } from '@mui/material'
+import toast from 'react-hot-toast'
 
-// ** Core Imports
-import PageHeader from 'src/@core/components/page-header'
+// ** Component Imports
+import PageHeader from 'src/layouts/components/page-header'
 
 // ** Module Specific Imports
-import TestList from 'src/pages/tests/views/index'
-import TestApis from 'src/pages/tests/_components/apis'
+import TestList from 'src/pages/tests/_views'
+import CreateTest from 'src/pages/tests/create_test'
+import Toolbar from 'src/pages/tests/_components/toolbar'
 
-const Page = () => {
+// ** Actions Imports
+import { ListTests } from 'src/pages/tests/_models/TestModel'
+
+
+const UserList = () => {
   const [dataList, setDataList] = useState([])
+  const [metaData, setMetaData] = useState([])
   const [responseStatus, setResponseStatus] = useState(false)
   const [responseMessage, setResponseMessage] = useState('')
+  const [drawerOpen, setDrawerOpen] = useState(false)
+  const [isLoading, setLoading] = useState(true)
+  const [searchTerm, setSearchTerm] = useState('')
+  const [status, setStatus] = useState('')
+  const [type, setType] = useState('')
 
-  // view all listing Using API
-  const getTests = useRef(async () => {
-    const response = await TestApis.getAllTests()
-    if (response.success === true) {
-      setDataList(response.payload.data)
+  /** GET ALL TESTS */
+  const getTests = useCallback(async (searchTerm, status, type) => {
+    const data = {
     }
-    setResponseStatus(response.status)
-    setResponseMessage(response.message)
-  })
-  useEffect(() => {
-    getTests.current()
+    if (status !== "")
+      data['status'] = status
+
+    if (searchTerm !== "")
+      data['search'] = searchTerm
+
+    if (type !== "")
+      data['test_type'] = type
+
+    const response = await ListTests(data)
+
+    return response
   }, [])
 
-  return (
-    <Grid container spacing={6}>
-      <PageHeader
-        title={<Typography variant='h5'>React</Typography>}
-        subtitle={
-          <Typography variant='body2'>
-            A declarative, efficient, and flexible JavaScript library for building user interfaces.
-          </Typography>
+  useEffect(() => {
+    getTests(searchTerm, status, type)
+      .then((response) => {
+        if (response.success === true) {
+          setDataList(response.payload.data)
+          setMetaData(response.payload.meta)
+          setLoading(false)
+        } else {
+          toast.error(response.message)
         }
-      />
-      <Grid item xs={12}>
-        <Card>
-          <TestList data={dataList} responseStatus={responseStatus} responseMessage={responseMessage} />
-        </Card>
+      })
+  }, [getTests, searchTerm, status, type, isLoading])
+
+
+  /** HANDLE SEARCH */
+  const handleSearch = useCallback(value => {
+    setSearchTerm(value)
+  }, [])
+
+  /** HANDLE STATUS CHANGE */
+  const handleStatus = useCallback(value => {
+    setStatus(value)
+  }, [])
+
+  /** HANDLE TEST_TYPE CHANGE */
+  const handleType = useCallback(value => {
+    setType(value)
+  }, [])
+
+  /** HANDLE CREATE TEST DRAWER */
+  const toggleCreateDrawer = () => setDrawerOpen(!drawerOpen)
+
+  return (
+    <>
+      <Grid container spacing={6}>
+        <Grid item xs={12}>
+          <PageHeader
+            title={<Typography variant='h5'>Tests</Typography>}
+            subtitle={<Typography variant='body2'>List all tests</Typography>}
+            toggleDrawer={toggleCreateDrawer}
+            buttonTitle='Add Test'
+          />
+          <Card>
+            {isLoading ?
+              (<CircularProgress />) :
+              (<form>
+                <CardContent>
+                  <Toolbar
+                    searchTerm={searchTerm}
+                    handleSearch={handleSearch}
+                    status={status}
+                    handleStatus={handleStatus}
+                    type={type}
+                    handleType={handleType}
+                  />
+                </CardContent>
+                <TestList
+                  rows={dataList}
+                  responseStatus={responseStatus}
+                  responseMessage={responseMessage}
+                  meta={metaData}
+                />
+              </form>)}
+          </Card>
+        </Grid>
       </Grid>
-    </Grid>
+      <CreateTest
+        open={drawerOpen}
+        toggle={toggleCreateDrawer}
+      />
+    </>
   )
 }
 
-export default Page
-
-//import Toolbar from 'src/global-component/toolbar'
+export default UserList
