@@ -184,13 +184,6 @@ const EnhancedTableToolbar = props => {
       ) : (
         ''
       )}
-      {numSelected > 0 ? (
-        <Tooltip title='Delete'>
-          <IconButton sx={{ color: 'text.secondary' }}>
-            <Icon icon='mdi:delete-outline' />
-          </IconButton>
-        </Tooltip>
-      ) : null}
     </Toolbar>
   )
 }
@@ -207,7 +200,7 @@ const EnhancedTable = (props) => {
   const [openArcModal, setOpenArcModal] = useState(false)
 
   // ** Props
-  const { responseMessage, dataList, setDataList, setMetaData } = props
+  const { responseMessage, dataList, setDataList, setMetaData, selectedLength, setSelectedLength } = props
 
   const handleRequestSort = (event, property) => {
     const isAsc = orderBy === property && order === 'asc'
@@ -219,6 +212,7 @@ const EnhancedTable = (props) => {
     if (event.target.checked) {
       const newSelecteds = dataList.map(n => n.guid)
       setSelected(newSelecteds)
+      setSelectedLength(newSelecteds)
 
       return
     }
@@ -239,6 +233,7 @@ const EnhancedTable = (props) => {
       newSelected = newSelected.concat(selected.slice(0, selectedIndex), selected.slice(selectedIndex + 1))
     }
     setSelected(newSelected)
+    setSelectedLength(newSelected)
   }
 
   const handleChangePage = (event, newPage) => {

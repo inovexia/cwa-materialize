@@ -2,7 +2,7 @@
 import { useState, useEffect, useRef } from 'react'
 
 // ** MUI Imports
-import { Drawer, Button, styled, TextField, IconButton, Typography } from '@mui/material'
+import { Drawer, Button, MenuItem, styled, TextField, IconButton, Typography } from '@mui/material'
 import Box from '@mui/material/Box'
 import FormControl from '@mui/material/FormControl'
 import FormHelperText from '@mui/material/FormHelperText'
@@ -33,18 +33,18 @@ const Header = styled(Box)(({ theme }) => ({
 
 
 const schema = yup.object().shape({
-  title: yup.string(),
-  description: yup.string().required(),
-  created_by: yup.string().required()
+  title: yup.string().required()
 })
 
-const SidebarAddSubject = props => {
+const SidebarAddCategory = props => {
   // ** Props
-  const { open, toggle, setReload, doReload } = props
+  const { open, toggle, doReload, dataList } = props
 
   // ** State
   const [responseMessage, setResponseMessage] = useState('')
   const [loading, setLoading] = useState(false)
+  const [parentId, setParentId] = useState('')
+
   // ** Hooks
   const {
     reset,
@@ -54,21 +54,39 @@ const SidebarAddSubject = props => {
   } = useForm({
     defaultValues: {
       title: '',
-      description: '',
-      created_by: 'ASI8'
     },
     mode: 'onChange',
     resolver: yupResolver(schema)
   })
 
   const handleFormSubmit = async data => {
-    setLoading(true)
-    const response = await CourseApi.createCourse(data)
-    setLoading(false)
-    if (!response.success) return toast.success(response.message)
-    doReload(true)
-    toggle()
-    reset()
+    const formData = {};
+    if (parentId) {
+      formData.parent_guid = parentId;
+    }
+
+    // Include other form data fields
+    Object.assign(formData, data);
+    setLoading(true);
+    const response = await CourseApi.createCategory(formData);
+    setLoading(false);
+
+    if (!response.success) {
+      return toast.success(response.message);
+    }
+
+    doReload();
+    toggle();
+    reset();
+  }
+
+
+
+  // Filter By Role
+  const handleRoleFilterChange = event => {
+    const selectedRole = event.target.value
+    setParentId(selectedRole)
+
   }
 
   const handleClose = () => {
@@ -77,6 +95,7 @@ const SidebarAddSubject = props => {
   }
 
   const editorRef = useRef(null)
+
   return (
     <Drawer
       open={open}
@@ -85,7 +104,7 @@ const SidebarAddSubject = props => {
       sx={{ '& .MuiDrawer-paper': { width: { xs: 300, sm: 400 } } }}
     >
       <Header>
-        <Typography variant='h6'>Create Subject</Typography>
+        <Typography variant='h6'>Create Category</Typography>
         <IconButton size='small' onClick={handleClose} sx={{ color: 'text.primary' }}>
           <Icon icon='mdi:close' fontSize={20} />
         </IconButton>
@@ -116,19 +135,14 @@ const SidebarAddSubject = props => {
             />
             {errors.title && <FormHelperText sx={{ color: 'error.main' }}>{errors.title.message}</FormHelperText>}
           </FormControl>
-          <label
-            htmlFor='description'
-            style={{
-              fontSize: 16,
-              fontWeight: 500,
-              fontFamily: 'Arial',
-              marginBottom: '10px',
-              display: "block"
-            }}
-          >
-            Description
-          </label>
-          <FormEditorField control={control} name='description' onInit={(evt, editor) => (editorRef.current = editor)} />
+          <Box>
+            <TextField select label='Parent Category' size='small' value={parentId} onChange={handleRoleFilterChange} style={{ width: '100%' }}>
+              <MenuItem value=''>Select Category</MenuItem>
+              {dataList.map((item) => (
+                <MenuItem value={item.guid} key={item.guid}>{item.title}</MenuItem>
+              ))}
+            </TextField>
+          </Box>
           <Box sx={{ display: 'flex', alignItems: 'center', justifyContent: 'space-between', marginTop: '30px' }}>
             <LoadingButton
               type='submit'
@@ -150,4 +164,4 @@ const SidebarAddSubject = props => {
   )
 }
 
-export default SidebarAddSubject
+export default SidebarAddCategory

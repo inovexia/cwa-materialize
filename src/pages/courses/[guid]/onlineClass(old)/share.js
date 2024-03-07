@@ -45,6 +45,8 @@ const Page = () => {
       setCheckedIds([...checkedIds, userId])
     }
   }
+
+
   //  Bulk activate user
   const handleSelectedBulkAction = async selectedBulkAct => {
     setLoader(true)
@@ -129,6 +131,7 @@ const Page = () => {
       toast.error(res.message)
     }
   }
+
   return (
     <>
       <Grid container spacing={6}>

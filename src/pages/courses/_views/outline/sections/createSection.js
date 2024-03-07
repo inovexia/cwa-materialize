@@ -11,7 +11,7 @@ const CreateSection = () => {
 
   return (
     <div>
-      <TypeButtons handleDrawerContent={handleDrawerContent} />
+      <ButtonType handleDrawerContent={handleDrawerContent} />
       <DynamicFields selectedType={selectedType} />
     </div>
   );

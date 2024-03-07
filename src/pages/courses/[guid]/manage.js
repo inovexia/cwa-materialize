@@ -1,7 +1,8 @@
 
 // ** MUI Imports
-import { Grid, Card, CardHeader, CardContent, Button, Box, Link, Typography, CircularProgress } from '@mui/material'
+import { Grid, Box, Typography } from '@mui/material'
 import toast from 'react-hot-toast'
+import ReactHtmlParser from 'react-html-parser'
 import { ListSubjects } from 'src/pages/courses/_models/SubjectModel'
 
 // ** Component Imports
@@ -20,6 +21,7 @@ const createData = (title, href, icon) => {
 }
 
 import CourseApi from '../_components/Apis'
+
 const Page = () => {
 
   const router = useRouter()
@@ -91,8 +93,8 @@ const Page = () => {
   ]
 
   const TestSettingsCard = [
-    createData('All Test', `/courses/${guid}/tests`, 'quill:paper'),
-    createData('Add Test', `/courses/${guid}/tests/create`, 'gg:add'),
+    createData('All Test', `/courses/${guid}/test`, 'quill:paper'),
+    createData('Add Test', `/courses/${guid}/test/create`, 'gg:add'),
   ]
 
   const MeetingSettingsCard = [
@@ -111,12 +113,13 @@ const Page = () => {
     createData('Archive', "", 'material-symbols:archive-outline'),
     createData('Delete', "", 'material-symbols:delete-outline'),
   ]
+
   return (
     <Grid container spacing={6}>
       <Grid item xs={12}>
         <PageHeader
-          title={<Typography variant='h5'>Manage Course</Typography>}
-          subtitle={<Typography variant='body2'></Typography>}
+          title={<Typography variant='h5' component="h1">{course.title}</Typography>}
+          subtitle={<Typography variant='body2'>{ReactHtmlParser(course.description)}</Typography>}
         />
       </Grid>
       <Grid item xs={12} md={6}>

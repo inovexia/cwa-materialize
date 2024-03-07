@@ -277,7 +277,7 @@ const EditUser = () => {
                   <Button variant='contained' size='medium' type='submit' sx={{ mt: 5 }}>
                     Update
                   </Button>
-                  <Button variant='contained' size='medium' component={Link} href='/user' sx={{ mt: 5, ml: 3 }}>
+                  <Button variant='contained' size='medium' component={Link} href='/users' sx={{ mt: 5, ml: 3 }}>
                     Cancel
                   </Button>
                 </Grid>

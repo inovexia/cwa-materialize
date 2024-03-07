@@ -47,29 +47,22 @@ const Page = () => {
   const [roleFilter, setRoleFilter] = useState('')
   const [orderFilter, setOrderFilter] = useState('')
   const [bulkAction, setBulkAction] = useState('')
+  const [selectedLength, setSelectedLength] = useState('')
   const doReload = () => setReload(r => r + 1)
 
   const toggleCreateDrawer = () => setDrawerOpen(!drawerOpen)
 
-  // Single Checkbox
-  const handleCheckboxChange = userId => {
-    const isChecked = checkedIds.includes(userId)
-    if (isChecked) {
-      setCheckedIds(checkedIds.filter(id => id !== userId))
-    } else {
-      setCheckedIds([...checkedIds, userId])
-    }
-  }
+
 
 
   //  Bulk activate user
   const handleSelectedBulkAction = async selectedBulkAct => {
     setLoader(true)
     const formData = new FormData()
-    checkedIds.forEach((user, index) => {
+    selectedLength.forEach((user, index) => {
       formData.append(`users[${index}]`, user)
-      formData.append(`status`, selectedBulkAct)
     })
+    formData.append(`status`, selectedBulkAct)
     setLoader(true)
     const res = await UserApi.changeStatus(formData)
     setLoader(false)
@@ -127,21 +120,30 @@ const Page = () => {
   const handleBulkAction = useCallback(async () => {
     const formData = new FormData()
     if (bulkAction === '1' || bulkAction === '0') {
-      checkedIds.forEach((user, index) => {
+      selectedLength.forEach((user, index) => {
         formData.append(`users[${index}]`, user)
-        formData.append(`status`, bulkAction)
       })
+      formData.append(`status`, bulkAction)
 
       const res = await UserApi.changeStatus(formData)
       setResponseStatus(res.status)
       setResponseMessage(res.message)
 
     }
-  }, [bulkAction, checkedIds])
+    else if (bulkAction === 'delete') {
+      selectedLength.forEach((user, index) => {
+        formData.append(`users[${index}]`, user)
+      })
+
+      const res = await UserApi.changeStatus(formData)
+      setResponseStatus(res.status)
+      setResponseMessage(res.message)
+    }
+  }, [bulkAction, selectedLength])
 
   useEffect(() => {
     handleBulkAction()
-  }, [handleBulkAction, bulkAction, checkedIds])
+  }, [handleBulkAction, bulkAction, selectedLength])
 
 
   /** HANDLE SEARCH */
@@ -173,6 +175,8 @@ const Page = () => {
   const handleCurrentPage = useCallback(value => {
     setCurrentPage(value)
   }, [])
+
+  //console.log(checkedIds);
 
   return (
     <UserContextProvider>
@@ -206,6 +210,8 @@ const Page = () => {
                 checkedLength={checkedIds}
                 bulkAction={bulkAction}
                 setBulkAction={setBulkAction}
+                selectedLength={selectedLength}
+                setSelectedLength={setSelectedLength}
               />
             </CardContent>
             <UserList
@@ -217,6 +223,8 @@ const Page = () => {
               dataList={dataList}
               setDataList={setDataList}
               setMetaData={setMetaData}
+              selectedLength={selectedLength}
+              setSelectedLength={setSelectedLength}
             />
             {/* <Pagination
               itemPerPage={itemPerPage}

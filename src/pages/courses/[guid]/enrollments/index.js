@@ -46,13 +46,13 @@ const Page = () => {
   useEffect(() => {
     const fetchData = async () => {
       const res = await CourseApi.enrolledUsers(guid)
-      if (!res.success) return toast.error(res.message)
+      if (!res.success) return
       setLoading(false)
       setDataList(res && res.payload)
       setResponseMessage(res.message)
     }
     fetchData()
-  }, [])
+  }, [guid])
 
   /** HANDLE SEARCH */
   const handleSearch = useCallback(value => {
@@ -79,7 +79,7 @@ const Page = () => {
           <PageHeader
             title={<Typography variant='h5'>Enrolment</Typography>}
             subtitle={<Typography variant='body2'>List all Enrolment</Typography>}
-            buttonHref='./addenrolment'
+            buttonHref='./enroll'
             buttonTitle='Enrol Users'
             setReload={setReload}
             doReload={doReload}

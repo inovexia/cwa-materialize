@@ -46,7 +46,17 @@ const navigation = () => {
     {
       title: 'Courses',
       path: '/courses',
-      icon: 'lucide:book'
+      icon: 'lucide:book',
+      children: [
+        {
+          title: 'All Courses',
+          path: '/courses'
+        },
+        {
+          title: 'Categories',
+          path: '/courses/categories'
+        }
+      ]
     },
     {
       title: 'Online Class',

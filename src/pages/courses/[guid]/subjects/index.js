@@ -50,6 +50,7 @@ const Page = () => {
       const res = await CourseApi.getSubjects(guid);
       if (!res.success) return
       const searchTermLower = searchTerm.toLowerCase();
+
       // Filter subjects based on the case-insensitive search term
       const filteredSubjects = res.payload.data.filter(subject =>
         subject.title.toLowerCase().includes(searchTermLower) ||
@@ -87,14 +88,9 @@ const Page = () => {
                 </Box>) :
               (<form>
                 <CardContent>
-                  To Do cross button for unselect
                   <Toolbar
                     searchTerm={searchTerm}
                     handleSearch={handleSearch}
-                  //status={status}
-                  //handleStatus={handleStatus}
-                  //orderBy={orderBy}
-                  //handleType={handleType}
                   />
                 </CardContent>
                 <SubjectList

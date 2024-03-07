@@ -9,12 +9,14 @@ import { Grid, Card, CardActions, TextField, Button, Link, CardHeader, CardConte
 
 // ** Action Module
 import { ViewOnlineClass } from 'src/pages/onlineclass/_models/OnlineClassModel'
+
 // ** Icon Imports
 import Icon from 'src/@core/components/icon'
 
 const PreviewClass = () => {
   const router = useRouter()
   const { guid, classguid } = router.query
+
   // ** state
   const [isLoading, setLoading] = useState(false)
   const [choices, setChoices] = useState([])
@@ -33,9 +35,11 @@ const PreviewClass = () => {
         if (response.success === false) {
           toast.error(response.message)
         }
+
         // reset(response.payload)
         if (response.payload) {
           setDataList(response.payload)
+
           // setCount(response.payload.length)
         }
       }
@@ -46,10 +50,12 @@ const PreviewClass = () => {
   function extractUrlFromHtml(htmlContent) {
     const urlPattern = /https?:\/\/\S+(?=<\/p>)/; // Match URL until </p>
     const match = htmlContent && htmlContent.match(urlPattern); // Check if htmlContent is defined
+
     return match ? match[0] : '';
   }
 
   const extractedUrl = extractUrlFromHtml(dataList.details)
+
   return (
     <>
       <Grid container spacing={6}>

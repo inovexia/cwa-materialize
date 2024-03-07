@@ -9,6 +9,7 @@ const TypeButtons = ({ handleDrawerContent }) => {
     { type: 'pdf', label: 'PDF', icon: "" },
     { type: 'url', label: 'URL', icon: "" },
     { type: 'youtube', label: 'YOUTUBE URL', icon: "" },
+
     // Add more button data as needed
   ];
 

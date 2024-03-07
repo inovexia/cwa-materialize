@@ -3,7 +3,6 @@ import { Fragment } from 'react'
 
 // ** MUI Imports
 import List from '@mui/material/List'
-import Divider from '@mui/material/Divider'
 import ListItem from '@mui/material/ListItem'
 import ListItemIcon from '@mui/material/ListItemIcon'
 import ListItemText from '@mui/material/ListItemText'
@@ -44,7 +43,6 @@ export function CardComponent(props) {
                   <ListItemText primary={row.title} />
                   {row.title && row.title == "Unpublished" || row.title == "Published" ? (<SwitchField id={guid} status={dataList.status} doReload={doReload} />) : ""}
                 </ListItemButton>)}
-
               </ListItem>
             )}
           </List>

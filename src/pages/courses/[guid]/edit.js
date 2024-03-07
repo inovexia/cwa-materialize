@@ -17,6 +17,7 @@ const EditCourse = () => {
   const { query: { guid }, push } = useRouter()
   const editorRef = useRef(null)
   const [loading, setLoading] = useState(true)
+
   const {
     control,
     handleSubmit,
@@ -45,6 +46,7 @@ const EditCourse = () => {
       toast.error('Failed to update course')
     }
   }
+
   // ** Get Current Course Details
   useEffect(() => {
     const fetchData = async () => {

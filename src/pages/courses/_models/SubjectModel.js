@@ -6,6 +6,7 @@ import toast from 'react-hot-toast'
 export async function ListSubjects(guid) {
   const response = await API.getSubjects(guid)
   if (!response.success) return toast.error(response.message)
+
   return response
 }
 
@@ -47,6 +48,7 @@ export async function changeBulkStatus(checked, id) {
   formData.append('status', testStatus)
   const response = await API.statusSubject({ id, data: formData })
   if (!response.success) return toast.error(response.message)
+
   // var responseMessage = await responseMessages(response.message)
   // response.message = await responseMessage
   toast.success(response.message)

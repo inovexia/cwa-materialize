@@ -153,7 +153,7 @@ function EnhancedTableHead(props) {
 
 const EnhancedTableToolbar = props => {
   // ** Prop
-  const { numSelected } = props
+  const { numSelected, onCloseBar } = props
 
   return (
     numSelected !== 0 ?
@@ -174,7 +174,7 @@ const EnhancedTableToolbar = props => {
         )}
         {numSelected > 0 ? (
           <Tooltip title='Delete'>
-            <IconButton sx={{ color: 'text.secondary' }}>
+            <IconButton sx={{ color: 'text.secondary' }} onClick={closeBar}>
               <Icon icon='mdi:delete-outline' />
             </IconButton>
           </Tooltip>
@@ -261,6 +261,7 @@ const RowOptions = ({ guid, onDelete, courseId }) => {
         </MenuItem>
         <MenuItem
           sx={{ '& svg': { mr: 2 } }}
+
           //onClick={handleRowOptionsClose}
           onClick={handleItemClick}
         >
@@ -273,6 +274,9 @@ const RowOptions = ({ guid, onDelete, courseId }) => {
 }
 
 const EnhancedTable = (props) => {
+  const router = useRouter()
+  const { guid } = router.query
+
   // ** States
   const [page, setPage] = useState(0)
   const [order, setOrder] = useState('asc')
@@ -282,6 +286,7 @@ const EnhancedTable = (props) => {
   const [guidToDelete, setGuidToDelete] = useState('')
   const [openModal, setOpenModal] = useState(false)
   const [openArcModal, setOpenArcModal] = useState(false)
+  const [toolbarVisible, setToolbarVisible] = useState(true);
 
   // ** Props
   const { dataList, setDataList, responseStatus, responseMessage, meta } = props
@@ -334,6 +339,8 @@ const EnhancedTable = (props) => {
 
   // Avoid a layout jump when reaching the last page with empty rows.
   const emptyRows = page > 0 ? Math.max(0, (1 + page) * rowsPerPage - dataList.length) : 0
+
+
   // Close Modal
   const handleCloseModal = () => {
     setOpenModal(false)
@@ -345,19 +352,23 @@ const EnhancedTable = (props) => {
     const updatedData = await CourseApi.getSubjects(props.guid)
     if (!updatedData.success) return
     setDataList(updatedData.payload.data)
+
     //setMetaData(updatedData.payload.meta)
     setOpenModal(false)
   }
+
   const handleDelete = (guid) => {
     setGuidToDelete(guid);
     setOpenModal(true);
   };
-  const router = useRouter()
-  const { guid } = router.query
+
+  const closeBar = () => {
+    setToolbarVisible(false);
+  }
+
   return (
     <>
-      <EnhancedTableToolbar numSelected={selected.length} />
-
+      {toolbarVisible && <EnhancedTableToolbar numSelected={selected.length} onCloseBar={closeBar} />}
       <TableContainer component={Paper}>
         <Table sx={{ minWidth: 750 }} aria-labelledby='tableTitle'>
           <EnhancedTableHead

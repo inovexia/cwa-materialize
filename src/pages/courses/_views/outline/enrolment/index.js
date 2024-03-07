@@ -97,6 +97,7 @@ const headCells = [
     disablePadding: false,
     label: 'End Date'
   },
+
   // {
   //   id: 'status',
   //   numeric: false,
@@ -222,8 +223,10 @@ const RowOptions = ({ guid }) => {
     handleRowOptionsClose()
   }
   const [drawerOpen, setDrawerOpen] = useState(false)
+
   /** HANDLE CREATE TEST DRAWER */
   const toggleCreateDrawer = () => setDrawerOpen(!drawerOpen)
+
   return (
     <>
       <IconButton size='small' onClick={handleRowOptionsClick}>
@@ -263,9 +266,11 @@ const RowOptions = ({ guid }) => {
           Preview
         </MenuItem> */}
         <MenuItem
+
           // component={Link}
           sx={{ '& svg': { mr: 2 } }}
           onClick={toggleCreateDrawer}
+
         // href={`/courses/edit?id=${guid}`}
 
         >
@@ -306,6 +311,7 @@ const EnhancedTable = (props) => {
   const [drawerOpen, setDrawerOpen] = useState(false)
   const [reload, setReload] = useState(0)
   const doReload = () => setReload(r => r + 1)
+
   // ** Props
   const { rows, dataList, responseStatus, responseMessage } = props
 
@@ -357,9 +363,10 @@ const EnhancedTable = (props) => {
 
   // Avoid a layout jump when reaching the last page with empty rows.
   const emptyRows = page > 0 ? Math.max(0, (1 + page) * rowsPerPage - rows.length) : 0
+
   /** HANDLE CREATE TEST DRAWER */
   const toggleCreateDrawer = () => setDrawerOpen(!drawerOpen)
-  console.log(dataList)
+
   return (
     <>
       <EnhancedTableToolbar numSelected={selected.length} />

@@ -26,6 +26,8 @@ const Page = () => {
   const [loader, setLoader] = useState(true)
   const [searchTerm, setSearchTerm] = useState('')
   const doReload = () => setReload(r => r + 1)
+
+
   /** HANDLE SEARCH */
   const handleSearch = useCallback(value => {
     setSearchTerm(value)
@@ -42,6 +44,8 @@ const Page = () => {
       if (!res.success) return setLoader(false)
       setLoader(false)
       const searchTermLower = searchTerm.toLowerCase();
+
+
       // Filter subjects based on the case-insensitive search term
       const filteredLesson = res.payload.data.filter(lesson =>
         lesson.title.toLowerCase().includes(searchTermLower) ||
@@ -53,6 +57,7 @@ const Page = () => {
     };
     fetchData();
   }, [subjectId, searchTerm, reload]);
+
   return (
     <>
       <Grid container spacing={6}>
@@ -76,6 +81,7 @@ const Page = () => {
                   <Toolbar
                     searchTerm={searchTerm}
                     handleSearch={handleSearch}
+
                   //status={status}
                   //handleStatus={handleStatus}
                   //orderBy={orderBy}

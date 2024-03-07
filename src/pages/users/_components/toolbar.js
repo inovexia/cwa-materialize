@@ -18,6 +18,7 @@ const Toolbar = ({
   handleRole,
   orderFilter,
   handleOrder,
+  selectedLength
 }) => {
 
   const [selectedBulkAct, setSelectedBulkAct] = useState('')
@@ -104,7 +105,7 @@ const Toolbar = ({
             select
             label='Action'
             size='small'
-            disabled={checkedLength.length === 0}
+            disabled={selectedLength.length === 0}
             value={selectedBulkAct}
             onChange={handleBulkAction}
           >

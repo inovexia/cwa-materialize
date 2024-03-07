@@ -3,6 +3,7 @@ import React, { useEffect, useState, useCallback } from 'react'
 // ** MUI Imports
 import { Grid, Card, CardContent, Box, Typography, CircularProgress } from '@mui/material'
 import { useRouter } from 'next/router'
+import ReactHtmlParser from 'react-html-parser'
 
 // ** Component Imports
 import PageHeader from 'src/layouts/components/page-header'
@@ -13,6 +14,7 @@ import Toolbar from 'src/pages/courses/_components/Outline/sections/Toolbar'
 
 // ** Course API
 import CourseApi from 'src/pages/courses/_components/Apis'
+import { LessonPreview } from 'src/pages/courses/_models/LessonModel'
 
 
 
@@ -23,6 +25,7 @@ const Page = () => {
   const [itemPerPage, setItemPerPage] = useState('10')
   const [checkedIds, setCheckedIds] = useState([])
   const [dataList, setDataList] = useState([])
+  const [currentLesson, setCurrentLesson] = useState([])
   const [metaData, setMetaData] = useState(undefined)
   const [responseStatus, setResponseStatus] = useState(false)
   const [responseMessage, setResponseMessage] = useState('')
@@ -34,15 +37,23 @@ const Page = () => {
 
   const [isLoading, setLoading] = useState(true)
 
-  // Get All Courses
-  //** GET ALL LESSON OF CURRENT SUBJECT */
+  /** Get Current Lesson Details */
+  useEffect(() => {
+    const fetchData = async () => {
+      const response = await LessonPreview(lessonId)
+      setCurrentLesson(response.payload)
+    }
+    fetchData()
+  }, [lessonId])
+
+  //** GET ALL SECTIONS OF CURRENT LESSON */
   useEffect(() => {
     const fetchData = async () => {
       const res = await CourseApi.allSections(lessonId)
       if (!res.success) return setLoader(false)
       setLoading(false)
       const searchTermLower = searchTerm.toLowerCase();
-      // Filter subjects based on the case-insensitive search term
+
       const filteredSection = res.payload.filter(lesson =>
         lesson.title.toLowerCase().includes(searchTermLower)
       );
@@ -72,13 +83,15 @@ const Page = () => {
 
   /** HANDLE CREATE TEST DRAWER */
   const toggleCreateDrawer = () => setDrawerOpen(!drawerOpen)
+  console.log(dataList)
+
   return (
     <>
       <Grid container spacing={6}>
         <Grid item xs={12}>
           <PageHeader
-            title={<Typography variant='h5'>Sections</Typography>}
-            subtitle={<Typography variant='body2'>List all Sections</Typography>}
+            title={<Typography variant='h5'>{currentLesson && currentLesson.title}</Typography>}
+            subtitle={<Typography variant='body2'>{ReactHtmlParser(currentLesson && currentLesson.description)}</Typography>}
             buttonHref={`/courses/${guid}/subjects/${subjectId}/lesson/${lessonId}/sections/create`}
             buttonTitle='Add Section'
           />

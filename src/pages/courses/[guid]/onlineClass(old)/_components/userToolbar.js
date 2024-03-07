@@ -57,6 +57,7 @@ const ShareToolbar = ({
     const selectedAction = event.target.value
     setBulkAction(selectedAction) // Pass the selected bulk action to the parent
   }
+
   return (
     <Grid container spacing={6}>
       <Grid

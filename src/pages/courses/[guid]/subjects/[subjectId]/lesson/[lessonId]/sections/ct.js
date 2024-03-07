@@ -24,41 +24,40 @@ const MyForm = () => {
     console.log(formData, data);
   };
 
-  return (
-    <form onSubmit={handleSubmit(onSubmit)}>
-      {fields.map((block, index) => (
-        <div key={block.id}>
-          <label>
-            Type:
-            <input
-              {...register(`blocks.${index}.type`)}
-              defaultValue={block.type}
-              placeholder="Type"
-            />
-          </label>
-          <label>
-            Content:
-            <input
-              {...register(`blocks.${index}.content`)}
-              defaultValue={block.content}
-              placeholder="Content"
-            />
-          </label>
-          <button type="button" onClick={() => remove(index)}>
-            Remove Block
-          </button>
-        </div>
-      ))}
-      <button
-        type="button"
-        onClick={() => {
-          append({ type: '', content: '' });
-        }}
-      >
-        Add Block
-      </button>
-      <button type="submit">Submit</button>
-    </form>
+  <form onSubmit={handleSubmit(onSubmit)}>
+    {fields.map((block, index) => (
+      <div key={block.id}>
+        <label>
+          Type:
+          <input
+            {...register(`blocks.${index}.type`)}
+            defaultValue={block.type}
+            placeholder="Type"
+          />
+        </label>
+        <label>
+          Content:
+          <input
+            {...register(`blocks.${index}.content`)}
+            defaultValue={block.content}
+            placeholder="Content"
+          />
+        </label>
+        <button type="button" onClick={() => remove(index)}>
+          Remove Block
+        </button>
+      </div>
+    ))}
+    <button
+      type="button"
+      onClick={() => {
+        append({ type: '', content: '' });
+      }}
+    >
+      Add Block
+    </button>
+    <button type="submit">Submit</button>
+  </form>
   );
 };
 

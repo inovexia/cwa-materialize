@@ -26,6 +26,7 @@ import { visuallyHidden } from '@mui/utils'
 import { alpha } from '@mui/material/styles'
 import NextLink from 'next/link'
 import ReactHtmlParser from 'react-html-parser'
+import { useRouter } from 'next/router'
 
 import Translations from 'src/layouts/components/Translations'
 
@@ -83,12 +84,6 @@ const headCells = [
     disablePadding: true,
     label: 'Title'
   },
-  // {
-  //   id: 'description',
-  //   numeric: false,
-  //   disablePadding: false,
-  //   label: 'Description'
-  // },
   {
     id: 'status',
     numeric: false,
@@ -182,7 +177,9 @@ const EnhancedTableToolbar = props => {
   )
 }
 
-const RowOptions = ({ guid }) => {
+const RowOptions = ({ sectionId }) => {
+  const router = useRouter()
+  const { guid, subjectId, lessonId } = router.query
 
   // ** State
   const [anchorEl, setAnchorEl] = useState(null)
@@ -236,7 +233,7 @@ const RowOptions = ({ guid }) => {
           component={NextLink}
           sx={{ '& svg': { mr: 2 } }}
           onClick={handleRowOptionsClose}
-          href='/courses/manage'
+          href={`/courses/${guid}/subjects/${subjectId}/lesson/${lessonId}/sections/${sectionId}/preview/`}
         >
           <Icon icon='mdi:eye-outline' fontSize={20} />
           Preview
@@ -245,7 +242,7 @@ const RowOptions = ({ guid }) => {
           component={NextLink}
           sx={{ '& svg': { mr: 2 } }}
           onClick={handleRowOptionsClose}
-          href={`/courses/edit?id=${guid}`}
+          href={`/courses/${guid}/subjects/${subjectId}/lesson/${lessonId}/sections/${sectionId}/edit`}
         >
           <Icon icon='mdi:pencil-outline' fontSize={20} />
           Edit
@@ -367,7 +364,7 @@ const EnhancedTable = (props) => {
                       </Box>
                     </TableCell>
                     <TableCell ><Switch defaultChecked={row.status === '1' ? true : false} onChange={event => handleChangeStatus(event, row.guid)} /></TableCell>
-                    <TableCell><RowOptions guid={row.guid} /></TableCell>
+                    <TableCell><RowOptions sectionId={row.guid} /></TableCell>
                   </TableRow>
                 )
               })}

@@ -48,11 +48,13 @@ const ContentUrl = props => {
   };
 
   // ** Props
-  const { open, toggle, setReload, doReload } = props
+  const { open, toggle, setReload, doReload, name } = props
 
   // ** State
   const [responseMessage, setResponseMessage] = useState('')
   const [loading, setLoading] = useState(false)
+
+
   // ** Hooks
   const {
     reset,
@@ -69,22 +71,13 @@ const ContentUrl = props => {
     resolver: yupResolver(schema)
   })
 
-  const handleFormSubmit = async data => {
-    setLoading(true)
-    const response = await CourseApi.createCourse(data)
-    setLoading(false)
-    if (!response.success) return toast.success(response.message)
-    doReload(true)
-    toggle()
-    reset()
-  }
-
   const handleClose = () => {
     toggle()
     reset()
   }
 
   const editorRef = useRef(null)
+
   return (
     <Box>
       <TextField
@@ -92,6 +85,8 @@ const ContentUrl = props => {
         variant="outlined"
         fullWidth
         value={url}
+        control={control}
+        name={name}
         onChange={handleUrlChange}
       />
     </Box>

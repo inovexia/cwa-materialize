@@ -31,10 +31,10 @@ const Page = () => {
   const [responseStatus, setResponseStatus] = useState(false)
   const [responseMessage, setResponseMessage] = useState('')
   const [drawerOpen, setDrawerOpen] = useState(false)
-  const [reload, setReload] = useState(0)
   const [loader, setLoader] = useState(true)
   const [searchTerm, setSearchTerm] = useState('')
   const defSearchTerm = useDebounce(searchTerm, 300);
+  const [reload, setReload] = useState(0)
   const doReload = () => setReload(r => r + 1)
 
   const [isLoading, setLoading] = useState(true)
@@ -64,10 +64,13 @@ const Page = () => {
 
   /** HANDLE SEARCH */
   const handleSearch = (value) => setSearchTerm(value)
+
   /** HANDLE STATUS CHANGE */
   const handleStatus = (value) => setStatus(value)
+
   /** HANDLE TEST_TYPE CHANGE */
   const handleType = (value) => setOrderBy(value)
+
   /** HANDLE CREATE TEST DRAWER */
   const toggleCreateDrawer = () => setDrawerOpen(!drawerOpen)
 

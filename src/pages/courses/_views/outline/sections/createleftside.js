@@ -3,6 +3,7 @@ import React, { useEffect, useState, useRef } from 'react'
 import { useRouter } from 'next/router'
 import NextLink from "next/link"
 import { serialize } from 'object-to-formdata';
+
 // ** MUI Imports
 import { Grid, Card, Fragment, Link, ListItemButton, Box, List, CardHeader, ListItem, ListItemIcon, ListItemText, Drawer, Button, styled, TextField, IconButton, Typography, CardContent } from '@mui/material'
 import FormControl from '@mui/material/FormControl'
@@ -29,6 +30,7 @@ import PageHeader from 'src/layouts/components/page-header'
 
 const CreateSectionLeft = ({ passedValue, contentType }) => {
   const { query: { guid, subjectId, lessonId } } = useRouter()
+
   const {
     control,
     handleSubmit,
@@ -41,8 +43,10 @@ const CreateSectionLeft = ({ passedValue, contentType }) => {
       created_by: 'ASI8'
     }
   })
+
   const handleFormSubmit = async data => {
     console.log('Content Type:', contentType);
+
     return;
     const formData = new FormData()
     Object.entries(data).forEach(([key, value]) => {
@@ -61,6 +65,7 @@ const CreateSectionLeft = ({ passedValue, contentType }) => {
   }
 
   const editorRef = useRef(null)
+
   const log = () => {
     if (editorRef.current) {
       console.log(editorRef.current.getContent())

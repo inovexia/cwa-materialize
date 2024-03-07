@@ -51,7 +51,7 @@ const VideoUpload = () => {
   ))
 
   return (
-    <Box {...getRootProps({ className: 'dropzone' })} sx={files.length ? { height: 450 } : {}}>
+    <Box {...getRootProps({ className: 'dropzone' })} sx={files.length ? { height: "auto" } : {}}>
       <input {...getInputProps()} />
       {files.length ? (
         img

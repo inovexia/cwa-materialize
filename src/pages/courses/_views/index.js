@@ -196,8 +196,7 @@ const RowOptions = ({ guid, onDelete }) => {
     setAnchorEl(event.currentTarget)
   }
 
-  const handleRowOptionsClose = (e) => {
-    e.stopPropagation()
+  const handleRowOptionsClose = () => {
     setAnchorEl(null)
   }
 
@@ -390,7 +389,7 @@ const EnhancedTable = ({ dataList, setDataList, responseMessage, doReload }) => 
                     </TableCell>
                     <TableCell component='th' id={labelId} scope='row' padding='none'>
                       <Box sx={{ display: 'flex', alignItems: 'flex-start', flexDirection: 'column' }}>
-                        <LinkStyled href={`/courses/view/${row.guid}`} onClick={e => e.stopPropagation()}>{row.title}</LinkStyled>
+                        <LinkStyled href={`/courses/${row.guid}/manage`} onClick={e => e.stopPropagation()}>{row.title}</LinkStyled>
                         <Typography noWrap variant='caption'>{row.guid}</Typography>
                       </Box>
                     </TableCell>

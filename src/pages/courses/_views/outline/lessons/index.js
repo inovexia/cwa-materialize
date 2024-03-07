@@ -108,6 +108,7 @@ const headCells = [
 
 function EnhancedTableHead(props) {
   const { query: { guid, subjectId } } = useRouter()
+
   // ** Props
   const { onSelectAllClick, order, orderBy, numSelected, rowCount, onRequestSort } = props
 
@@ -258,6 +259,7 @@ const RowOptions = ({ lessonId, onDelete }) => {
         </MenuItem>
         <MenuItem
           sx={{ '& svg': { mr: 2 } }}
+
           //onClick={handleRowOptionsClose}
           onClick={handleItemClick}
         >
@@ -271,6 +273,7 @@ const RowOptions = ({ lessonId, onDelete }) => {
 
 const EnhancedTable = (props) => {
   const { query: { guid, subjectId }, push } = useRouter()
+
   // ** States
   const [page, setPage] = useState(0)
   const [order, setOrder] = useState('asc')
@@ -284,6 +287,7 @@ const EnhancedTable = (props) => {
   // ** Props
   const { dataList, setDataList, responseStatus, responseMessage, meta } = props
   console.log(dataList)
+
   const handleRequestSort = (event, property) => {
     const isAsc = orderBy === property && order === 'asc'
     setOrder(isAsc ? 'desc' : 'asc')
@@ -332,6 +336,8 @@ const EnhancedTable = (props) => {
 
   // Avoid a layout jump when reaching the last page with empty rows.
   const emptyRows = page > 0 ? Math.max(0, (1 + page) * rowsPerPage - dataList.length) : 0
+
+
   // Close Modal
   const handleCloseModal = () => {
     setOpenModal(false)
@@ -343,14 +349,17 @@ const EnhancedTable = (props) => {
     const updatedData = await CourseApi.allLesson(subjectId)
     if (!updatedData.success) return
     setDataList(updatedData.payload.data)
+
     //setMetaData(updatedData.payload.meta)
     setOpenModal(false)
   }
+
   const handleDelete = (guid) => {
     setGuidToDelete(guid);
     setOpenModal(true);
   };
   console.log(dataList)
+
   return (
     <>
       <EnhancedTableToolbar numSelected={selected.length} />

@@ -7,17 +7,11 @@ import { styled, Typography, Box, Grid } from '@mui/material'
 
 // ** Third Party Imports
 import * as yup from 'yup'
-import { useForm, Controller } from 'react-hook-form'
-import { yupResolver } from '@hookform/resolvers/yup'
-import Divider from '@mui/material/Divider';
-// ** Icon Imports
-import Icon from 'src/@core/components/icon'
 
-// ** Actions Imports
-import { AddTest } from 'src/pages/tests/_models/TestModel'
 
 // ** Component Imports
 import PageHeader from 'src/layouts/components/page-header'
+
 // import PreviewSection from '../_views/outline/sections/preview'
 import SectionContent from 'src/pages/courses/_views/SectionContent'
 

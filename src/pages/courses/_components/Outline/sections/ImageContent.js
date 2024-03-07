@@ -1,53 +1,21 @@
-// ** React Imports
-import { useState, useEffect, useRef } from 'react'
+import { useState } from 'react';
+import { Box, Typography } from '@mui/material';
+import { useController } from 'react-hook-form';
+import FileUploaderSingle from 'src/pages/courses/_components/Fileupload';
 
-// ** MUI Imports
-import { Drawer, Button, styled, TextField, IconButton, Typography } from '@mui/material'
-import Box from '@mui/material/Box'
-import FormControl from '@mui/material/FormControl'
-import FormHelperText from '@mui/material/FormHelperText'
-import LoadingButton from '@mui/lab/LoadingButton'
-import 'react-draft-wysiwyg/dist/react-draft-wysiwyg.css'
+const ContentImage = ({ control, name }) => {
+  const { field } = useController({
+    control,
+    name,
+  });
 
-// ** Third Party Imports
-import * as yup from 'yup'
-import toast from 'react-hot-toast'
-import { useForm, Controller } from 'react-hook-form'
-import { yupResolver } from '@hookform/resolvers/yup'
+  const [files, setFiles] = useState([]);
 
-// ** Icon Imports
-import Icon from 'src/@core/components/icon'
+  const onDrop = (acceptedFiles) => {
+    setFiles(acceptedFiles);
+    field.onChange(acceptedFiles); // Update the field value in the form
+  };
 
-// ** Component
-import FormEditorField from 'src/layouts/components/common/formEditorField'
-
-// ** API
-import CourseApi from 'src/pages/courses/_components/Apis'
-import FileUploaderSingle from 'src/pages/courses/_components/Fileupload'
-
-const Header = styled(Box)(({ theme }) => ({
-  display: 'flex',
-  alignItems: 'center',
-  padding: theme.spacing(3, 4),
-  justifyContent: 'space-between'
-}))
-
-
-const schema = yup.object().shape({
-  title: yup.string(),
-  description: yup.string().required(),
-  created_by: yup.string().required()
-})
-
-const ContentImage = props => {
-  // ** Props
-  const { open, toggle, setReload, doReload } = props
-
-  // ** State
-  const [responseMessage, setResponseMessage] = useState('')
-  const [loading, setLoading] = useState(false)
-
-  const editorRef = useRef(null)
   return (
     <Box>
       <label
@@ -57,14 +25,14 @@ const ContentImage = props => {
           fontWeight: 500,
           fontFamily: 'Arial',
           marginBottom: '10px',
-          display: "block"
+          display: 'block',
         }}
       >
         Image Upload
       </label>
-      <FileUploaderSingle />
+      <FileUploaderSingle onDrop={onDrop} files={files} />
     </Box>
-  )
-}
+  );
+};
 
-export default ContentImage
+export default ContentImage;

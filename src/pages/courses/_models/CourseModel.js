@@ -46,12 +46,26 @@ export async function changeStatus(checked, id) {
   formData.append('status', testStatus)
   const response = await API.statusCourse({ id, data: formData })
   if (!response.success) return toast.error(response.message)
+
   // var responseMessage = await responseMessages(response.message)
   // response.message = await responseMessage
   toast.success(response.message)
 }
 
+/** ENROLL USER IN COURSE */
+export async function EnrollUser({ guid, data }) {
+  const formData = new FormData()
+  if (typeof data === "object") {
+    Object.entries(data).forEach(([key, value]) => {
+      formData.append(key, value)
+    })
+  }
+  const response = await API.enrollUser({ guid, data: formData })
+  var responseMessage = await responseMessages(response.message)
+  response.message = await responseMessage
 
+  return response
+}
 
 
 const responseMessages = (message) => {

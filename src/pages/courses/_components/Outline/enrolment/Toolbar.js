@@ -14,7 +14,7 @@ import { ListCourses } from 'src/pages/courses/_models/CourseModel'
 const Toolbar = (props) => {
 
   // ** Props
-  const { searchTerm, handleSearch, status, handleStatus, orderBy, handleType } = props
+  const { searchTerm, handleSearch } = props
 
   return (
     <Grid container spacing={6}>
@@ -29,46 +29,7 @@ const Toolbar = (props) => {
           />
         </FormControl>
       </Grid>
-      <Grid item sm={4} xs={12}>
-        <FormControl fullWidth>
-          <InputLabel id='status-select'>Select Status</InputLabel>
-          <Select
-            fullWidth
-            value={status}
-            id='select-status'
-            label='Select Status'
-            labelId='status-select'
-            onChange={e => handleStatus(e.target.value)}
-            inputProps={{ placeholder: 'Select Status' }}
-          >
-            <MenuItem value=''>Select Status</MenuItem>
-            <MenuItem value='1'>Enrolment</MenuItem>
-            <MenuItem value='0'>Unenrolment</MenuItem>
-          </Select>
-        </FormControl>
-      </Grid>
-      <Grid item sm={4} xs={12}>
-        <FormControl fullWidth>
-          <InputLabel id='type-select'>Order By</InputLabel>
-          <Select
-            fullWidth
-            value={orderBy}
-            id='select-type'
-            label='Select Order'
-            labelId='type-select'
-            onChange={e => handleType(e.target.value)}
-            inputProps={{ placeholder: 'Select Order' }}
-          >
-            <MenuItem value=''>Select Order</MenuItem>
-            <MenuItem value='newest_first'>Newest First</MenuItem>
-            <MenuItem value='newest_last'>Newest Last</MenuItem>
-            <MenuItem value='last_name_asc'>Last Name ASC</MenuItem>
-            <MenuItem value='last_name_desc'>Last Name DESC</MenuItem>
-            <MenuItem value='first_name_asc'>First Name ASC</MenuItem>
-            <MenuItem value='first_name_desc'>First Name DESC</MenuItem>
-          </Select>
-        </FormControl>
-      </Grid>
+
     </Grid>
   )
 }

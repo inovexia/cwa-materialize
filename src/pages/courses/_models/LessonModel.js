@@ -1,7 +1,7 @@
 import API from 'src/pages/courses/_components/Apis'
 import toast from 'react-hot-toast'
 
-/** GET COURSES */
+/** GET LESSONS */
 export async function ListLesson({ subjectId, data }) {
 
   const formData = new FormData()
@@ -11,6 +11,22 @@ export async function ListLesson({ subjectId, data }) {
     })
   }
   const response = await API.allLesson(subjectId && subjectId, formData)
+  var responseMessage = await responseMessages(response.message)
+  response.message = await responseMessage
+
+  return response
+}
+
+/** Preview Lesson */
+export async function LessonPreview(lessonId) {
+
+  const formData = new FormData()
+  if (typeof data === "object") {
+    Object.entries(data).forEach(([key, val]) => {
+      formData.append(key, val)
+    })
+  }
+  const response = await API.previewLesson(lessonId && lessonId)
   var responseMessage = await responseMessages(response.message)
   response.message = await responseMessage
 
