@@ -34,6 +34,7 @@ import Icon from 'src/@core/components/icon'
 // ** Actions Imports
 import { changeStatus } from 'src/pages/courses/_models/CourseModel'
 import DeleteCourse from './deleteCourse'
+import BulkDeleteCourse from './bulkDelete'
 
 // APIs
 import CourseApi from 'src/pages/courses/_components/Apis'
@@ -153,7 +154,11 @@ function EnhancedTableHead(props) {
 
 const EnhancedTableToolbar = props => {
   // ** Prop
-  const { numSelected } = props
+  const { numSelected, setOpenBulkModal } = props
+
+  const handleBulkDelete = () => {
+    setOpenBulkModal(true)
+  }
 
   return (
     numSelected !== 0 ?
@@ -173,7 +178,7 @@ const EnhancedTableToolbar = props => {
           ''
         )}
         {numSelected > 0 ? (
-          <Tooltip title='Delete'>
+          <Tooltip title='Delete' onClick={handleBulkDelete}>
             <IconButton sx={{ color: 'text.secondary' }}>
               <Icon icon='mdi:delete-outline' />
             </IconButton>
@@ -210,6 +215,7 @@ const RowOptions = ({ guid, onDelete }) => {
   const handleDelete = () => {
     onDelete(guid);
   };
+
 
   return (
     <>
@@ -279,6 +285,7 @@ const EnhancedTable = ({ dataList, setDataList, responseMessage, doReload }) => 
   const [selected, setSelected] = useState([])
   const [guidToDelete, setGuidToDelete] = useState('')
   const [openModal, setOpenModal] = useState(false)
+  const [openBulkModal, setOpenBulkModal] = useState(false)
   const [openArcModal, setOpenArcModal] = useState(false)
 
   const handleRequestSort = (event, property) => {
@@ -298,6 +305,7 @@ const EnhancedTable = ({ dataList, setDataList, responseMessage, doReload }) => 
   }
 
   const handleClick = (event, guid) => {
+    event.stopPropagation();
     const selectedIndex = selected.indexOf(guid)
     let newSelected = []
     if (selectedIndex === -1) {
@@ -333,6 +341,7 @@ const EnhancedTable = ({ dataList, setDataList, responseMessage, doReload }) => 
   // Close Modal
   const handleCloseModal = () => {
     setOpenModal(false)
+    setOpenBulkModal(false)
     setOpenArcModal(false)
   }
 
@@ -351,9 +360,17 @@ const EnhancedTable = ({ dataList, setDataList, responseMessage, doReload }) => 
     setOpenModal(true);
   };
 
+  // Bulk Delete course
+  const handleItemBulkDeleted = async () => {
+    const updatedData = await CourseApi.getAllCourses()
+    if (!updatedData.success) return
+    setDataList(updatedData.payload.data)
+    setOpenBulkModal(false)
+  }
+
   return (
     <>
-      <EnhancedTableToolbar numSelected={selected.length} />
+      <EnhancedTableToolbar numSelected={selected.length} setOpenBulkModal={setOpenBulkModal} />
 
       <TableContainer component={Paper}>
         <Table sx={{ minWidth: 750 }} aria-labelledby='tableTitle'>
@@ -430,6 +447,13 @@ const EnhancedTable = ({ dataList, setDataList, responseMessage, doReload }) => 
         handleClose={handleCloseModal}
         guidToDelete={guidToDelete}
         onItemDeleted={handleItemDeleted}
+        doReload={doReload}
+      />
+      <BulkDeleteCourse
+        mdOpen={openBulkModal}
+        handleClose={handleCloseModal}
+        selectedCourseId={selected}
+        onItemDeleted={handleItemBulkDeleted}
         doReload={doReload}
       />
     </>

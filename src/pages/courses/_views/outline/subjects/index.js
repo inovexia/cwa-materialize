@@ -185,7 +185,7 @@ const EnhancedTableToolbar = props => {
   )
 }
 
-const RowOptions = ({ guid, onDelete, courseId }) => {
+const RowOptions = ({ guid, onDelete, courseId, subjectId }) => {
 
 
   // ** State
@@ -198,7 +198,6 @@ const RowOptions = ({ guid, onDelete, courseId }) => {
   }
 
   const handleRowOptionsClose = (e) => {
-    e.stopPropagation()
     setAnchorEl(null)
   }
 
@@ -209,7 +208,7 @@ const RowOptions = ({ guid, onDelete, courseId }) => {
   };
 
   const handleDelete = () => {
-    onDelete(guid);
+    onDelete(subjectId);
   };
 
   return (
@@ -357,8 +356,8 @@ const EnhancedTable = (props) => {
     setOpenModal(false)
   }
 
-  const handleDelete = (guid) => {
-    setGuidToDelete(guid);
+  const handleDelete = (subjectId) => {
+    setGuidToDelete(subjectId);
     setOpenModal(true);
   };
 
@@ -409,7 +408,7 @@ const EnhancedTable = (props) => {
                     </TableCell>
                     <TableCell >{ReactHtmlParser(row.description)}</TableCell>
                     <TableCell ><Switch defaultChecked={row.status === '1' ? true : false} onChange={event => handleChangeStatus(row.guid, row.status)} /></TableCell>
-                    <TableCell><RowOptions guid={row.guid} onDelete={handleDelete} courseId={guid} /></TableCell>
+                    <TableCell><RowOptions onDelete={handleDelete} courseId={guid} subjectId={row.guid} /></TableCell>
                   </TableRow>
                 )
               })}
@@ -442,7 +441,7 @@ const EnhancedTable = (props) => {
       <DeleteSubject
         mdOpen={openModal}
         handleClose={handleCloseModal}
-        guidToDelete={guidToDelete}
+        subjectId={guidToDelete}
         onItemDeleted={handleItemDeleted}
       />
     </>

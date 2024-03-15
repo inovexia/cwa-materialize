@@ -292,7 +292,6 @@ const EnhancedTable = ({ dataList, setDataList, responseMessage, doReload }) => 
   const [openModalEdit, setOpenModalEdit] = useState(false)
   const [openArcModal, setOpenArcModal] = useState(false)
 
-
   const handleSelectAllClick = event => {
     if (event.target.checked) {
       const newSelecteds = dataList.map(n => n.guid)
@@ -345,7 +344,7 @@ const EnhancedTable = ({ dataList, setDataList, responseMessage, doReload }) => 
   const handleItemDeleted = async () => {
     const updatedData = await CourseApi.courseCategory()
     if (!updatedData.success) return
-    setDataList(updatedData.payload)
+    setDataList(updatedData.payload.data)
 
     //setMetaData(updatedData.payload.meta)
     setOpenModal(false)

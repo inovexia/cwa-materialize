@@ -27,8 +27,8 @@ const Page = () => {
   const [responseStatus, setResponseStatus] = useState(false)
   const [responseMessage, setResponseMessage] = useState('')
   const [drawerOpen, setDrawerOpen] = useState(false)
-  const [reload, setReload] = useState(0)
   const [searchTerm, setSearchTerm] = useState('')
+  const [reload, setReload] = useState(0)
   const doReload = () => setReload(r => r + 1)
 
   const [isLoading, setLoading] = useState(true)
@@ -66,7 +66,7 @@ const Page = () => {
 
 
     fetchData();
-  }, [guid, searchTerm]);
+  }, [guid, searchTerm, reload]);
 
   return (
     <>
@@ -111,7 +111,6 @@ const Page = () => {
         open={drawerOpen}
         toggle={toggleCreateDrawer}
         setReload={setReload}
-        reload={reload}
         doReload={doReload}
         guid={guid}
       />

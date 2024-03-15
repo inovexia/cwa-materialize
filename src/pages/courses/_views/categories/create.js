@@ -18,9 +18,6 @@ import { yupResolver } from '@hookform/resolvers/yup'
 // ** Icon Imports
 import Icon from 'src/@core/components/icon'
 
-// ** Component
-import FormEditorField from 'src/layouts/components/common/formEditorField'
-
 // ** API
 import CourseApi from 'src/pages/courses/_components/Apis'
 
@@ -33,7 +30,7 @@ const Header = styled(Box)(({ theme }) => ({
 
 
 const schema = yup.object().shape({
-  title: yup.string().required()
+  title: yup.string().required().min(3).max(15)
 })
 
 const SidebarAddCategory = props => {
@@ -151,6 +148,7 @@ const SidebarAddCategory = props => {
               loadingPosition='start'
               startIcon={loading ? <Icon icon='eos-icons:bubble-loading' /> : ''}
               variant='contained'
+              disabled={errors.title ? true : false}
             >
               <span>SAVE</span>
             </LoadingButton>

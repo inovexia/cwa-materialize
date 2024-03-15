@@ -39,8 +39,8 @@ const Page = () => {
     const response = await ListCategory(data)
     setLoading(false)
     if (!response.success) return toast.error(response.message)
-    setDataList(response.payload)
-    setMetaData(response.payload)
+    setDataList(response.payload.data)
+    setMetaData(response.payload.meta)
   }, [defSearchTerm])
 
   useEffect(() => {

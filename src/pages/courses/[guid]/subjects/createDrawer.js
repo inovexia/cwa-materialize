@@ -33,17 +33,19 @@ const Header = styled(Box)(({ theme }) => ({
 
 
 const schema = yup.object().shape({
-  title: yup.string(),
-  description: yup.string().required(),
+  title: yup.string().required().min(3).max(15),
+  description: yup.string().min(3).max(100),
 })
 
 const SidebarAddSubject = props => {
   // ** Props
-  const { open, toggle, setReload, doReload, guid } = props
+  const { open, toggle, doReload, guid } = props
 
   // ** State
   const [responseMessage, setResponseMessage] = useState('')
   const [loading, setLoading] = useState(false)
+
+
   // ** Hooks
   const {
     reset,
@@ -58,14 +60,13 @@ const SidebarAddSubject = props => {
     mode: 'onChange',
     resolver: yupResolver(schema)
   })
+
   const handleFormSubmit = async data => {
-    console.log('Form data:', data);
     setLoading(true);
     const response = await CourseApi.createSubject({ guid, data });
-    console.log('API Response:', response);
     setLoading(false);
     if (!response.success) return toast.success(response.message)
-    doReload(true)
+    doReload()
     toggle()
     reset()
   }
@@ -76,6 +77,7 @@ const SidebarAddSubject = props => {
   }
 
   const editorRef = useRef(null)
+
   return (
     <Drawer
       open={open}
@@ -115,19 +117,25 @@ const SidebarAddSubject = props => {
             />
             {errors.title && <FormHelperText sx={{ color: 'error.main' }}>{errors.title.message}</FormHelperText>}
           </FormControl>
-          <label
-            htmlFor='description'
-            style={{
-              fontSize: 16,
-              fontWeight: 500,
-              fontFamily: 'Arial',
-              marginBottom: '10px',
-              display: "block"
-            }}
-          >
-            Description
-          </label>
-          <FormEditorField control={control} name='description' onInit={(evt, editor) => (editorRef.current = editor)} />
+          <FormControl fullWidth sx={{ mb: 6 }}>
+            <Controller
+              name='description'
+              control={control}
+              rules={{ required: true }}
+              render={({ field: { value, onChange } }) => (
+                <TextField
+                  label='Description'
+                  value={value}
+                  rows={5}
+                  multiline
+                  onChange={onChange}
+                  placeholder='Description'
+                  error={Boolean(errors.description)}
+                />
+              )}
+            />
+            {errors.description && <FormHelperText sx={{ color: 'error.main' }}>{errors.description.message}</FormHelperText>}
+          </FormControl>
           <Box sx={{ display: 'flex', alignItems: 'center', justifyContent: 'space-between', marginTop: '30px' }}>
             <LoadingButton
               type='submit'
@@ -136,6 +144,7 @@ const SidebarAddSubject = props => {
               loadingPosition='start'
               startIcon={loading ? <Icon icon='eos-icons:bubble-loading' /> : ''}
               variant='contained'
+              disabled={errors.title ? true : errors.description ? true : false}
             >
               <span>SAVE</span>
             </LoadingButton>

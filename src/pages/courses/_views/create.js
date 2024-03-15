@@ -1,11 +1,8 @@
 // ** React Imports
-import { useState, useEffect, useRef } from 'react'
+import { useState, useRef } from 'react'
 
 // ** MUI Imports
-import { Drawer, Button, styled, TextField, IconButton, Typography } from '@mui/material'
-import Box from '@mui/material/Box'
-import FormControl from '@mui/material/FormControl'
-import FormHelperText from '@mui/material/FormHelperText'
+import { Box, FormControl, FormHelperText, Drawer, Button, styled, TextField, IconButton, Typography } from '@mui/material'
 import LoadingButton from '@mui/lab/LoadingButton'
 import 'react-draft-wysiwyg/dist/react-draft-wysiwyg.css'
 
@@ -17,9 +14,6 @@ import { yupResolver } from '@hookform/resolvers/yup'
 
 // ** Icon Imports
 import Icon from 'src/@core/components/icon'
-
-// ** Component
-import FormEditorField from 'src/layouts/components/common/formEditorField'
 
 // ** API
 import CourseApi from 'src/pages/courses/_components/Apis'
@@ -33,14 +27,14 @@ const Header = styled(Box)(({ theme }) => ({
 
 
 const schema = yup.object().shape({
-  title: yup.string(),
-  description: yup.string().required(),
+  title: yup.string().required().min(3).max(15),
+  description: yup.string().min(3).max(100),
   created_by: yup.string().required()
 })
 
 const SidebarAddCourse = props => {
   // ** Props
-  const { open, toggle, setReload, doReload } = props
+  const { open, toggle, doReload } = props
 
   // ** State
   const [responseMessage, setResponseMessage] = useState('')
@@ -118,19 +112,25 @@ const SidebarAddCourse = props => {
             />
             {errors.title && <FormHelperText sx={{ color: 'error.main' }}>{errors.title.message}</FormHelperText>}
           </FormControl>
-          <label
-            htmlFor='description'
-            style={{
-              fontSize: 16,
-              fontWeight: 500,
-              fontFamily: 'Arial',
-              marginBottom: '10px',
-              display: "block"
-            }}
-          >
-            Description
-          </label>
-          <FormEditorField control={control} name='description' onInit={(evt, editor) => (editorRef.current = editor)} />
+          <FormControl fullWidth sx={{ mb: 6 }}>
+            <Controller
+              name='description'
+              control={control}
+              rules={{ required: true }}
+              render={({ field: { value, onChange } }) => (
+                <TextField
+                  label='Description'
+                  value={value}
+                  rows={5}
+                  multiline
+                  onChange={onChange}
+                  placeholder='Description'
+                  error={Boolean(errors.description)}
+                />
+              )}
+            />
+            {errors.description && <FormHelperText sx={{ color: 'error.main' }}>{errors.description.message}</FormHelperText>}
+          </FormControl>
           <Box sx={{ display: 'flex', alignItems: 'center', justifyContent: 'space-between', marginTop: '30px' }}>
             <LoadingButton
               type='submit'
@@ -139,6 +139,7 @@ const SidebarAddCourse = props => {
               loadingPosition='start'
               startIcon={loading ? <Icon icon='eos-icons:bubble-loading' /> : ''}
               variant='contained'
+              disabled={errors.title ? true : errors.description ? true : false}
             >
               <span>SAVE</span>
             </LoadingButton>

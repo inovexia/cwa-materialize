@@ -4,7 +4,7 @@ import toast from 'react-hot-toast'
 import { useRouter } from 'next/router'
 
 // ** MUI Imports
-import { Grid, Card, TextField, Button, Link, CardHeader, CardContent, FormControl } from '@mui/material'
+import { Grid, Card, TextField, FormHelperText, Button, Link, CardHeader, CardContent, FormControl } from '@mui/material'
 
 // ** Course API
 import CourseApi from 'src/pages/courses/_components/Apis'
@@ -15,6 +15,7 @@ import FormEditorField from 'src/layouts/components/common/formEditorField'
 const CreateSubject = () => {
   const router = useRouter()
   const { guid } = router.query
+
   const {
     control,
     handleSubmit,
@@ -44,6 +45,7 @@ const CreateSubject = () => {
   }
 
   const editorRef = useRef(null)
+
   const log = () => {
     if (editorRef.current) {
       console.log(editorRef.current.getContent())
@@ -95,7 +97,7 @@ const CreateSubject = () => {
                             message: 'Title should be at least 3 characters'
                           },
                           maxLength: {
-                            value: 15,
+                            value: 100,
                             message: 'Title should not exceed 15 characters'
                           }
                         }}
@@ -103,23 +105,25 @@ const CreateSubject = () => {
                     </FormControl>
                   </Grid>
                   <Grid item xs={12} sx={{ mt: 3 }}>
-                    <label
-                      htmlFor='description'
-                      style={{
-                        fontSize: 16,
-                        fontWeight: 500,
-                        fontFamily: 'Arial',
-                        marginBottom: '10px',
-                        display: "block"
-                      }}
-                    >
-                      Description
-                    </label>
-                    <FormEditorField
-                      control={control}
-                      name='description'
-                      onInit={(evt, editor) => (editorRef.current = editor)}
-                    />
+                    <FormControl fullWidth sx={{ mb: 6 }}>
+                      <Controller
+                        name='description'
+                        control={control}
+                        rules={{ required: true }}
+                        render={({ field: { value, onChange } }) => (
+                          <TextField
+                            label='Description'
+                            value={value}
+                            rows={5}
+                            multiline
+                            onChange={onChange}
+                            placeholder='Description'
+                            error={Boolean(errors.description)}
+                          />
+                        )}
+                      />
+                      {errors.description && <FormHelperText sx={{ color: 'error.main' }}>{errors.description.message}</FormHelperText>}
+                    </FormControl>
                   </Grid>
                 </Grid>
                 <Grid container spacing={2} style={{ marginTop: '20px' }}>

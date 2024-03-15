@@ -11,9 +11,8 @@ import toast from 'react-hot-toast'
 // ** API
 import CourseApi from 'src/pages/courses/_components/Apis'
 
-const DeleteCourse = ({ mdOpen, handleClose, guidToDelete, onItemDeleted, doReload }) => {
+const BulkDeleteCourse = ({ mdOpen, handleClose, selectedCourseId, onItemDeleted, doReload }) => {
   const [open, setOpen] = useState(mdOpen)
-
   useEffect(() => {
     setOpen(mdOpen)
   }, [mdOpen])
@@ -40,7 +39,7 @@ const DeleteCourse = ({ mdOpen, handleClose, guidToDelete, onItemDeleted, doRelo
           aria-labelledby='alert-dialog-title'
           aria-describedby='alert-dialog-description'
         >
-          <DialogTitle id='alert-dialog-title'>{'Delete Course'}</DialogTitle>
+          <DialogTitle id='alert-dialog-title'>{'Delete Selected Course'}</DialogTitle>
           <DialogContent>
             <DialogContentText id='alert-dialog-description'>Confirm to delete ?</DialogContentText>
           </DialogContent>
@@ -48,8 +47,8 @@ const DeleteCourse = ({ mdOpen, handleClose, guidToDelete, onItemDeleted, doRelo
             <Button onClick={handleClose} variant='outlined'>
               Cancel
             </Button>
-            <Button onClick={handleDeleteCourse} autoFocus variant='contained'>
-              Confirm
+            <Button onClick={handleDeleteCourse} autoFocus variant='contained' disabled>
+              API Not Ready
             </Button>
           </DialogActions>
         </Dialog>
@@ -58,4 +57,4 @@ const DeleteCourse = ({ mdOpen, handleClose, guidToDelete, onItemDeleted, doRelo
   )
 }
 
-export default DeleteCourse
+export default BulkDeleteCourse

@@ -55,11 +55,11 @@ const Page = () => {
     if (!response.success) return toast.error(response.message)
     setDataList(response.payload.data)
     setMetaData(response.payload.meta)
-  }, [defSearchTerm, status, orderBy, reload])
+  }, [defSearchTerm, status, orderBy])
 
   useEffect(() => {
     getCourses()
-  }, [getCourses])
+  }, [getCourses, reload])
 
 
   /** HANDLE SEARCH */

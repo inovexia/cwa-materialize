@@ -7,12 +7,12 @@ import DialogContent from '@mui/material/DialogContent'
 import DialogContentText from '@mui/material/DialogContentText'
 import DialogTitle from '@mui/material/DialogTitle'
 import toast from 'react-hot-toast'
+
 // ** API
 import CourseApi from 'src/pages/courses/_components/Apis'
 
 const DeleteSubject = ({ mdOpen, handleClose, subjectId, onItemDeleted }) => {
   const [open, setOpen] = useState(mdOpen)
-
   useEffect(() => {
     setOpen(mdOpen)
   }, [mdOpen])
