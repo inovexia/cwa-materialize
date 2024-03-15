@@ -1,28 +1,25 @@
-import React, { useEffect, useState, useRef } from 'react';
-import { useForm, useFieldArray, Controller, useWatch } from 'react-hook-form';
+import { useEffect, useRef, useState } from 'react';
+import { Controller, useFieldArray, useForm, useWatch } from 'react-hook-form';
 
 // ** Component
-import FormEditorField from 'src/layouts/components/common/formEditorField'
-import { Grid, Card, FormControl, Fragment, Link, ListItemButton, Box, List, CardHeader, ListItem, ListItemIcon, ListItemText, Drawer, Button, styled, TextField, IconButton, Typography, CardContent } from '@mui/material'
-import PageHeader from 'src/layouts/components/page-header'
-import ButtonType from 'src/pages/courses/_views/outline/sections/buttonType';
-import NextLink from "next/link"
+import { Box, Button, Card, CardContent, FormControl, Grid, TextField, Typography } from '@mui/material';
+import NextLink from "next/link";
 import { useRouter } from 'next/router';
+import FormEditorField from 'src/layouts/components/common/formEditorField';
+import PageHeader from 'src/layouts/components/page-header';
+import ButtonType from 'src/pages/courses/_views/outline/sections/buttonType';
 
 
-import ContentPdf from 'src/pages/courses/_components/Outline/sections/PdfContent'
-import ContentUrl from 'src/pages/courses/_components/Outline/sections/UrlContent'
-import ContentVideo from 'src/pages/courses/_components/Outline/sections/VideoContent'
-import ContentYoutubeUrl from 'src/pages/courses/_components/Outline/sections/YoutubeUrl'
-import HtmlCode from 'src/pages/courses/_components/Outline/sections/HtmlCode'
-import ContentImage from 'src/pages/courses/_components/Outline/sections/ImageContent'
+import ContentImage from 'src/pages/courses/_components/Outline/sections/ImageContent';
+import ContentPdf from 'src/pages/courses/_components/Outline/sections/PdfContent';
+import ContentVideo from 'src/pages/courses/_components/Outline/sections/VideoContent';
 
-import { AddSection } from "src/pages/courses/_models/SectionModel"
 import toast from 'react-hot-toast';
+import { AddSection } from "src/pages/courses/_models/SectionModel";
 
 const Create = () => {
   const router = useRouter()
-  const { lessonId } = router.query
+  const { guid, lessonId, subjectId } = router.query
   const { control, register, reset, handleSubmit, formState: { errors } } = useForm();
 
   const { fields, append, remove } = useFieldArray({
@@ -90,6 +87,8 @@ const Create = () => {
         <Grid item xs={12}>
           <PageHeader
             title={<Typography variant='h5'>Create Section</Typography>}
+            buttonHref={`/courses/${guid}/subjects/${subjectId}/lesson/${lessonId}/sections`}
+            buttonTitle='Back'
           />
         </Grid>
       </Grid>
@@ -119,7 +118,7 @@ const Create = () => {
                           label='Title'
                           variant='outlined'
                           error={!!errors.title}
-                          helperText={errors.title && 'Field must be between 3 and 15 characters'}
+                          helperText={errors.title && 'Field must be between 3 and 100 characters'}
                         />
                       )}
                       control={control}
@@ -131,8 +130,8 @@ const Create = () => {
                           message: 'Title should be at least 3 characters'
                         },
                         maxLength: {
-                          value: 15,
-                          message: 'Title should not exceed 15 characters'
+                          value: 100,
+                          message: 'Title should not exceed 100 characters'
                         }
                       }}
                     />

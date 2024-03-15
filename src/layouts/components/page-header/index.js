@@ -1,5 +1,4 @@
 // ** MUI Imports
-import Grid from '@mui/material/Grid'
 import Box from '@mui/material/Box'
 import Button from '@mui/material/Button'
 
@@ -9,7 +8,7 @@ const PageHeader = props => {
 
   return (
     <Box sx={{ width: '100%', display: 'flex', alignItems: 'left', justifyContent: 'space-between' }}>
-      <Box className='actions-left' sx={{ mr: 2, alignItems: 'left' }}>
+      <Box className='actions-left' sx={{ mr: 2, alignItems: 'left', maxWidth: '80%' }}>
         {title}
         {subtitle || null}
       </Box>
