@@ -32,9 +32,11 @@ export function CardComponent(props) {
     if (!updatedData.success) return
     router.push(`/courses/${guid}/subjects`)
   }
+
   const deleteItem = () => {
     setOpenModal(true)
   }
+
   return (
     <>
       <Card>

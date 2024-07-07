@@ -1,6 +1,7 @@
 // ** React Imports
 import { useState, useRef } from 'react'
 import { useRouter } from 'next/router'
+
 // ** MUI Imports
 import { Drawer, useTheme, Grid, styled, TextField, Button, IconButton, Typography, Box, FormControl, FormHelperText } from '@mui/material'
 
@@ -22,7 +23,7 @@ import FormEditorField from 'src/layouts/components/common/formEditorField'
 // ** Action Module
 import { AddOnlineClass } from 'src/pages/onlineclass/_models/OnlineClassModel'
 
-// ** date picker component 
+// ** date picker component
 import PickersBasic from 'src/lib/common/datepicker/PickersBasic'
 
 const Header = styled(Box)(({ theme }) => ({
@@ -41,10 +42,12 @@ const schema = yup.object().shape({
 const SidebarAddMeeting = props => {
   const router = useRouter()
   const { guid } = router.query
+
   //popperPlacement
   const theme = useTheme()
   const { direction } = theme
   const popperPlacement = direction === 'ltr' ? 'bottom-start' : 'bottom-end'
+
   // ** Props
   const { open, toggle, setReload } = props
 
@@ -61,6 +64,8 @@ const SidebarAddMeeting = props => {
   const handleEndDateChange = (date) => {
     setEndDate(date);
   };
+
+
   // ** Hooks
   const {
     reset,
@@ -98,6 +103,7 @@ const SidebarAddMeeting = props => {
   }
 
   const editorRef = useRef(null)
+
   const log = () => {
     if (editorRef.current) {
       console.log(editorRef.current.getContent())

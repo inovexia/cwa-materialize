@@ -77,7 +77,7 @@ const CreateQuestionForm = props => {
       }
     }
     fetchData()
-  }, [guid])
+  }, [guid, reset])
 
   /** SAVE QUESTION  */
   const onSubmit = async (data) => {

@@ -3,6 +3,7 @@ import { useState } from 'react'
 
 // ** Next Import
 import Link from 'next/link'
+
 // ** MUI Components
 import Box from '@mui/material/Box'
 import Grid from '@mui/material/Grid'
@@ -17,8 +18,10 @@ import InputAdornment from '@mui/material/InputAdornment'
 import { styled, useTheme } from '@mui/material/styles'
 import MuiCard from '@mui/material/Card'
 import FormHelperText from '@mui/material/FormHelperText'
+
 // ** Icon Imports
 import Icon from 'src/@core/components/icon'
+
 // ** Third Party Imports
 import Cleave from 'cleave.js/react'
 import { useForm, Controller } from 'react-hook-form'
@@ -79,6 +82,7 @@ const defaultValues = {
   val5: '',
   val6: ''
 }
+
 const StepOtpVerification = ({ handleNext, handlePrev }) => {
   // ** State
   const [isBackspace, setIsBackspace] = useState(false)

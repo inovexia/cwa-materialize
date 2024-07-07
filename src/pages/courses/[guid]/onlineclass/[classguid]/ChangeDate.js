@@ -5,12 +5,14 @@ import CardSnippet from 'src/@core/components/card-snippet'
 
 // ** Styled Component
 import DatePickerWrapper from 'src/@core/styles/libs/react-datepicker'
+
 // ** Toast Imports
 import toast from 'react-hot-toast'
 
 // ** Icon Imports
 import Icon from 'src/@core/components/icon'
 import { useRouter } from 'next/router'
+
 // ** Actions Imports
 import { AddExistingOnlineClass } from 'src/pages/courses/_models/OnlineClassModel'
 
@@ -20,10 +22,13 @@ const ChangeDateOnlineClass = (props) => {
   const { classguid } = props
   const [startDate, setStartDate] = useState(new Date()); // Initial start date
   const [endDate, setEndDate] = useState(new Date());
+
   //popperPlacement
   const theme = useTheme()
   const { direction } = theme
   const popperPlacement = direction === 'ltr' ? 'bottom-start' : 'bottom-end'
+
+
   // Initial end date
   const handleStartDateChange = (date) => {
     setStartDate(date);
@@ -32,6 +37,7 @@ const ChangeDateOnlineClass = (props) => {
   const handleEndDateChange = (date) => {
     setEndDate(date);
   };
+
   // ** State
   const [open, setOpen] = useState(false)
 

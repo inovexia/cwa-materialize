@@ -1,6 +1,7 @@
 import React, { useState } from 'react';
 import ButtonType from './buttonType';
-import DynamicFields from './demo';
+
+//import DynamicFields from './demo';
 
 const CreateSection = () => {
   const [selectedType, setSelectedType] = useState(null);
@@ -12,7 +13,7 @@ const CreateSection = () => {
   return (
     <div>
       <ButtonType handleDrawerContent={handleDrawerContent} />
-      <DynamicFields selectedType={selectedType} />
+      {/* <DynamicFields selectedType={selectedType} /> */}
     </div>
   );
 };

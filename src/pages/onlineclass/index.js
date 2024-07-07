@@ -28,6 +28,7 @@ const Page = () => {
   const [drawerOpen, setDrawerOpen] = useState(false)
   const [reload, setReload] = useState(0)
   const toggleCreateDrawer = () => setDrawerOpen(!drawerOpen)
+
   /** GET ALL Online Class */
   useEffect(() => {
     const fetchData = async () => {
@@ -46,10 +47,13 @@ const Page = () => {
     }
     fetchData()
   }, [searchTerm])
+
+
   /** HANDLE SEARCH */
   const handleSearch = useCallback(value => {
     setSearchTerm(value)
   }, [])
+
   return (
     <>
       <Grid container spacing={6}>
@@ -70,6 +74,7 @@ const Page = () => {
                   <Toolbar
                     searchTerm={searchTerm}
                     handleSearch={handleSearch}
+
                   // status={status}
                   // handleStatus={handleStatus}
                   // type={type}
@@ -80,6 +85,7 @@ const Page = () => {
 
                   <>
                     <OnlineClassList
+
                       // key={i}
                       // count={i + 1}
                       // question={row}
@@ -88,6 +94,7 @@ const Page = () => {
                       responseStatus={responseStatus}
                       responseMessage={responseMessage}
                       meta={metaData}
+
                     // doReload={doReload}
                     />
                     <Divider />

@@ -61,7 +61,7 @@ const Page = () => {
     setMetaData(res.payload.meta)
     setResponseStatus(res.status)
     setResponseMessage(res.message)
-  }, [searchTerm, statusFilter, roleFilter, orderFilter, reload, itemPerPage, currentPage])
+  }, [searchTerm, statusFilter, roleFilter, orderFilter, orderBy, status, reload, itemPerPage, currentPage])
 
   useEffect(() => {
     handleFiltersChange()
@@ -117,6 +117,7 @@ const Page = () => {
 
   /** HANDLE CREATE TEST DRAWER */
   const toggleCreateDrawer = () => setDrawerOpen(!drawerOpen)
+
   return (
     <>
       <Grid container spacing={6}>
@@ -125,6 +126,7 @@ const Page = () => {
             title={<Typography variant='h5'>Enrolment</Typography>}
             subtitle={<Typography variant='body2'>List all Enrolment</Typography>}
             buttonHref='./addenrolment'
+
             // toggleDrawer={toggleCreateDrawer}
             buttonTitle='Enrol Users'
             setReload={setReload}

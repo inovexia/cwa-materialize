@@ -20,6 +20,7 @@ const MyForm = () => {
 
   const onSubmit = (data) => {
     const formData = serialize(data, { indices: false });
+
     // Handle form submission with data
     console.log(formData, data);
   };
@@ -58,7 +59,6 @@ const MyForm = () => {
     </button>
     <button type="submit">Submit</button>
   </form>
-  );
 };
 
 export default MyForm;

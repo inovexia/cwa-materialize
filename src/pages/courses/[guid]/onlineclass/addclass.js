@@ -23,6 +23,7 @@ const ExistingOnlineClasses = () => {
           <PageHeader
             title={<Typography variant='h5'>Add existing class into the course</Typography>}
             subtitle={<Typography variant='body2'>List of all online classes</Typography>}
+
           // setReload={setReload}
           // doReload={doReload}
           />

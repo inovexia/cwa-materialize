@@ -16,6 +16,8 @@ export async function GetOnlineClass(data) {
 
   return response
 }
+
+
 /** Create Online Class*/
 export async function AddOnlineClass(data) {
 

@@ -89,7 +89,7 @@ const UserList = () => {
           />
           <Card>
             {isLoading ?
-              (<CircularProgress />) :
+              (<Box fullWidth className="loader" style={{ textAlign: "center", padding: "50px 0px" }}><CircularProgress /></Box>) :
               (<form>
                 <CardContent>
                   <Toolbar

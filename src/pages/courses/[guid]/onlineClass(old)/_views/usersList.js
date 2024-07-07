@@ -15,6 +15,7 @@ import {
 } from '@mui/material'
 import Translations from 'src/layouts/components/Translations'
 import CustomAvatar from 'src/@core/components/mui/avatar'
+
 // ** Utils Import
 import { getInitials } from 'src/@core/utils/get-initials'
 
@@ -33,6 +34,8 @@ export default function BasicTable({
   const [guidToDelete, setGuidToDelete] = useState('')
   const [openModal, setOpenModal] = useState(false)
   const [openArcModal, setOpenArcModal] = useState(false)
+
+
   // Bulk Checkbox
   const handleBulkCheckboxChange = () => {
     if (checkedIds.length === dataList.length) {
@@ -47,6 +50,7 @@ export default function BasicTable({
     setGuidToDelete(guid)
     setOpenModal(true)
   }
+
   const handleDeleteClick = (guid, onClose) => {
     handleClickOpen(guid)
     onClose()
@@ -57,10 +61,13 @@ export default function BasicTable({
     setGuidToDelete(guid)
     setOpenArcModal(true)
   }
+
   const handleArchiveClick = (guid, onClose) => {
     handleClickArcOpen(guid)
     onClose()
   }
+
+
   // Checkbox  Change
   const handleCheckboxChange = userId => {
     const isChecked = checkedIds.includes(userId)
@@ -70,11 +77,15 @@ export default function BasicTable({
       setCheckedIds([...checkedIds, userId])
     }
   }
+
+
   // Close Modal
   const handleCloseModal = () => {
     setOpenModal(false)
     setOpenArcModal(false)
   }
+
+
   // Delete user
   const handleUserDeleted = async () => {
     const updatedUsers = await MeetingApi.getAllUsers()

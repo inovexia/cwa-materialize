@@ -1,10 +1,12 @@
 import React, { useEffect, useRef } from 'react';
 import { useForm, useFieldArray } from 'react-hook-form';
+
 // ** Component
 import FormEditorField from 'src/layouts/components/common/formEditorField'
 
 const DynamicFields = ({ selectedType }) => {
   const { control, register, reset, handleSubmit } = useForm();
+
   const { fields, append, remove } = useFieldArray({
     control,
     name: 'items',
@@ -25,8 +27,9 @@ const DynamicFields = ({ selectedType }) => {
     if (selectedType) {
       handleAddField();
     }
-  }, [selectedType]);
+  }, [selectedType, handleAddField]);
   const editorRef = useRef(null)
+
   return (
     <form onSubmit={handleSubmit(onSubmit)}>
       {fields.map((field, index) => (

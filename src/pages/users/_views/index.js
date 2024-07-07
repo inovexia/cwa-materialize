@@ -4,6 +4,7 @@ import React, { useState, useCallback } from 'react'
 // ** MUI Imports
 import {
   Button,
+  Alert,
   Box,
   Grid,
   Table,
@@ -21,7 +22,7 @@ import {
   Tooltip,
   Checkbox,
   Switch,
-  Menu, MenuItem
+  Menu, MenuItem, CircularProgress
 } from '@mui/material'
 import { visuallyHidden } from '@mui/utils'
 import { alpha } from '@mui/material/styles'
@@ -41,9 +42,11 @@ import UserApi from 'src/pages/users/_components/apis'
 // ** Actions Imports
 import { ChangeStatus } from 'src/pages/tests/_models/TestModel'
 import ActionMenu from 'src/pages/users/_components/actionMenu'
+import BulkActionMenu from 'src/pages/users/_components/bulkActionMenu'
 import DeleteUser from 'src/pages/users/_views/deleteUser'
 import ArchiveUser from 'src/pages/users/_views/archiveUser'
 import SwitchField from 'src/pages/users/_components/Switch'
+import { right } from '@popperjs/core'
 
 const LinkStyled = styled(Link)(({ theme }) => ({
   fontWeight: 600,
@@ -166,7 +169,7 @@ function EnhancedTableHead(props) {
 
 const EnhancedTableToolbar = props => {
   // ** Prop
-  const { numSelected } = props
+  const { numSelected, selected } = props
 
   return (
     <Toolbar
@@ -178,9 +181,19 @@ const EnhancedTableToolbar = props => {
       }}
     >
       {numSelected > 0 ? (
-        <Typography sx={{ flex: '1 1 100%' }} color='inherit' variant='subtitle1' component='div'>
-          {numSelected} selected
-        </Typography>
+        <Box
+          width="100%"
+          my={4}
+          display="flex"
+          alignItems="center"
+          justifyContent={'space-between'}>
+          <Typography sx={{ flex: '1 1 100%' }} color='inherit' variant='subtitle1' component='div'>
+            {numSelected} selected
+          </Typography>
+          <Box sx={{ flex: '1 1 100%' }} color='inherit' variant='subtitle1' component='div' textAlign={right}>
+            <BulkActionMenu selected={selected} />
+          </Box>
+        </Box>
       ) : (
         ''
       )}
@@ -189,6 +202,10 @@ const EnhancedTableToolbar = props => {
 }
 
 const EnhancedTable = (props) => {
+
+  // ** Props
+  const { responseMessage, dataList, setDataList, setMetaData, selectedLength, setSelectedLength, doReload } = props
+
   // ** States
   const [page, setPage] = useState(0)
   const [order, setOrder] = useState('asc')
@@ -198,9 +215,6 @@ const EnhancedTable = (props) => {
   const [guidToDelete, setGuidToDelete] = useState('')
   const [openModal, setOpenModal] = useState(false)
   const [openArcModal, setOpenArcModal] = useState(false)
-
-  // ** Props
-  const { responseMessage, dataList, setDataList, setMetaData, selectedLength, setSelectedLength } = props
 
   const handleRequestSort = (event, property) => {
     const isAsc = orderBy === property && order === 'asc'
@@ -298,9 +312,11 @@ const EnhancedTable = (props) => {
 
   return (
     <>
-      {selected.length === 0 ? "" : (<EnhancedTableToolbar numSelected={selected.length} />)}
-      <TableContainer component={Paper}>
-        <Table sx={{ minWidth: 750 }} aria-labelledby='tableTitle'>
+      {selected.length === 0 ? "" : (<EnhancedTableToolbar numSelected={selected.length} selected={selected} />)}
+      <TableContainer component={Paper} className="user-list">
+        {props.loader ? (<Box fullWidth className="loader" style={{ textAlign: "center", padding: "50px 0px" }}>
+          <CircularProgress />
+        </Box>) : dataList.length > 0 ? (<Table sx={{ minWidth: 750 }} aria-labelledby='tableTitle'>
           <EnhancedTableHead
             order={order}
             orderBy={orderBy}
@@ -389,7 +405,8 @@ const EnhancedTable = (props) => {
               </TableRow>
             )}
           </TableBody>
-        </Table>
+        </Table>) : (<Alert fullWidth className="loader" color="warning" style={{ textAlign: "left", padding: "10px" }}>User not found!</Alert>)}
+
       </TableContainer>
       <TablePagination
         page={page}

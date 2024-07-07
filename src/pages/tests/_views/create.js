@@ -150,11 +150,11 @@ const CreateTestForm = props => {
                     fullWidth
                     value={value}
                     defaultValue=''
-                    label='Category'
+                    label='Select Category'
                     labelId='categoryLabel'
                     onChange={onChange}
                     error={Boolean(errors.category_guid)}
-                    inputProps={{ placeholder: 'Select Type' }}
+                    inputProps={{ placeholder: 'Select Category' }}
                   >
                     {categories.length > 0 && categories.map(({ guid, title }, i) =>
                       (<MenuItem value={guid} key={i}>{title}</MenuItem>)

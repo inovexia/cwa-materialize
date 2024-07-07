@@ -58,7 +58,7 @@ const EditCourse = () => {
       }
     }
     fetchData()
-  }, [guid])
+  }, [guid, reset])
 
   if (loading) return null
 

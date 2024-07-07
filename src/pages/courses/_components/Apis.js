@@ -38,6 +38,10 @@ export default class CourseApi {
   static createSection = async ({ lessonId, data }) => await ApiRequest(`/course/lesson/${lessonId}/section/create`, 'POST', { data })
   static previewSection = async sectionId => await ApiRequest(`/course/section/${sectionId}/preview`, 'POST')
 
+  // Content
+  static arrangeContent = async ({ sectionId, data }) => await ApiRequest(`/course/section/${sectionId}/content/arrange`, 'POST', { data })
+
+
   //Test Module
   static filterTest = async ({ guid, data }) => await ApiRequest(`/course/get_tests/${guid}`, 'POST', { data })
   static createTest = async ({ guid, data }) => await ApiRequest(`/course/create_test/${guid}`, 'POST', { data })

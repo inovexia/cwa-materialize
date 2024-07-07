@@ -58,7 +58,7 @@ const schema = yup.object().shape({
 
 const SidebarAddUser = props => {
   // ** Props
-  const { open, toggle } = props
+  const { open, toggle, reload, setReload, doReload } = props
 
   // ** State
   const [responseMessage, setResponseMessage] = useState('')
@@ -106,15 +106,41 @@ const SidebarAddUser = props => {
     fetchData()
   }, [])
 
+  // const handleFormSubmit = async data => {
+  //   setLoading(true)
+  //   const response = await UserApi.createUser(data)
+  //   setLoading(false)
+  //   if (!response.success) return toast.success(response.message)
+  //   props.setReload(true)
+  //   toggle()
+  //   reset()
+  // }
+
   const handleFormSubmit = async data => {
     setLoading(true)
     const response = await UserApi.createUser(data)
     setLoading(false)
-    if (!response.success) return toast.success(response.message)
-    props.setReload(true)
+
+    let message = ''
+    if (!response.success) {
+      if (typeof response.message === 'object') {
+        message = response.message.email || response.message.mobile || 'An error occurred'
+      } else {
+        message = response.message
+      }
+      setResponseMessage(message)
+
+      return
+    }
+
+    setReload(true)
+    doReload()
     toggle()
     reset()
+    setResponseMessage('') // Clear any previous message
   }
+
+
 
   const handleClose = () => {
     toggle()
@@ -134,12 +160,10 @@ const SidebarAddUser = props => {
           <Icon icon='mdi:close' fontSize={20} />
         </IconButton>
       </Header>
-      {responseMessage && responseMessage ? (
+      {responseMessage && (
         <Box sx={{ p: 4 }}>
-          {responseMessage && <FormHelperText sx={{ color: 'error.main' }}>{responseMessage}</FormHelperText>}
+          <FormHelperText sx={{ color: 'warning.main' }}>{responseMessage}</FormHelperText>
         </Box>
-      ) : (
-        ''
       )}
       <Box sx={{ p: 5 }}>
         <form onSubmit={handleSubmit(handleFormSubmit)}>
@@ -235,8 +259,7 @@ const SidebarAddUser = props => {
               render={({ field: { value, onChange } }) => (
                 <Select
                   fullWidth
-
-                  //value={value}
+                  value={value}
                   label='User Role'
                   labelId='userRoleLabel'
                   onChange={onChange}
@@ -366,6 +389,8 @@ const SidebarAddUser = props => {
         </form>
       </Box>
     </Drawer>
+
+
   )
 }
 

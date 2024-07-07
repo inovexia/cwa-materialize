@@ -1,67 +1,83 @@
-// ** React Imports
-import { useState } from 'react'
+"use client"
 
-// ** Next Import
-import Link from 'next/link'
+import { useState, useContext } from 'react';
+import { AppContext } from "Context/GlobalContext";
+import Link from 'next/link';
+import { Box, Button, Checkbox, TextField, InputLabel, Typography, IconButton, CardContent, FormControl, OutlinedInput } from '@mui/material';
+import { styled, useTheme } from '@mui/material/styles';
+import MuiCard from '@mui/material/Card';
+import InputAdornment from '@mui/material/InputAdornment';
+import MuiFormControlLabel from '@mui/material/FormControlLabel';
+import * as yup from 'yup';
+import toast from 'react-hot-toast';
+import { useForm, Controller } from 'react-hook-form';
+import { yupResolver } from '@hookform/resolvers/yup';
+import Icon from 'src/@core/components/icon';
+import themeConfig from 'src/configs/themeConfig';
+import BlankLayout from 'src/@core/layouts/BlankLayout';
+import FooterIllustrationsV1 from './_components/FooterIllustrationsV2';
+import AuthApi from 'src/pages/auth/login/_components/Apis';
+import { useRouter } from 'next/router';
 
-// ** MUI Components
-import Box from '@mui/material/Box'
-import Button from '@mui/material/Button'
-import Divider from '@mui/material/Divider'
-import Checkbox from '@mui/material/Checkbox'
-import TextField from '@mui/material/TextField'
-import InputLabel from '@mui/material/InputLabel'
-import Typography from '@mui/material/Typography'
-import IconButton from '@mui/material/IconButton'
-import CardContent from '@mui/material/CardContent'
-import FormControl from '@mui/material/FormControl'
-import OutlinedInput from '@mui/material/OutlinedInput'
-import { styled, useTheme } from '@mui/material/styles'
-import MuiCard from '@mui/material/Card'
-import InputAdornment from '@mui/material/InputAdornment'
-import MuiFormControlLabel from '@mui/material/FormControlLabel'
-
-// ** Icon Imports
-import Icon from 'src/@core/components/icon'
-
-// ** Configs
-import themeConfig from 'src/configs/themeConfig'
-
-// ** Layout Import
-import BlankLayout from 'src/@core/layouts/BlankLayout'
-
-// ** Demo Imports
-import FooterIllustrationsV1 from './_component/FooterIllustrationsV2'
-
-// ** Styled Components
 const Card = styled(MuiCard)(({ theme }) => ({
   [theme.breakpoints.up('sm')]: { width: 450 }
-}))
+}));
 
 const FormControlLabel = styled(MuiFormControlLabel)(({ theme }) => ({
   '& .MuiFormControlLabel-label': {
     fontSize: '0.875rem',
     color: theme.palette.text.secondary
   }
-}))
+}));
+
+const schema = yup.object().shape({
+  username: yup.string().required(),
+  password: yup.string().required(),
+});
 
 const LoginV1 = () => {
-  // ** State
+  const router = useRouter();
+  const { accessToken, setAccessToken, appSession, setAppSession } = useContext(AppContext)
+
   const [values, setValues] = useState({
-    password: '',
     showPassword: false
-  })
+  });
+  const [disabled, setDisabled] = useState(false)
 
-  // ** Hook
-  const theme = useTheme()
+  const theme = useTheme();
 
-  const handleChange = prop => event => {
-    setValues({ ...values, [prop]: event.target.value })
-  }
+  const {
+    reset,
+    register,
+    control,
+    handleSubmit,
+    formState: { errors }
+  } = useForm({
+    defaultValues: {
+      username: '',
+      password: '',
+      device_name: 'Device Name',
+    },
+    mode: 'onChange',
+    resolver: yupResolver(schema)
+  });
 
   const handleClickShowPassword = () => {
-    setValues({ ...values, showPassword: !values.showPassword })
-  }
+    setValues({ ...values, showPassword: !values.showPassword });
+  };
+
+  const handleFormSubmit = async data => {
+    setDisabled(true)
+    const response = await AuthApi.userLogin(data);
+
+    // setLoading(false)
+    if (!response.success) return toast.error(response.message);
+    setAccessToken(response.payload.token);
+    setAppSession(response.payload.caapis_session);
+    toast.success(response.message);
+    router.push('/');
+    reset();
+  };
 
   return (
     <Box className='content-center'>
@@ -148,33 +164,45 @@ const LoginV1 = () => {
             </Typography>
             <Typography variant='body2'>Please sign-in to your account and start the adventure</Typography>
           </Box>
-          <form noValidate autoComplete='off' onSubmit={e => e.preventDefault()}>
-            <TextField autoFocus fullWidth id='email' label='Email' sx={{ mb: 4 }} />
-            <FormControl fullWidth>
+          <form onSubmit={handleSubmit(handleFormSubmit)}>
+            <TextField
+              autoFocus
+              fullWidth
+              id='email'
+              label='Email'
+              {...register('username')}
+              error={!!errors.username}
+              helperText={errors.username?.message}
+              sx={{ mb: 4 }}
+            />
+            <FormControl fullWidth sx={{ mb: 4 }}>
               <InputLabel htmlFor='auth-login-password'>Password</InputLabel>
-              <OutlinedInput
-                label='Password'
-                value={values.password}
-                id='auth-login-password'
-                onChange={handleChange('password')}
-                type={values.showPassword ? 'text' : 'password'}
-                endAdornment={
-                  <InputAdornment position='end'>
-                    <IconButton
-                      edge='end'
-                      onClick={handleClickShowPassword}
-                      onMouseDown={e => e.preventDefault()}
-                      aria-label='toggle password visibility'
-                    >
-                      <Icon icon={values.showPassword ? 'mdi:eye-outline' : 'mdi:eye-off-outline'} />
-                    </IconButton>
-                  </InputAdornment>
-                }
+              <Controller
+                name="password"
+                control={control}
+                render={({ field }) => (
+                  <OutlinedInput
+                    {...field}
+                    label='Password'
+                    error={!!errors.password}
+                    type={values.showPassword ? 'text' : 'password'}
+                    endAdornment={
+                      <InputAdornment position='end'>
+                        <IconButton
+                          edge='end'
+                          onClick={handleClickShowPassword}
+                          onMouseDown={e => e.preventDefault()}
+                          aria-label='toggle password visibility'
+                        >
+                          <Icon icon={values.showPassword ? 'mdi:eye-outline' : 'mdi:eye-off-outline'} />
+                        </IconButton>
+                      </InputAdornment>
+                    }
+                  />
+                )}
               />
             </FormControl>
-            <Box
-              sx={{ mb: 4, display: 'flex', alignItems: 'center', flexWrap: 'wrap', justifyContent: 'space-between' }}
-            >
+            <Box sx={{ mb: 4, display: 'flex', alignItems: 'center', flexWrap: 'wrap', justifyContent: 'space-between' }}>
               <FormControlLabel
                 label='Remember Me'
                 control={<Checkbox />}
@@ -189,7 +217,7 @@ const LoginV1 = () => {
                 Forgot Password?
               </Typography>
             </Box>
-            <Button fullWidth size='large' type='submit' variant='contained' sx={{ mb: 7 }}>
+            <Button fullWidth size='large' type='submit' variant='contained' sx={{ mb: 7 }} disabled={disabled}>
               Login
             </Button>
             <Box sx={{ display: 'flex', alignItems: 'center', flexWrap: 'wrap', justifyContent: 'center' }}>
@@ -207,8 +235,10 @@ const LoginV1 = () => {
       </Card>
       <FooterIllustrationsV1 />
     </Box>
-  )
-}
-LoginV1.getLayout = page => <BlankLayout>{page}</BlankLayout>
 
-export default LoginV1
+  );
+};
+
+LoginV1.getLayout = page => <BlankLayout>{page}</BlankLayout>;
+
+export default LoginV1;

@@ -6,9 +6,6 @@ import { Button, Link, Grid, Box, Icon, MenuItem, TextField, IconButton } from '
 
 import toast from 'react-hot-toast'
 
-// ** API
-import OnlineClassApi from './_components/apis'
-
 const ShareToolbar = ({
   searchTerm,
   setSearchTerm,

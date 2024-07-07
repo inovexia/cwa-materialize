@@ -1,10 +1,12 @@
 import React, { useEffect, useState, useRef, useCallback } from 'react'
 import { useRouter } from 'next/router'
 import { useForm, Controller } from 'react-hook-form'
+
 // ** MUI Imports
 import { Grid, Card, CardHeader, CardContent, Button, Box, Typography, Menu, useTheme, IconButton, MenuItem, style, Link } from '@mui/material'
 import Icon from 'src/@core/components/icon'
 import toast from 'react-hot-toast'
+
 // import Link from 'next/link';
 // ** Store Imports
 import { useDispatch, useSelector } from 'react-redux'
@@ -15,15 +17,18 @@ import CustomAvatar from 'src/@core/components/mui/avatar'
 
 // ** Core Imports
 import PageHeader from 'src/layouts/components/page-header'
-// ** date picker component 
+
+// ** date picker component
 import PickersBasic from 'src/lib/common/datepicker/PickersBasic'
 import CardSnippet from 'src/@core/components/card-snippet'
 
 // ** Styled Component
 import DatePickerWrapper from 'src/@core/styles/libs/react-datepicker'
+
 // ** Module Specific Imports
 import OnlineClassList from './_views/existingclasslist'
 import OnlineClassApi from './_components/apis'
+
 // import CreateMeeting from './_views/createonlineclass'
 // import Toolbar from './_components/toolbar'
 
@@ -110,9 +115,11 @@ const Page = () => {
   const [metaData, setMetaData] = useState(undefined)
   const [responseStatus, setResponseStatus] = useState(false)
   const [responseMessage, setResponseMessage] = useState('')
+
   // const [drawerOpen, setDrawerOpen] = useState(false)
   const [reload, setReload] = useState(0)
   const [loader, setLoader] = useState(true)
+
   // const [searchTerm, setSearchTerm] = useState('')
   // const [statusFilter, setStatusFilter] = useState('')
   // const [roleFilter, setRoleFilter] = useState('')
@@ -122,6 +129,7 @@ const Page = () => {
   const doReload = () => setReload(r => r + 1)
   const [startDate, setStartDate] = useState(new Date()); // Initial start date
   const [endDate, setEndDate] = useState(new Date());     // Initial end date
+
   const {
     control,
     handleSubmit,
@@ -134,6 +142,7 @@ const Page = () => {
       updated_on: ''
     }
   })
+
   const handleStartDateChange = (date) => {
     setStartDate(date);
   };
@@ -150,6 +159,7 @@ const Page = () => {
       setDataList(res && res.payload.data)
       setMetaData(res && res.payload.meta)
       setResponseMessage(res.message)
+
       // console.log(res)
     }
     fetchData()
@@ -223,6 +233,7 @@ const Page = () => {
       toast.error('Failed to added online class')
     }
   }
+
   return (
     <Grid container spacing={6}>
       <Grid item xs={12}>
@@ -280,6 +291,7 @@ const Page = () => {
                     <Button
                       variant='outlined'
                       size='medium'
+
                       // component={Link}
                       href={`/courses/${guid}/onlineClass`}
                       sx={{ mt: 5, ml: 3 }}

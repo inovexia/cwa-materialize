@@ -9,7 +9,7 @@ import DialogActions from '@mui/material/DialogActions'
 import DialogContentText from '@mui/material/DialogContentText'
 
 // ** Actions Imports
-import { DeleteCategory } from 'src/pages/qb/_models/CategoryModel'
+//import { DeleteCategory } from 'src/pages/qb/_models/CategoryModel'
 
 const DeleteCategoryComponent = ({ guid }) => {
   // ** State

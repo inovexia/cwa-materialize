@@ -62,7 +62,7 @@ const EditUser = () => {
     }
 
     fetchData()
-  }, [id])
+  }, [id, reset])
 
   // ** Get Required Field
   useEffect(() => {

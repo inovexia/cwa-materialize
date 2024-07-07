@@ -12,12 +12,13 @@ import { EditOnlineClass, ViewOnlineClass } from 'src/pages/onlineclass/_models/
 // ** Component
 import FormEditorField from 'src/layouts/components/common/formEditorField'
 
-// ** date picker component 
+// ** date picker component
 import PickersBasic from 'src/lib/common/datepicker/PickersBasic'
 
 const EditOnlineClasses = () => {
   const router = useRouter()
   const { guid } = router.query
+
   // ** state
   const [isLoading, setLoading] = useState(false)
   const [choices, setChoices] = useState([])
@@ -28,6 +29,7 @@ const EditOnlineClasses = () => {
   const theme = useTheme()
   const { direction } = theme
   const popperPlacement = direction === 'ltr' ? 'bottom-start' : 'bottom-end'
+
   // Initial end date
 
   const handleStartDateChange = (date) => {
@@ -37,6 +39,7 @@ const EditOnlineClasses = () => {
   const handleEndDateChange = (date) => {
     setEndDate(date);
   };
+
   const {
     control,
     handleSubmit,
@@ -61,6 +64,7 @@ const EditOnlineClasses = () => {
           toast.error(response.message)
         }
         reset(response.payload)
+
         // if (response.payload) {
         //   setChoices(response.payload)
         //   setCount(response.payload.length)
@@ -68,7 +72,7 @@ const EditOnlineClasses = () => {
       }
     }
     fetchData()
-  }, [guid])
+  }, [guid, reset])
 
   /** EDIT ONLINE CLASS  */
   const onSubmit = async (data) => {

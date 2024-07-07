@@ -65,7 +65,7 @@ const MyForm = () => {
       }
     }
     fetchData()
-  }, [testGuid])
+  }, [testGuid, reset])
 
   const onSubmit = async (formdata) => {
     const formattedData = {

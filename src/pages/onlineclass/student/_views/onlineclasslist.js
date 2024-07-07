@@ -1,12 +1,13 @@
 import React, { useEffect, useState } from 'react'
 
 // ** MUI Imports
-import { Box, Link, Typography, CircularProgress, Paper, Table, TableRow, TableHead, TableBody, TableCell, TableContainer } from '@mui/material'
+import { Box, Link, Typography, CircularProgress, Translations, Paper, Table, TableRow, TableHead, TableBody, TableCell, TableContainer } from '@mui/material'
 
 import CustomAvatar from 'src/@core/components/mui/avatar'
 import Icon from 'src/@core/components/icon'
 import ReactHtmlParser from 'react-html-parser'
 import toast from 'react-hot-toast'
+
 // ** Actions Imports
 import { GetOnlineClass } from 'src/pages/onlineclass/_models/OnlineClassModel'
 
@@ -37,8 +38,10 @@ const Page = () => {
   function extractUrlFromHtml(htmlContent) {
     const urlPattern = /https?:\/\/\S+(?=<\/p>)/ // Match URL until </p>
     const match = htmlContent.match(urlPattern)
+
     return match ? match[0] : ''
   }
+
   return (
     <>
       {isLoading ?
@@ -59,6 +62,7 @@ const Page = () => {
                 {dataList && dataList.length !== 0 ? (
                   dataList.map((item, index) => {
                     const extractedUrl = extractUrlFromHtml(item.details)
+
                     return (
                       <TableRow
                         key={item.guid}

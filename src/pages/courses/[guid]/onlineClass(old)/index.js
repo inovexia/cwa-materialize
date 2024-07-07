@@ -1,5 +1,6 @@
 import React, { useEffect, useState, useRef, useCallback } from 'react'
 import { useRouter } from 'next/router'
+
 // ** MUI Imports
 import { Grid, Card, CardHeader, CardContent, Button, Box, Link, Typography } from '@mui/material'
 import MenuItem from '@mui/material/MenuItem'
@@ -181,6 +182,7 @@ const Page = () => {
     const newSearchQuery = e.target.value
     setSearchQuery(newSearchQuery)
   }
+
   return (
     <>
       <Grid container spacing={6}>

@@ -27,6 +27,7 @@ import Link from 'next/link'
 import ReactHtmlParser from 'react-html-parser'
 
 import Translations from 'src/layouts/components/Translations'
+
 // import extractUrlFromHtml from 'src/lib/common/extractUrlFromHtml'
 
 // ** Icon Imports
@@ -163,16 +164,20 @@ function EnhancedTableHead(props) {
 const RowOptions = ({ guid }) => {
   const [anchorEl, setAnchorEl] = useState(null)
   const open = Boolean(anchorEl)
+
   const handleClick = event => {
     setAnchorEl(event.currentTarget)
   }
+
   const handleClose = () => {
     setAnchorEl(null)
   }
 
   const [drawerOpen, setDrawerOpen] = useState(false)
+
   /** HANDLE CREATE TEST DRAWER */
   const toggleCreateDrawer = () => setDrawerOpen(!drawerOpen)
+
   return (
     <>
       <IconButton
@@ -216,19 +221,24 @@ const RowOptions = ({ guid }) => {
     </>
   )
 }
+
 const RowOptionsCourse = ({ courseGuid, guid }) => {
   const [anchorEl, setAnchorEl] = useState(null)
   const open = Boolean(anchorEl)
+
   const handleClick = event => {
     setAnchorEl(event.currentTarget)
   }
+
   const handleClose = () => {
     setAnchorEl(null)
   }
 
   const [drawerOpen, setDrawerOpen] = useState(false)
+
   /** HANDLE CREATE TEST DRAWER */
   const toggleCreateDrawer = () => setDrawerOpen(!drawerOpen)
+
   return (
     <>
       <IconButton
@@ -275,6 +285,7 @@ const RowOptionsCourse = ({ courseGuid, guid }) => {
     </>
   )
 }
+
 const EnhancedTable = (props) => {
   // ** States
   const [page, setPage] = useState(0)
@@ -282,12 +293,14 @@ const EnhancedTable = (props) => {
   const [rowsPerPage, setRowsPerPage] = useState(10)
   const [orderBy, setOrderBy] = useState('calories')
   const [selected, setSelected] = useState([])
+
   // const [guid, setGuid] = useState('')
   const [testStatus, setTestStatus] = useState(0)
   const [checked, setChecked] = useState(false)
   const [drawerOpen, setDrawerOpen] = useState(false)
   const [reload, setReload] = useState(0)
   const doReload = () => setReload(r => r + 1)
+
   // ** Props
   const { rows, responseStatus, responseMessage, courseGuid, meta } = props
 
@@ -343,6 +356,7 @@ const EnhancedTable = (props) => {
   function extractUrlFromHtml(htmlContent) {
     const urlPattern = /https?:\/\/\S+(?=<\/p>)/ // Match URL until </p>
     const match = htmlContent.match(urlPattern)
+
     return match ? match[0] : ''
   }
 
@@ -370,6 +384,7 @@ const EnhancedTable = (props) => {
                   const isItemSelected = isSelected(row.guid)
                   const labelId = `enhanced-table-checkbox-${index}`
                   const extractedUrl = extractUrlFromHtml(row.details)
+
                   return (
                     <TableRow
                       hover

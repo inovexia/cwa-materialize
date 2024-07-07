@@ -1,64 +1,80 @@
 // ** React Imports
-import { useState } from 'react'
+import { useState, useEffect } from 'react'
+import { useRouter } from 'next/router';
+import debounce from 'lodash/debounce';
 
 
-import { Drawer, styled, Select, Button, MenuItem, TextField, IconButton, InputLabel, Typography, Box, FormControl, FormHelperText, CircularProgress, Card, Grid, CardHeader, CardContent, Divider, Style, List, ListItem, ListItemIcon, ListItemText } from '@mui/material'
 
-import toast from 'react-hot-toast'
-import CustomChip from 'src/@core/components/mui/chip'
-// ** Third Party Imports
-import * as yup from 'yup'
-import { useForm, Controller } from 'react-hook-form'
-import { yupResolver } from '@hookform/resolvers/yup'
+import { Button, Typography, Box, Card, CardContent, List, ListItem, ListItemIcon, ListItemText } from '@mui/material'
+
+import ReactHtmlParser from 'react-html-parser'
+import { ReactSortable } from "react-sortablejs";
 
 // ** Icon Imports
 import Icon from 'src/@core/components/icon'
 
-// ** Actions Imports
-import { AddTest } from 'src/pages/tests/_models/TestModel'
+// API
+import { ArrangeContent } from 'src/pages/courses/_models/ContentModel'
+import CourseApi from '../_components/Apis';
 
-// ** Component Imports
-import PageHeader from 'src/layouts/components/page-header'
+const SectionContent = ({ dataList }) => {
+  const { query: { guid, subjectId, lessonId, sectionId } } = useRouter()
+  const [rows, setRows] = useState([]);
 
-const Header = styled(Box)(({ theme }) => ({
-  display: 'flex',
-  alignItems: 'center',
-  padding: theme.spacing(3, 4),
-  justifyContent: 'space-between'
-}))
+  useEffect(() => {
+    setRows(dataList);
+  }, [dataList]);
 
-const defaultValues = {
-  title: '',
-  type: '',
-  details: '',
-  category: ''
-}
+  // const handleRowOrderChange = (items) => {
+  //   setRows(items);
+  //   const formData = new FormData();
 
-const showErrors = (field, valueLen, min) => {
-  if (valueLen === 0) {
-    return `${field} field is required`
-  } else if (valueLen > 0 && valueLen < min) {
-    return `${field} must be at least ${min} characters`
-  } else {
-    return ''
-  }
-}
+  //   // Iterate over each item in the sorted array
+  //   items.forEach((item, index) => {
+  //     // Assuming item.content.guid is the key you want to append
+  //     formData.append(`content[${item.guid}]`, index + 1);
+  //   });
+  //   console.log(formData)
 
-const schema = yup.object().shape({
-  title: yup.string().required().min(3),
-  type: yup.string().required(),
-  details: yup.string(),
-  category: yup.string()
-})
+  // };
 
+  // const handleRowOrderChange = async (items) => {
+  //   setRows(items);
+  //   const formData = new FormData();
+  //   items.forEach((item, index) => {
+  //     formData.append(`content[${item.guid}]`, index + 1);
+  //   });
+  //   const res = await CourseApi.arrangeContent({ sectionId, data: formData })
+  // }
 
-const SectionContent = () => {
-
+  const handleRowOrderChange = debounce(async (items) => {
+    setRows(items);
+    const formData = new FormData();
+    items.forEach((item, index) => {
+      formData.append(`content[${item.guid}]`, index + 1);
+    });
+    const res = await CourseApi.arrangeContent({ sectionId, data: formData });
+  }, 500);
 
   return (
     <Card>
       <CardContent>
-        <Box sx={{ mb: 3 }}>
+        <ReactSortable list={rows} setList={handleRowOrderChange} style={{ width: "100%", display: "contents" }}>
+          {rows.map((item, index) => (
+            <Card key={index} style={{ marginBottom: "15px", cursor: "move" }}>
+              <CardContent>
+                <Typography variant='span'>
+                  {item.guid}
+                  <br />
+                </Typography>
+                <Typography variant='p'>
+                  {ReactHtmlParser(item.content)}
+                </Typography>
+              </CardContent>
+            </Card>
+          ))}
+        </ReactSortable>
+        {/* <Box sx={{ mb: 3 }}>
           <img
             src="https://images.unsplash.com/photo-1502657877623-f66bf489d236?auto=format&fit=crop&w=800"
             srcSet="https://images.unsplash.com/photo-1502657877623-f66bf489d236?auto=format&fit=crop&w=800&dpr=2 2x"
@@ -68,16 +84,11 @@ const SectionContent = () => {
           />
         </Box>
         <Box sx={{ mb: 3 }}>
-          <Typography variant='h6' sx={{ mb: 2 }}> Description</Typography>
-          <Typography variant='p'>
-            Lorem Ipsum is simply dummy text of the printing and typesetting industry. Lorem Ipsum has been the industry's standard dummy text ever since the 1500s, Lorem Ipsum is simply dummy text of the printing and typesetting industry. Lorem Ipsum has been the industry's standard dummy text ever since the 1500s,
-          </Typography>
-        </Box>
-        <Box sx={{ mb: 3 }}>
           <video
             autoPlay
             loop
             muted
+
             // poster="https://assets.codepen.io/6093409/river.jpg"
             style={{ width: '100%', height: '100%' }}
           >
@@ -87,8 +98,8 @@ const SectionContent = () => {
 
             />
           </video>
-        </Box>
-        <Box sx={{ mb: 3 }}>
+        </Box> */}
+        {/* <Box sx={{ mb: 3 }}>
           <List component='nav' aria-label='main mailbox'>
             <ListItem disablePadding>
               <ListItemIcon sx={{ mr: 1 }}>
@@ -121,13 +132,13 @@ const SectionContent = () => {
               <ListItemText>Lorem ipsum dolor sit amet, </ListItemText>
             </ListItem>
           </List>
-        </Box>
-        <Box sx={{ mb: 3 }}>
+        </Box> */}
+        {/* <Box sx={{ mb: 3 }}>
           <Typography variant='p'>
             Lorem Ipsum is simply dummy text of the printing and typesetting industry. Lorem Ipsum has been the industry's standard dummy text ever since the 1500s, Lorem Ipsum is simply dummy text of the printing and typesetting industry. Lorem Ipsum has been the industry's standard dummy text ever since the 1500s,
           </Typography>
-        </Box>
-        <Box sx={{ mb: 3 }}>
+        </Box> */}
+        {/* <Box sx={{ mb: 3 }}>
           <Box sx={{ mb: 3 }}>
             <Typography variant='p' sx={{ mb: 2 }}>English Grammer PDF</Typography>
           </Box>
@@ -137,8 +148,8 @@ const SectionContent = () => {
           <Button component="label" variant="contained" color="success" size="small" sx={{ ml: 3 }} startIcon={<Icon icon="carbon:view" />}>
             Preview
           </Button>
-        </Box>
-        <Box sx={{ mb: 3 }}>
+        </Box> */}
+        {/* <Box sx={{ mb: 3 }}>
           <Box sx={{ mb: 3 }}>
             <Typography variant='p' sx={{ mb: 2 }}>English Grammer PDF</Typography>
           </Box>
@@ -148,7 +159,7 @@ const SectionContent = () => {
           <Button component="label" variant="contained" color="success" size="small" sx={{ ml: 3 }} startIcon={<Icon icon="carbon:view" />}>
             Preview
           </Button>
-        </Box>
+        </Box> */}
       </CardContent>
     </Card >
   )

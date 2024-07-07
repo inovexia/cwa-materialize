@@ -174,6 +174,7 @@ const Page = () => {
     const newSearchQuery = e.target.value
     setSearchQuery(newSearchQuery)
   }
+
   return (
     <>
       <Grid container spacing={6}>

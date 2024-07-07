@@ -21,7 +21,7 @@ import { ListCourses } from 'src/pages/courses/_models/CourseModel'
 // ** Course API
 import CourseApi from 'src/pages/courses/_components/Apis'
 
-// ** date picker component 
+// ** date picker component
 import PickersBasic from 'src/lib/common/datepicker/PickersBasic'
 
 
@@ -74,7 +74,7 @@ const Page = () => {
     setMetaData(res.payload.meta)
     setResponseStatus(res.status)
     setResponseMessage(res.message)
-  }, [searchTerm, statusFilter, roleFilter, orderFilter, reload, itemPerPage, currentPage])
+  }, [searchTerm, orderBy, status, itemPerPage, currentPage])
 
   useEffect(() => {
     handleFiltersChange()
@@ -130,12 +130,14 @@ const Page = () => {
 
   /** HANDLE CREATE TEST DRAWER */
   const toggleCreateDrawer = () => setDrawerOpen(!drawerOpen)
+
   return (
     <>
       <Grid container spacing={6}>
         <Grid item xs={12}>
           <PageHeader
             title={<Typography variant='h5'>Add Enrolment</Typography>}
+
             // subtitle={<Typography variant='body2'>List all Enrolment</Typography>}
             setReload={setReload}
             doReload={doReload}

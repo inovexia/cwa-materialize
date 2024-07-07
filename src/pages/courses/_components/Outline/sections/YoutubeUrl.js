@@ -48,6 +48,7 @@ const ContentYoutubeUrl = props => {
     const match = url.match(
       /^(?:https?:\/\/)?(?:www\.)?(?:youtube\.com\/(?:[^/]+\/.+\/|(?:v|e(?:mbed)?)\/|.*[?&]v=)|youtu\.be\/)([^"&?\/\s]{11})/
     );
+
     return match ? match[1] : null;
   };
 
@@ -62,12 +63,15 @@ const ContentYoutubeUrl = props => {
     // Implement your logic using the extracted videoId
     console.log('Video ID:', videoId);
   };
+
   // ** Props
   const { open, toggle, setReload, doReload } = props
 
   // ** State
   const [responseMessage, setResponseMessage] = useState('')
   const [loading, setLoading] = useState(false)
+
+
   // ** Hooks
   const {
     reset,
@@ -100,6 +104,7 @@ const ContentYoutubeUrl = props => {
   }
 
   const editorRef = useRef(null)
+
   return (
     <Box>
       <TextField

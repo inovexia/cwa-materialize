@@ -11,6 +11,7 @@ import EnrolUser from 'src/pages/onlineclass/_views/EnrolUserList'
 
 // ** Core Imports
 import PageHeader from 'src/layouts/components/page-header'
+
 const ShareOnlineClasses = () => {
   const router = useRouter()
   const { guid } = router.query
@@ -29,8 +30,10 @@ const ShareOnlineClasses = () => {
             title={<Typography variant='h5'>User already in online class</Typography>}
             subtitle={<Typography variant='body2'>List all Enrolment</Typography>}
             buttonHref={`/onlineclass/${guid}/addUsers`}
+
             // toggleDrawer={toggleCreateDrawer}
             buttonTitle='Add Users'
+
           // setReload={setReload}
           // doReload={doReload}
           />

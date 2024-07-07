@@ -7,9 +7,6 @@ import Icon from 'src/@core/components/icon'
 
 import toast from 'react-hot-toast'
 
-// ** API
-import OnlineClassApi from './_components/apis'
-
 const ShareToolbar = ({
   searchTerm,
   setSearchTerm,
@@ -58,6 +55,7 @@ const ShareToolbar = ({
     const selectedAction = event.target.value
     setBulkAction(selectedAction) // Pass the selected bulk action to the parent
   }
+
   return (
     <Grid container spacing={6}>
       <Grid

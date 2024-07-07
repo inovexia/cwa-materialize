@@ -2,6 +2,7 @@
 import React, { useEffect, useState, useRef } from 'react'
 
 import { useRouter } from 'next/router'
+
 // ** MUI Imports
 import { Grid, Card, Fragment, Link, ListItemButton, Box, List, CardHeader, ListItem, ListItemIcon, ListItemText, Drawer, Button, styled, TextField, IconButton, Typography, CardContent } from '@mui/material'
 import FormControl from '@mui/material/FormControl'
@@ -33,6 +34,7 @@ import CreateSectionRight from '../_views/outline/sections/createrightside'
 const SidebarAddSection = props => {
   const router = useRouter()
   const { id } = router.query
+
   const {
     control,
     handleSubmit,
@@ -45,6 +47,7 @@ const SidebarAddSection = props => {
       created_by: 'ASI8'
     }
   })
+
   // ** Get Current Meeting Details
   useEffect(() => {
     const fetchData = async () => {
@@ -54,7 +57,7 @@ const SidebarAddSection = props => {
       }
     }
     fetchData()
-  }, [id])
+  }, [id, reset])
 
   const updateFormSubmit = async data => {
     const formData = new FormData()
@@ -73,6 +76,7 @@ const SidebarAddSection = props => {
   }
 
   const editorRef = useRef(null)
+
   const log = () => {
     if (editorRef.current) {
       console.log(editorRef.current.getContent())

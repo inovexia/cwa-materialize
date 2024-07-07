@@ -33,6 +33,22 @@ export async function AddTest(data) {
   return response
 }
 
+/** EDIT TEST */
+export async function EditTest(data) {
+
+  const formData = new FormData()
+  if (typeof data === "object") {
+    Object.entries(data).forEach(([key, value]) => {
+      formData.append(key, value)
+    })
+  }
+  const response = await API.editTest({ data: formData })
+  var responseMessage = await responseMessages(response.message)
+  response.message = await responseMessage
+
+  return response
+}
+
 /** CHANGE STATUS */
 export async function ChangeStatus(checked, guid) {
   var testStatus = 0

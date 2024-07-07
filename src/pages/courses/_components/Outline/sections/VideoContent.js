@@ -47,6 +47,8 @@ const ContentVideo = props => {
   // ** State
   const [responseMessage, setResponseMessage] = useState('')
   const [loading, setLoading] = useState(false)
+
+
   // ** Hooks
   const {
     reset,
@@ -79,6 +81,7 @@ const ContentVideo = props => {
   }
 
   const editorRef = useRef(null)
+
   return (
     <Box>
       <label

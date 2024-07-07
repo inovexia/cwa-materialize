@@ -1,7 +1,9 @@
 // ** Next Import
 import Link from 'next/link'
+
 // ** React Imports
 import React, { useEffect, useState, useCallback } from 'react'
+
 // ** MUI Imports
 import { Box, FormControl, InputLabel, Select, MenuItem, Grid, Card, Switch, Button, Typography, CardHeader, CardContent } from '@mui/material'
 
@@ -52,6 +54,7 @@ const connectedRegisterArr = [
     subtitle: 'Use Mobile Number Field',
 
   },
+
   // {
   //   checked: true,
   //   title: 'Mobile',
@@ -59,6 +62,7 @@ const connectedRegisterArr = [
   //   subtitle: 'Use Email Field'
   // }
 ]
+
 const TabRegister = () => {
   // ** State
   const [isLoading, setLoading] = useState(false);
@@ -79,6 +83,7 @@ const TabRegister = () => {
   const formSubmit = async ({ email }) => {
     const formData = new FormData();
     formData.append('email', email);
+
     // Call the API to send data to the server
     const res = await SettingsApi.RequiredPost(formData);
     console.log(res);
@@ -101,7 +106,8 @@ const TabRegister = () => {
     };
 
     fetchData();
-  }, []);
+  }, [setValue]);
+
   return (
     <Grid container spacing={6}>
       {/* Connected Accounts Cards */}

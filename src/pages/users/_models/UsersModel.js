@@ -59,4 +59,20 @@ export async function GetUserDetails(id) {
   return response
 }
 
+/** CHANGE USERS STATUS*/
+export async function ChangeUserStatus(data) {
+
+  const formData = new FormData()
+  if (typeof data === "object") {
+    Object.entries(data).forEach(([key, value]) => {
+      formData.append(key, value)
+    })
+  }
+  const response = await API.changeStatus({ data: formData })
+  var responseMessage = await responseMessages(response.message)
+  response.message = await responseMessage
+
+  return response
+}
+
 

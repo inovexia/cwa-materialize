@@ -6,9 +6,11 @@ import Icon from 'src/@core/components/icon'
 export default function ActionMenu({ id, onDeleteClick, onArchiveClick }) {
   const [anchorEl, setAnchorEl] = useState(null)
   const open = Boolean(anchorEl)
+
   const handleClick = event => {
     setAnchorEl(event.currentTarget)
   }
+
   const handleClose = () => {
     setAnchorEl(null)
   }

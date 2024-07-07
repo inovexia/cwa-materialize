@@ -2,6 +2,7 @@ import React, { useEffect, useState, useCallback } from 'react'
 import { useForm } from 'react-hook-form'
 import { useRouter } from 'next/router'
 import ReactHtmlParser from 'react-html-parser'
+
 // ** MUI Imports
 import { Grid, Button, Box, Link, Typography, CircularProgress, Paper, TableRow, TableHead, TableBody, TableCell, TableContainer, Table, Checkbox, Card, CardContent } from '@mui/material'
 import toast from 'react-hot-toast'
@@ -25,6 +26,7 @@ const Page = (props) => {
   const [isLoading, setLoading] = useState(true)
   const [checkedIds, setCheckedIds] = useState([]);
   const [searchTerm, setSearchTerm] = useState('')
+
   const {
     control,
     handleSubmit,
@@ -41,6 +43,7 @@ const Page = (props) => {
       setCheckedIds([...checkedIds, userId])
     }
   }
+
   const handleBulkCheckboxChange = () => {
     // Toggle all checkboxes at once
     if (checkedIds.length === dataList.length) {
@@ -56,6 +59,7 @@ const Page = (props) => {
       if (guid) {
         const data = {
         }
+
         // if (searchTerm !== "")
         //   data['search'] = searchTerm
         const response = await GetOnlineClasses(guid)
@@ -74,6 +78,7 @@ const Page = (props) => {
   const onSubmit = async (data) => {
     if (checkedIds.length === 0) {
       toast.error('Please select at least one online class into the course.');
+
       return;
     }
     if (guid) {
@@ -93,6 +98,8 @@ const Page = (props) => {
         });
     }
   };
+
+
   /** HANDLE SEARCH */
   const handleSearch = useCallback(value => {
     setSearchTerm(value)
@@ -100,10 +107,12 @@ const Page = (props) => {
   function extractUrlFromHtml(htmlContent) {
     const urlPattern = /https?:\/\/\S+(?=<\/p>)/; // Match URL until </p>
     const match = htmlContent && htmlContent.match(urlPattern); // Check if htmlContent is defined
+
     return match ? match[0] : '';
   }
 
   const extractedUrl = extractUrlFromHtml(dataList.details)
+
   return (
     <>
       {

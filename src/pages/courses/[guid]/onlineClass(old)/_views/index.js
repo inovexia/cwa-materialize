@@ -19,6 +19,7 @@ import Translations from 'src/layouts/components/Translations'
 import CustomAvatar from 'src/@core/components/mui/avatar'
 import Icon from 'src/@core/components/icon'
 import ReactHtmlParser from 'react-html-parser'
+
 // ** Utils Import
 import { getInitials } from 'src/@core/utils/get-initials'
 
@@ -42,6 +43,8 @@ export default function BasicTable({
   const [guidToDelete, setGuidToDelete] = useState('')
   const [openModal, setOpenModal] = useState(false)
   const [openArcModal, setOpenArcModal] = useState(false)
+
+
   // Bulk Checkbox
   const handleBulkCheckboxChange = () => {
     if (checkedIds.length === dataList.length) {
@@ -56,6 +59,7 @@ export default function BasicTable({
     setGuidToDelete(guid)
     setOpenModal(true)
   }
+
   const handleDeleteClick = (guid, onClose) => {
     handleClickOpen(guid)
     onClose()
@@ -66,10 +70,13 @@ export default function BasicTable({
     setGuidToDelete(guid)
     setOpenArcModal(true)
   }
+
   const handleArchiveClick = (guid, onClose) => {
     handleClickArcOpen(guid)
     onClose()
   }
+
+
   // Checkbox  Change
   const handleCheckboxChange = userId => {
     const isChecked = checkedIds.includes(userId)
@@ -79,11 +86,15 @@ export default function BasicTable({
       setCheckedIds([...checkedIds, userId])
     }
   }
+
+
   // Close Modal
   const handleCloseModal = () => {
     setOpenModal(false)
     setOpenArcModal(false)
   }
+
+
   // Delete user
   const handleItemDeleted = async () => {
     const updatedData = await OnlineClassApi.onlineClassList()
@@ -105,9 +116,11 @@ export default function BasicTable({
   function extractUrlFromHtml(htmlContent) {
     const urlPattern = /https?:\/\/\S+(?=<\/p>)/ // Match URL until </p>
     const match = htmlContent.match(urlPattern)
+
     return match ? match[0] : ''
   }
   console.log(responseMessage)
+
   return (
     <>
       <TableContainer component={Paper}>
@@ -132,6 +145,7 @@ export default function BasicTable({
             {dataList && dataList.length !== 0 ? (
               dataList.map((item, index) => {
                 const extractedUrl = extractUrlFromHtml(item.details)
+
                 return (
                   <TableRow
                     key={item.guid}
@@ -196,6 +210,7 @@ export default function BasicTable({
                         <ActionMenu
                           id={item.guid}
                           onDeleteClick={handleDeleteClick}
+
                         //onArchiveClick={handleArchiveClick}
                         />
                       </Grid>

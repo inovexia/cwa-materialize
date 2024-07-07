@@ -15,6 +15,7 @@ import {
 } from '@mui/material'
 import Translations from 'src/layouts/components/Translations'
 import CustomAvatar from 'src/@core/components/mui/avatar'
+
 // ** Utils Import
 import { getInitials } from 'src/@core/utils/get-initials'
 
@@ -37,6 +38,7 @@ export default function BasicTable({ dataList, responseMessage, checkedIds, setC
       setCheckedIds([...checkedIds, userId])
     }
   }
+
   return (
     <>
       <TableContainer component={Paper}>

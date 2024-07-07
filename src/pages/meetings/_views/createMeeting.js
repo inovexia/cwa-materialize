@@ -62,6 +62,8 @@ const SidebarAddMeeting = props => {
   // ** State
   const [responseMessage, setResponseMessage] = useState('')
   const [loading, setLoading] = useState(false)
+
+
   // ** Hooks
   const {
     reset,
@@ -95,11 +97,13 @@ const SidebarAddMeeting = props => {
   }
 
   const editorRef = useRef(null)
+
   const log = () => {
     if (editorRef.current) {
       console.log(editorRef.current.getContent())
     }
   }
+
   return (
     <Drawer
       open={open}

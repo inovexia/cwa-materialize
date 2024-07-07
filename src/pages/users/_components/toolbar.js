@@ -11,6 +11,7 @@ const Toolbar = ({
   checkedLength,
   setBulkAction,
   searchTerm,
+  loader,
   handleSearch,
   statusFilter,
   handleStatus,
@@ -98,21 +99,6 @@ const Toolbar = ({
             <MenuItem value='last_name_desc'>Last Name DESC</MenuItem>
             <MenuItem value='first_name_asc'>First Name ASC</MenuItem>
             <MenuItem value='first_name_desc'>First Name DESC</MenuItem>
-          </TextField>
-        </Box>
-        <Box>
-          <TextField
-            select
-            label='Action'
-            size='small'
-            disabled={selectedLength.length === 0}
-            value={selectedBulkAct}
-            onChange={handleBulkAction}
-          >
-            <MenuItem value='1'>Active</MenuItem>
-            <MenuItem value='0'>Inactive</MenuItem>
-            <MenuItem value='delete'>Delete</MenuItem>
-            <MenuItem value='archive'>Archive</MenuItem>
           </TextField>
         </Box>
       </Grid>

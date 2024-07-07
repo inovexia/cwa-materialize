@@ -5,8 +5,10 @@ import { styled, useTheme } from '@mui/material/styles'
 
 // ** Layout Import
 import BlankLayout from 'src/@core/layouts/BlankLayout'
+
 // ** Configs
 import themeConfig from 'src/configs/themeConfig'
+
 // ** Hooks
 import { useSettings } from 'src/@core/hooks/useSettings'
 

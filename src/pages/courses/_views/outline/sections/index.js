@@ -1,9 +1,8 @@
 // ** React Imports
-import React, { useState, useCallback } from 'react'
+import React, { useState } from 'react'
 
 // ** MUI Imports
 import {
-  Button,
   Box,
   Table,
   TableRow,
@@ -27,6 +26,7 @@ import { alpha } from '@mui/material/styles'
 import NextLink from 'next/link'
 import ReactHtmlParser from 'react-html-parser'
 import { useRouter } from 'next/router'
+import { ReactSortable } from "react-sortablejs";
 
 import Translations from 'src/layouts/components/Translations'
 
@@ -268,9 +268,10 @@ const EnhancedTable = (props) => {
   const [selected, setSelected] = useState([])
   const [testStatus, setTestStatus] = useState(0)
   const [checked, setChecked] = useState(false)
+  const [rows, setRows] = useState(props.rows);
 
   // ** Props
-  const { rows, responseStatus, responseMessage, meta, guid, subjectId, lessonId } = props
+  const { responseStatus, responseMessage, meta, guid, subjectId, lessonId } = props
 
   const handleRequestSort = (event, property) => {
     const isAsc = orderBy === property && order === 'asc'
@@ -321,6 +322,10 @@ const EnhancedTable = (props) => {
   // Avoid a layout jump when reaching the last page with empty rows.
   const emptyRows = page > 0 ? Math.max(0, (1 + page) * rowsPerPage - rows.length) : 0
 
+  const handleRowOrderChange = (items) => {
+    setRows(items);
+  };
+
   return (
     <>
       <EnhancedTableToolbar numSelected={selected.length} />
@@ -336,38 +341,41 @@ const EnhancedTable = (props) => {
             onSelectAllClick={handleSelectAllClick}
           />
           <TableBody>
+            <ReactSortable list={rows} setList={handleRowOrderChange} style={{ width: "100%", display: "contents" }}>
 
-            {/* if you don't need to support IE11, you can replace the `stableSort` call with: rows.slice().sort(getComparator(order, orderBy)) */}
-            {stableSort(rows, getComparator(order, orderBy))
-              .slice(page * rowsPerPage, page * rowsPerPage + rowsPerPage)
-              .map((row, index) => {
-                const isItemSelected = isSelected(row.guid)
-                const labelId = `enhanced-table-checkbox-${index}`
+              {/* if you don't need to support IE11, you can replace the `stableSort` call with: rows.slice().sort(getComparator(order, orderBy)) */}
+              {stableSort(rows, getComparator(order, orderBy))
+                .slice(page * rowsPerPage, page * rowsPerPage + rowsPerPage)
+                .map((row, index) => {
+                  const isItemSelected = isSelected(row.guid)
+                  const labelId = `enhanced-table-checkbox-${index}`
 
-                return (
-                  <TableRow
-                    hover
-                    tabIndex={-1}
-                    key={row.guid}
-                    role='checkbox'
-                    selected={isItemSelected}
-                    aria-checked={isItemSelected}
-                    onClick={event => handleClick(event, row.guid)}
-                  >
-                    <TableCell padding='checkbox'>
-                      <Checkbox checked={isItemSelected} inputProps={{ 'aria-labelledby': labelId }} />
-                    </TableCell>
-                    <TableCell component='th' id={labelId} scope='row' padding='none'>
-                      <Box sx={{ display: 'flex', alignItems: 'flex-start', flexDirection: 'column' }}>
-                        <LinkStyled href={`/courses/${guid}/subjects/${subjectId}/lesson/${lessonId}/sections/${row.guid}/preview/`} onClick={e => e.stopPropagation()}>{row.title}</LinkStyled>
-                        <Typography noWrap variant='caption'>{row.guid}</Typography>
-                      </Box>
-                    </TableCell>
-                    <TableCell ><Switch defaultChecked={row.status === '1' ? true : false} onChange={event => handleChangeStatus(event, row.guid)} /></TableCell>
-                    <TableCell><RowOptions sectionId={row.guid} /></TableCell>
-                  </TableRow>
-                )
-              })}
+                  return (
+                    <TableRow
+                      hover
+                      tabIndex={-1}
+                      key={row.guid}
+                      role='checkbox'
+                      selected={isItemSelected}
+                      aria-checked={isItemSelected}
+                      onClick={event => handleClick(event, row.guid)}
+                      style={{ cursor: "move" }}
+                    >
+                      <TableCell padding='checkbox'>
+                        <Checkbox checked={isItemSelected} inputProps={{ 'aria-labelledby': labelId }} />
+                      </TableCell>
+                      <TableCell component='th' id={labelId} scope='row' padding='none'>
+                        <Box sx={{ display: 'flex', alignItems: 'flex-start', flexDirection: 'column' }}>
+                          <LinkStyled href={`/courses/${guid}/subjects/${subjectId}/lesson/${lessonId}/sections/${row.guid}/preview/`} onClick={e => e.stopPropagation()}>{row.title}</LinkStyled>
+                          <Typography noWrap variant='caption'>{row.guid}</Typography>
+                        </Box>
+                      </TableCell>
+                      <TableCell ><Switch defaultChecked={row.status === '1' ? true : false} onChange={event => handleChangeStatus(event, row.guid)} /></TableCell>
+                      <TableCell><RowOptions sectionId={row.guid} /></TableCell>
+                    </TableRow>
+                  )
+                })}
+            </ReactSortable>
             {emptyRows > 0 && (
               <TableRow
                 sx={{

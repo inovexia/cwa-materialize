@@ -2,6 +2,7 @@
 import React, { useEffect, useState, useRef } from 'react'
 
 import { useRouter } from 'next/router'
+
 // ** MUI Imports
 import { Grid, Card, Fragment, Link, ListItemButton, Box, List, CardHeader, ListItem, ListItemIcon, ListItemText, Drawer, Button, styled, TextField, IconButton, Typography, CardContent } from '@mui/material'
 import FormControl from '@mui/material/FormControl'
@@ -31,6 +32,7 @@ const EditSectionLeft = props => {
 
   const router = useRouter()
   const { id } = router.query
+
   const {
     control,
     handleSubmit,
@@ -43,6 +45,7 @@ const EditSectionLeft = props => {
       created_by: 'ASI8'
     }
   })
+
   // ** Get Current Meeting Details
   useEffect(() => {
     const fetchData = async () => {
@@ -52,7 +55,7 @@ const EditSectionLeft = props => {
       }
     }
     fetchData()
-  }, [id])
+  }, [id, reset])
 
   const updateFormSubmit = async data => {
     const formData = new FormData()
@@ -71,6 +74,7 @@ const EditSectionLeft = props => {
   }
 
   const editorRef = useRef(null)
+
   const log = () => {
     if (editorRef.current) {
       console.log(editorRef.current.getContent())
@@ -100,6 +104,7 @@ const EditSectionLeft = props => {
             autoPlay
             loop
             muted
+
             // poster="https://assets.codepen.io/6093409/river.jpg"
             style={{ width: '100%', height: '100%' }}
           >

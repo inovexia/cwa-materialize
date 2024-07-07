@@ -108,10 +108,10 @@ const Page = () => {
       if (!response.success) {
         toast.error(response.message)
       }
-      setDataList(response.payload.data)
-      setMetaData(response.payload.meta)
-      setResponseStatus(response.status)
-      setResponseMessage(response.message)
+      setDataList(response && response.payload.data)
+      setMetaData(response && response.payload.meta)
+      setResponseStatus(response && response.status)
+      setResponseMessage(response && response.message)
     }
     fetchData()
   }, [searchTerm, statusFilter, roleFilter, orderFilter, itemPerPage, currentPage])
@@ -176,8 +176,6 @@ const Page = () => {
     setCurrentPage(value)
   }, [])
 
-  //console.log(checkedIds);
-
   return (
     <UserContextProvider>
       <Grid container spacing={6}>
@@ -207,6 +205,8 @@ const Page = () => {
                 currentPage={currentPage}
                 handleCurrentPage={handleCurrentPage}
                 setLoader={setLoader}
+                loader={loader}
+                doReload={doReload}
                 checkedLength={checkedIds}
                 bulkAction={bulkAction}
                 setBulkAction={setBulkAction}
@@ -221,6 +221,7 @@ const Page = () => {
               responseMessage={responseMessage}
               loader={loader}
               dataList={dataList}
+              doReload={doReload}
               setDataList={setDataList}
               setMetaData={setMetaData}
               selectedLength={selectedLength}
@@ -237,7 +238,7 @@ const Page = () => {
           </Card>
         </Grid>
       </Grid>
-      <CreateUser open={drawerOpen} toggle={toggleCreateDrawer} setReload={setReload} />
+      <CreateUser open={drawerOpen} toggle={toggleCreateDrawer} reload={reload} setReload={setReload} doReload={doReload} />
     </UserContextProvider>
   )
 }

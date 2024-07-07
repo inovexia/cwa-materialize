@@ -19,7 +19,8 @@ const createData = (title, href, icon) => {
   }
 }
 
-import CourseApi from '../_components/Apis'
+import CourseApi from '../../../_components/Apis'
+
 const Page = () => {
 
   const router = useRouter()
@@ -111,6 +112,7 @@ const Page = () => {
     createData('Archive', "", 'material-symbols:archive-outline'),
     createData('Delete', "", 'material-symbols:delete-outline'),
   ]
+
   return (
     <Grid container spacing={6}>
       <Grid item xs={12}>

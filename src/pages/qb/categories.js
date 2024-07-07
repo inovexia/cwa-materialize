@@ -43,7 +43,7 @@ const Page = () => {
       setDataList(response.payload)
     }
     fetchData()
-  }, [])
+  }, [status])
 
 
 

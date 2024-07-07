@@ -5,6 +5,7 @@ import { Grid, Card, CardContent, Box, Typography, CircularProgress } from '@mui
 import toast from 'react-hot-toast'
 import { useRouter } from 'next/router'
 
+
 // ** Component Imports
 import PageHeader from 'src/layouts/components/page-header'
 
@@ -77,6 +78,8 @@ const Page = () => {
             subtitle={<Typography variant='body2'>List all Subjects</Typography>}
             toggleDrawer={toggleCreateDrawer}
             buttonTitle='Add Subject'
+            buttonTitle2='Back'
+            buttonHref2={`/courses/${guid}/manage`}
             setReload={setReload}
             doReload={doReload}
           />

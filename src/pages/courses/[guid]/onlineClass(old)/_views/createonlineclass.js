@@ -1,9 +1,11 @@
 // ** React Imports
 import { useState, useEffect, useRef } from 'react'
 import { useRouter } from 'next/router'
+
 // ** MUI Imports
 import { Drawer, useTheme, Grid, styled } from '@mui/material'
 import Button from '@mui/material/Button'
+
 // import { styled } from '@mui/material/styles'
 import TextField from '@mui/material/TextField'
 import IconButton from '@mui/material/IconButton'
@@ -31,11 +33,14 @@ import CardSnippet from 'src/@core/components/card-snippet'
 
 // ** Styled Component
 import DatePickerWrapper from 'src/@core/styles/libs/react-datepicker'
+
 // ** API
 import OnlineClassApi from '../_components/apis'
 import AuthApi from 'src/configs/commonConfig'
-// ** date picker component 
+
+// ** date picker component
 import PickersBasic from 'src/lib/common/datepicker/PickersBasic'
+
 const Header = styled(Box)(({ theme }) => ({
   display: 'flex',
   alignItems: 'center',
@@ -62,10 +67,12 @@ const schema = yup.object().shape({
 const SidebarAddMeeting = props => {
   const router = useRouter()
   const { guid } = router.query
+
   //popperPlacement
   const theme = useTheme()
   const { direction } = theme
   const popperPlacement = direction === 'ltr' ? 'bottom-start' : 'bottom-end'
+
   // ** Props
   const { open, toggle, setReload } = props
 
@@ -82,6 +89,8 @@ const SidebarAddMeeting = props => {
   const handleEndDateChange = (date) => {
     setEndDate(date);
   };
+
+
   // ** Hooks
   const {
     reset,
@@ -94,8 +103,10 @@ const SidebarAddMeeting = props => {
       title: '',
       details: '',
       created_on: ''
+
       // created_by: 'ASI8'
     },
+
     // mode: 'onChange',
     // resolver: yupResolver(schema)
   })
@@ -134,12 +145,14 @@ const SidebarAddMeeting = props => {
   }
 
   const editorRef = useRef(null)
+
   const log = () => {
     if (editorRef.current) {
       console.log(editorRef.current.getContent())
     }
   }
   const toggleCreateDrawer = () => setDrawerOpen(!drawerOpen)
+
   return (
     <Drawer
       open={open}

@@ -45,6 +45,8 @@ const Page = () => {
       setCheckedIds([...checkedIds, userId])
     }
   }
+
+
   //  Bulk activate user
   const handleSelectedBulkAction = async selectedBulkAct => {
     setLoader(true)
@@ -83,7 +85,7 @@ const Page = () => {
     setMetaData(res.payload.meta)
     setResponseStatus(res.status)
     setResponseMessage(res.message)
-  }, [searchTerm, statusFilter, roleFilter, orderFilter, reload, itemPerPage, currentPage])
+  }, [searchTerm, statusFilter, roleFilter, orderFilter, reload, itemPerPage, currentPage, reload])
 
   useEffect(() => {
     handleFiltersChange()
@@ -129,6 +131,7 @@ const Page = () => {
       toast.error(res.message)
     }
   }
+
   return (
     <>
       <Grid container spacing={6}>

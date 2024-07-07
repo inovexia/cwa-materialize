@@ -119,6 +119,7 @@ const ViewCourse = () => {
     }
     fetchData()
   }, [guid])
+
   return (
     <Grid container spacing={6}>
       <Grid item xs={12}>

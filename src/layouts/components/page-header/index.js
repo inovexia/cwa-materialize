@@ -4,7 +4,7 @@ import Button from '@mui/material/Button'
 
 const PageHeader = props => {
   // ** Props
-  const { title, subtitle, toggleDrawer, buttonTitle, buttonHref } = props
+  const { title, subtitle, toggleDrawer, buttonTitle, buttonHref, buttonTitle2, buttonHref2 } = props
 
   return (
     <Box sx={{ width: '100%', display: 'flex', alignItems: 'left', justifyContent: 'space-between' }}>
@@ -21,6 +21,11 @@ const PageHeader = props => {
         {buttonHref && (
           <Button sx={{ mb: 2 }} href={buttonHref} variant='contained'>
             {buttonTitle}
+          </Button>
+        )}
+        {buttonHref2 && (
+          <Button sx={{ mb: 2, ml: 2 }} href={buttonHref2} variant='contained' color='secondary'>
+            {buttonTitle2}
           </Button>
         )}
       </Box>

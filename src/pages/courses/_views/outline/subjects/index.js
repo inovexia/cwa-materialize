@@ -153,7 +153,7 @@ function EnhancedTableHead(props) {
 
 const EnhancedTableToolbar = props => {
   // ** Prop
-  const { numSelected, onCloseBar } = props
+  const { numSelected, onCloseBar, closeBar } = props
 
   return (
     numSelected !== 0 ?
@@ -307,6 +307,7 @@ const EnhancedTable = (props) => {
   }
 
   const handleClick = (event, guid) => {
+    event.stopPropagation();
     const selectedIndex = selected.indexOf(guid)
     let newSelected = []
     if (selectedIndex === -1) {
@@ -361,7 +362,8 @@ const EnhancedTable = (props) => {
     setOpenModal(true);
   };
 
-  const closeBar = () => {
+  const closeBar = (e) => {
+    e.stopPropagation();
     setToolbarVisible(false);
   }
 

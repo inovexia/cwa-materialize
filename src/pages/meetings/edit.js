@@ -39,7 +39,7 @@ const EditUser = () => {
     }
 
     fetchData()
-  }, [id])
+  }, [id, reset])
 
   const updateFormSubmit = async data => {
     const formData = new FormData()

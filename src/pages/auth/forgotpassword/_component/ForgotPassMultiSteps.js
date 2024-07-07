@@ -21,14 +21,17 @@ import StepperWrapper from 'src/@core/styles/mui/stepper'
 const steps = [
   {
     title: 'Username & Password',
+
     // subtitle: 'Account Details'
   },
   {
     title: 'Enter OTP',
+
     // subtitle: 'Enter Information'
   },
   {
     title: 'Change Password',
+
     // subtitle: 'Payment Details'
   }
 ]

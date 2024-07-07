@@ -29,6 +29,7 @@ const SwitchField = ({ id, status, doReload }) => {
       toast.error('Status not changed')
     }
   }
+
   return (
     <Box>
       <FormGroup row>

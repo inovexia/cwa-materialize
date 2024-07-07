@@ -120,6 +120,8 @@ const Page = () => {
         <PageHeader
           title={<Typography variant='h5' component="h1">{course.title}</Typography>}
           subtitle={<Typography variant='body2'>{ReactHtmlParser(course.description)}</Typography>}
+          buttonTitle='Back'
+          buttonHref={`/courses/`}
         />
       </Grid>
       <Grid item xs={12} md={6}>

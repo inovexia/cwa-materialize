@@ -45,6 +45,7 @@ const MyMeetings = () => {
   function extractUrlFromHtml(htmlContent) {
     const urlPattern = /https?:\/\/\S+(?=<\/p>)/ // Match URL until </p>
     const match = htmlContent.match(urlPattern)
+
     return match ? match[0] : ''
   }
 
@@ -98,6 +99,7 @@ const MyMeetings = () => {
                       {dataList && dataList.length !== 0 ? (
                         dataList.map((item, index) => {
                           const extractedUrl = extractUrlFromHtml(item.details)
+
                           return (
                             <TableRow
                               key={item.guid}
@@ -176,6 +178,7 @@ const MyMeetings = () => {
                       {dataList && dataList.length !== 0 ? (
                         dataList.map((item, index) => {
                           const extractedUrl = extractUrlFromHtml(item.details)
+
                           return (
                             <TableRow
                               key={item.guid}
@@ -254,6 +257,7 @@ const MyMeetings = () => {
                       {dataList && dataList.length !== 0 ? (
                         dataList.map((item, index) => {
                           const extractedUrl = extractUrlFromHtml(item.details)
+
                           return (
                             <TableRow
                               key={item.guid}

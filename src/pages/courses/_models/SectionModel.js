@@ -19,7 +19,7 @@ export async function AddSection(lessonId, data) {
 }
 
 /** Preview Section */
-export async function SectionPreview(sectionId) {
+export async function SecPreview(sectionId) {
 
   const formData = new FormData()
   if (typeof data === "object") {

@@ -33,8 +33,10 @@ export default class OnlineClassApi {
 
   // Change User Status
   static changeStatus = async data => await ApiRequest(`/users/change_status`, 'POST', { data })
+
   // Get All Subjects of course
   static getSubjects = async guid => await ApiRequest(`/course/${guid}/subjects`, 'POST')
+
   // Online Class list
   static onlineClassList = async guid => await ApiRequest(`course/zoom/get_meetings/${guid}`, 'POST')
 

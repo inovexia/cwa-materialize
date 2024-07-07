@@ -9,12 +9,15 @@ const Pagination = ({ currentPage, onPageChange, itemPerPage, setItemPerPage, me
   const handleChange = (event, value) => {
     onPageChange(value)
   }
+
+
   // Filter By Status
   const handlePerPage = event => {
     const selectedItem = event.target.value
     setSelectedNum(selectedItem)
     setItemPerPage(selectedItem)
   }
+
   return (
     <>
       <Box

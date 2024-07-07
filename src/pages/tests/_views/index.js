@@ -154,12 +154,15 @@ function EnhancedTableHead(props) {
   )
 }
 
+
+
 const EnhancedTableToolbar = props => {
   // ** Prop
   const { numSelected } = props
 
   return (
     <Toolbar
+      style={{ minHeight: "unset" }}
       sx={{
         px: theme => `${theme.spacing(5)} !important`,
         ...(numSelected > 0 && {
@@ -168,19 +171,27 @@ const EnhancedTableToolbar = props => {
       }}
     >
       {numSelected > 0 ? (
-        <Typography sx={{ flex: '1 1 100%' }} color='inherit' variant='subtitle1' component='div'>
-          {numSelected} selected
-        </Typography>
+        <Box
+          width="100%"
+          my={4}
+          display="flex"
+          alignItems="center"
+          justifyContent={'space-between'}>
+          <Typography sx={{ flex: '1 1 100%' }} color='inherit' variant='subtitle1' component='div'>
+            {numSelected} selected
+          </Typography>
+          <Box sx={{ flex: '1 1 100%' }} color='inherit' variant='subtitle1' component='div' textAlign="right">
+            <Tooltip title='Delete'>
+              <IconButton sx={{ color: 'text.secondary' }}>
+                <Icon icon='mdi:delete-outline' />
+              </IconButton>
+            </Tooltip>
+          </Box>
+        </Box>
+
       ) : (
         ''
       )}
-      {numSelected > 0 ? (
-        <Tooltip title='Delete'>
-          <IconButton sx={{ color: 'text.secondary' }}>
-            <Icon icon='mdi:delete-outline' />
-          </IconButton>
-        </Tooltip>
-      ) : null}
     </Toolbar>
   )
 }
@@ -192,10 +203,12 @@ const RowOptions = ({ guid }) => {
   const rowOptionsOpen = Boolean(anchorEl)
 
   const handleRowOptionsClick = event => {
+    event.stopPropagation()
     setAnchorEl(event.currentTarget)
   }
 
-  const handleRowOptionsClose = () => {
+  const handleRowOptionsClose = (e) => {
+    e.stopPropagation()
     setAnchorEl(null)
   }
 
@@ -230,14 +243,23 @@ const RowOptions = ({ guid }) => {
           onClick={handleRowOptionsClose}
           href={`/tests/${guid}/manage`}
         >
-          <Icon icon='mdi:pencil-outline' fontSize={20} />
+          <Icon icon='material-symbols:manage-history' fontSize={20} />
           Manage
         </MenuItem>
         <MenuItem
           component={Link}
           sx={{ '& svg': { mr: 2 } }}
           onClick={handleRowOptionsClose}
-          href={`/tests/manage`}
+          href={`/tests/${guid}/edit`}
+        >
+          <Icon icon='tabler:edit' fontSize={20} />
+          Edit
+        </MenuItem>
+        <MenuItem
+          component={Link}
+          sx={{ '& svg': { mr: 2 } }}
+          onClick={handleRowOptionsClose}
+          href={`/tests/${guid}/manage`}
         >
           <Icon icon='mdi:eye-outline' fontSize={20} />
           Preview
@@ -246,10 +268,19 @@ const RowOptions = ({ guid }) => {
           component={Link}
           sx={{ '& svg': { mr: 2 } }}
           onClick={handleRowOptionsClose}
-          href='/tests/manage'
+          href={`/tests/${guid}/manage`}
         >
-          <Icon icon='mdi:pencil-outline' fontSize={20} />
+          <Icon icon='uil:setting' fontSize={20} />
           Settings
+        </MenuItem>
+        <MenuItem
+          component={Link}
+          sx={{ '& svg': { mr: 2 } }}
+          onClick={handleRowOptionsClose}
+          href={`/tests/${guid}/manage`}
+        >
+          <Icon icon='material-symbols-light:delete-outline' fontSize={20} />
+          Delete
         </MenuItem>
       </Menu>
     </>
@@ -287,6 +318,7 @@ const EnhancedTable = (props) => {
   }
 
   const handleClick = (event, guid) => {
+    event.stopPropagation()
     const selectedIndex = selected.indexOf(guid)
     let newSelected = []
     if (selectedIndex === -1) {
@@ -311,7 +343,7 @@ const EnhancedTable = (props) => {
   }
 
   const handleChangeStatus = (async (event, guid) => {
-
+    event.stopPropagation()
     const response = await ChangeStatus(event.target.checked, guid)
     if (response.status) {
       toast.success(response.message)
@@ -328,7 +360,6 @@ const EnhancedTable = (props) => {
   return (
     <>
       <EnhancedTableToolbar numSelected={selected.length} />
-
       <TableContainer component={Paper}>
         <Table sx={{ minWidth: 750 }} aria-labelledby='tableTitle'>
           <EnhancedTableHead
@@ -363,7 +394,7 @@ const EnhancedTable = (props) => {
                     </TableCell>
                     <TableCell component='th' id={labelId} scope='row' padding='none'>
                       <Box sx={{ display: 'flex', alignItems: 'flex-start', flexDirection: 'column' }}>
-                        <LinkStyled href={`/tests/${guid}/manage`}>{row.title}</LinkStyled>
+                        <LinkStyled href={`/tests/${row.guid}/manage`}>{row.title}</LinkStyled>
                         <Typography noWrap variant='caption'>{row.guid}</Typography>
                       </Box>
                     </TableCell>

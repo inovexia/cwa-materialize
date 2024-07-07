@@ -19,7 +19,7 @@ import ContentImage from 'src/pages/courses/_components/Outline/sections/ImageCo
 
 import { AddSection } from "src/pages/courses/_models/SectionModel"
 import toast from 'react-hot-toast';
-import { SectionPreview } from 'src/pages/courses/_models/SectionModel';
+import { SecPreview } from 'src/pages/courses/_models/SectionModel';
 
 const EditSection = () => {
   const router = useRouter()
@@ -39,7 +39,7 @@ const EditSection = () => {
 
   useEffect(() => {
     const fetchData = async () => {
-      const response = await SectionPreview(sectionId);
+      const response = await SecPreview(sectionId);
       setCurrentSection(response.payload);
 
       // Populate form fields with response data
@@ -104,7 +104,7 @@ const EditSection = () => {
 
   useEffect(() => {
     handleAddField();
-  }, [selectedType]);
+  }, [selectedType, handleAddField]);
 
 
   const editorRef = useRef(null)

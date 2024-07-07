@@ -76,7 +76,7 @@ const Create = () => {
 
   useEffect(() => {
     handleAddField();
-  }, [selectedType]);
+  }, [selectedType, handleAddField]);
 
 
   const editorRef = useRef(null)

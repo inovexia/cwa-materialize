@@ -53,6 +53,8 @@ const CreateSectionDrawer = props => {
   const [responseMessage, setResponseMessage] = useState('')
   const [loading, setLoading] = useState(false)
   const [htmlCode, setHtmlCode] = useState('');
+
+
   // ** Hooks
   const {
     reset,
@@ -86,6 +88,7 @@ const CreateSectionDrawer = props => {
   }
 
   const editorRef = useRef(null)
+
   return (
     <Drawer
       open={open}

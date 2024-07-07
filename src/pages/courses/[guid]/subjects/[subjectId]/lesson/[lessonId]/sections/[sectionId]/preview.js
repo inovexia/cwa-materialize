@@ -1,5 +1,6 @@
 // ** React Imports
-import { useState } from 'react'
+import { useState, useEffect } from 'react'
+import { useRouter } from 'next/router'
 
 // ** MUI Imports
 
@@ -15,51 +16,40 @@ import PageHeader from 'src/layouts/components/page-header'
 // import PreviewSection from '../_views/outline/sections/preview'
 import SectionContent from 'src/pages/courses/_views/SectionContent'
 
-const Header = styled(Box)(({ theme }) => ({
-  display: 'flex',
-  alignItems: 'center',
-  padding: theme.spacing(3, 4),
-  justifyContent: 'space-between'
-}))
-
-const defaultValues = {
-  title: '',
-  type: '',
-  details: '',
-  category: ''
-}
-
-const showErrors = (field, valueLen, min) => {
-  if (valueLen === 0) {
-    return `${field} field is required`
-  } else if (valueLen > 0 && valueLen < min) {
-    return `${field} must be at least ${min} characters`
-  } else {
-    return ''
-  }
-}
-
-const schema = yup.object().shape({
-  title: yup.string().required().min(3),
-  type: yup.string().required(),
-  details: yup.string(),
-  category: yup.string()
-})
-
+// API
+import { SecPreview } from 'src/pages/courses/_models/SectionModel'
 
 const SectionPreview = () => {
+  const { query: { guid, subjectId, lessonId, sectionId } } = useRouter()
+  const [dataList, setDataList] = useState([])
+  const [parentData, setParentData] = useState("")
+  const [loader, setLoader] = useState(true)
 
+  //** GET ALL LESSON OF CURRENT SUBJECT */
+  useEffect(() => {
+    const fetchData = async () => {
+      const res = await SecPreview(sectionId)
+      if (!res.success) return setLoader(false)
+      setLoader(false)
+      setParentData(res.payload)
+      setDataList(res.payload.content)
+
+    };
+    fetchData();
+  }, [sectionId]);
 
   return (
     <Grid container spacing={6}>
       <Grid item xs={12}>
         <PageHeader
-          title={<Typography variant='h5'>Preview Subject</Typography>}
-          subtitle={<Typography variant='body2'>All Subject Description</Typography>}
+          title={<Typography variant='h5'>Preview Section</Typography>}
+          subtitle={<Typography variant='body2'>{parentData.title}</Typography>}
+          buttonHref={`/courses/${guid}/subjects/${subjectId}/lesson/${lessonId}/sections`}
+          buttonTitle='Back'
         />
       </Grid>
       <Grid item xs={12}>
-        <SectionContent />
+        <SectionContent dataList={dataList} />
       </Grid>
     </Grid >
   )

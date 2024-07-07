@@ -1,7 +1,9 @@
 // ** React Imports
 import { useState } from 'react'
+
 // ** Next Import
 import Link from 'next/link'
+
 // ** MUI Components
 import Box from '@mui/material/Box'
 import Grid from '@mui/material/Grid'
@@ -15,6 +17,7 @@ import FormControlLabel from '@mui/material/FormControlLabel'
 import OutlinedInput from '@mui/material/OutlinedInput'
 import InputAdornment from '@mui/material/InputAdornment'
 import Checkbox from '@mui/material/Checkbox'
+
 // ** Icon Imports
 import Icon from 'src/@core/components/icon'
 
@@ -24,6 +27,7 @@ const StepChangePassword = ({ handleNext, handlePrev }) => {
     showPassword: false,
     showConfirmPassword: false
   })
+
   const handleChange = prop => event => {
     setValues({ ...values, [prop]: event.target.value })
   }

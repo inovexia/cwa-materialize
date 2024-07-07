@@ -1,7 +1,7 @@
 import React, { useEffect, useState, useCallback } from 'react'
 
 // ** MUI Imports
-import { Grid, Card, CardContent, Box, Typography, CircularProgress } from '@mui/material'
+import { Grid, Card, CardContent, Box, Typography, CircularProgress, List, ListItem } from '@mui/material'
 import { useRouter } from 'next/router'
 import ReactHtmlParser from 'react-html-parser'
 
@@ -15,6 +15,7 @@ import Toolbar from 'src/pages/courses/_components/Outline/sections/Toolbar'
 // ** Course API
 import CourseApi from 'src/pages/courses/_components/Apis'
 import { LessonPreview } from 'src/pages/courses/_models/LessonModel'
+import Icon from 'src/@core/components/icon'
 
 
 
@@ -83,7 +84,6 @@ const Page = () => {
 
   /** HANDLE CREATE TEST DRAWER */
   const toggleCreateDrawer = () => setDrawerOpen(!drawerOpen)
-  console.log(dataList)
 
   return (
     <>
@@ -94,6 +94,8 @@ const Page = () => {
             subtitle={<Typography variant='body2'>{ReactHtmlParser(currentLesson && currentLesson.description)}</Typography>}
             buttonHref={`/courses/${guid}/subjects/${subjectId}/lesson/${lessonId}/sections/create`}
             buttonTitle='Add Section'
+            buttonHref2={`/courses/${guid}/subjects/${subjectId}/lesson`}
+            buttonTitle2='Back'
           />
 
           <Card style={{ marginTop: "20px" }}>

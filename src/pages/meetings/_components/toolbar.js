@@ -64,6 +64,7 @@ const Toolbar = ({
     const selectedAction = event.target.value
     setBulkAction(selectedAction) // Pass the selected bulk action to the parent
   }
+
   return (
     <Grid container spacing={6}>
       <Grid
@@ -83,6 +84,7 @@ const Toolbar = ({
           fullWidth
           value={searchQuery}
           onChange={handleSearchChange}
+
           //onChange={event => setSearchQuery(event.target.value)}
           InputProps={{
             endAdornment: (

@@ -15,6 +15,7 @@ import FormEditorField from 'src/layouts/components/common/formEditorField'
 
 const EditLesson = () => {
   const { query: { guid, subjectId, lessonId }, push } = useRouter()
+
   const {
     control,
     handleSubmit,
@@ -26,6 +27,7 @@ const EditLesson = () => {
       description: '',
     }
   })
+
   // ** Get Current lesson Details
   useEffect(() => {
     const fetchData = async () => {
@@ -35,7 +37,7 @@ const EditLesson = () => {
       }
     }
     fetchData()
-  }, [lessonId])
+  }, [lessonId, reset])
 
 
   const updateFormSubmit = async data => {
@@ -55,6 +57,7 @@ const EditLesson = () => {
   }
 
   const editorRef = useRef(null)
+
   const log = () => {
     if (editorRef.current) {
       console.log(editorRef.current.getContent())

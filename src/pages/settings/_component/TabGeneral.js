@@ -1,17 +1,21 @@
 import { useState, useEffect, useRef } from 'react'
+
 // ** Next Import
 import Link from 'next/link'
 import { ColorPicker, useColor } from "react-color-palette";
 import "react-color-palette/css";
 import toast from 'react-hot-toast'
 import { useForm, Controller } from 'react-hook-form'
+
 // ** MUI Imports
 import { Box, Grid, Card, Switch, Button, Typography, CardHeader, CardContent } from '@mui/material'
 
 // ** Icon Imports
 import Icon from 'src/@core/components/icon'
+
 // ** API
 import SettingsApi from './Apis'
+
 const connectedAccountsArr = [
   {
     checked: false,
@@ -33,6 +37,7 @@ const connectedAccountsArr = [
 const TabGeneral = () => {
   const [color, setColor] = useColor("#561ecb");
   const [show, setShow] = useState(false);
+
   const {
     register,
     watch,
@@ -45,6 +50,7 @@ const TabGeneral = () => {
   const formSubmit = async (data) => {
     const formData = new FormData();
     formData.append('theme_color', color.hex);
+
     // Call the API to send data to the server
     const res = await SettingsApi.ThemeColorPost(formData);
     console.log('Selected color:', color);

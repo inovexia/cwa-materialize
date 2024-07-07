@@ -20,6 +20,7 @@ const createData = (title, href, icon) => {
 }
 
 import CourseApi from 'src/pages/courses/_components/Apis'
+
 const Manage = () => {
 
   const router = useRouter()
@@ -59,6 +60,7 @@ const Manage = () => {
     createData('Edit', `/courses/${guid}/subjects/edit/${subjectId}`, 'tabler:edit'),
     createData('Archive', "", 'material-symbols:archive-outline')
   ]
+
   return (
     <Grid container spacing={6}>
       <Grid item xs={12}>
