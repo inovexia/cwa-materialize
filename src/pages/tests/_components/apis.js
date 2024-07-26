@@ -13,6 +13,7 @@ export default class TestApis {
 
   /** QUESTIONS */
   static testQuestions = async ({ guid }) => await ApiRequest(`tests/questions/${guid}`, 'GET')
+  static viewQuestion = async ({ guid }) => await ApiRequest(`qb/questions/${guid}/view`, 'POST')
   static addQuestion = async ({ guid, data }) => await ApiRequest(`tests/create_question/${guid}`, 'POST', { data })
   static editQuestion = async ({ guid, qid, data }) => await ApiRequest(`tests/create_question/${guid}/${qid}`, 'POST', { data })
   static uploadQuestions = async ({ guid, data }) => await ApiRequest(`tests/upload_question/${guid}`, 'POST', { data })

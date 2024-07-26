@@ -20,7 +20,7 @@ import PageHeader from 'src/layouts/components/page-header'
 import Icon from 'src/@core/components/icon'
 
 // ** Icon Imports
-import CreateQuestionForm from 'src/pages/qb/_views/CreateQuestion'
+import CreateQuestionForm from 'src/pages/tests/_views/createQuestion'
 
 // ** Actions Imports
 import { AddQuestions, GetCategories } from 'src/pages/tests/_models/TestModel'
