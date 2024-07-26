@@ -34,7 +34,7 @@ export async function AddTest(data) {
 }
 
 /** EDIT TEST */
-export async function EditTest(data) {
+export async function EditTests({ guid, data }) {
 
   const formData = new FormData()
   if (typeof data === "object") {
@@ -42,7 +42,7 @@ export async function EditTest(data) {
       formData.append(key, value)
     })
   }
-  const response = await API.editTest({ data: formData })
+  const response = await API.editTest({ guid, data: formData })
   var responseMessage = await responseMessages(response.message)
   response.message = await responseMessage
 
@@ -76,6 +76,39 @@ export async function GetCategories() {
     })
   }
   const response = await API.getCategories({ data: formData })
+  var responseMessage = await responseMessages(response.message)
+  response.message = await responseMessage
+
+  return response
+}
+
+/** DELETE TEST */
+export async function DeleteTest(data) {
+
+  const formData = new FormData()
+  if (typeof data === "object") {
+    Object.entries(data).forEach(([key, value]) => {
+      formData.append(key, value)
+    })
+  }
+  const response = await API.deleteTest({ data: formData })
+  var responseMessage = await responseMessages(response.message)
+  response.message = await responseMessage
+
+  return response
+}
+
+
+/** ADD QUESTION IN TEST */
+export async function AddQuestions(data) {
+
+  const formData = new FormData()
+  if (typeof data === "object") {
+    Object.entries(data).forEach(([key, value]) => {
+      formData.append(key, value)
+    })
+  }
+  const response = await API.addQuestion({ guid, data: formData })
   var responseMessage = await responseMessages(response.message)
   response.message = await responseMessage
 

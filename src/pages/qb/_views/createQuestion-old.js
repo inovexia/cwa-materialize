@@ -80,7 +80,7 @@ const CreateQuestionForm = props => {
   }, [guid, reset])
 
   /** SAVE QUESTION  */
-  const handleFormSubmit = async (data) => {
+  const onSubmit = async (data) => {
     if (guid) {
       await EditQuestion(guid, data)
         .then(response => {
@@ -93,6 +93,7 @@ const CreateQuestionForm = props => {
     } else {
       await AddQuestion(data)
         .then(response => {
+          console.log(response)
           if (response.success === true) {
             toast.success(response.message)
           } else {
@@ -115,7 +116,7 @@ const CreateQuestionForm = props => {
             <CircularProgress />
           </Box >) :
           (
-            <form onSubmit={handleSubmit(handleFormSubmit)}>
+            <form onSubmit={handleSubmit(onSubmit)}>
               <Grid container spacing={5}>
                 <Grid item xs={12}>
                   <FormControl fullWidth sx={{ mb: 6 }}>

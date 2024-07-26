@@ -1,5 +1,6 @@
 // ** React Imports
 import React, { useEffect, useState, useCallback } from 'react'
+import { useRouter } from 'next/router'
 
 // ** MUI Imports
 import Drawer from '@mui/material/Drawer'
@@ -22,7 +23,7 @@ import Icon from 'src/@core/components/icon'
 import CreateQuestionForm from 'src/pages/qb/_views/CreateQuestion'
 
 // ** Actions Imports
-import { AddTest, GetCategories } from 'src/pages/tests/_models/TestModel'
+import { AddQuestions, GetCategories } from 'src/pages/tests/_models/TestModel'
 
 const Header = styled(Box)(({ theme }) => ({
   display: 'flex',
@@ -33,6 +34,9 @@ const Header = styled(Box)(({ theme }) => ({
 
 
 const Page = props => {
+  const router = useRouter()
+  const { guid } = router.query
+
   // ** Props
   const { open, toggle } = props
 
@@ -57,9 +61,9 @@ const Page = props => {
   }, [getCategories])
 
 
-  const onSubmit = async (data) => {
+  const handleFormSubmit = async (data) => {
     setLoading(true)
-    const response = await AddTest(data)
+    const response = await AddQuestions({ guid, data })
     setLoading(false)
     if (response.success === true) {
       toast.success(response.message)
@@ -82,7 +86,7 @@ const Page = props => {
         <Card>
           <CardContent>
             <CreateQuestionForm
-              onSubmit={onSubmit}
+              handleFormSubmit={handleFormSubmit}
               isLoading={isLoading}
               toggle={toggle}
               categories={categories}

@@ -13,9 +13,11 @@ import InputLabel from '@mui/material/InputLabel';
 import FormControl from '@mui/material/FormControl';
 import FormHelperText from '@mui/material/FormHelperText';
 import CircularProgress from '@mui/material/CircularProgress';
+import toast from 'react-hot-toast'
 
 // API import
 import TestApis from 'src/pages/tests/_components/apis';
+import { EditTests } from 'src/pages/tests/_models/TestModel'
 
 const schema = yup.object().shape({
   title: yup.string().required().min(3),
@@ -26,7 +28,7 @@ const schema = yup.object().shape({
 const EditTest = ({ onSubmit, isLoading, toggle }) => {
   const router = useRouter();
   const { guid } = router.query;
-  const [data, setData] = useState()
+  const [data, setData] = useState(null);
 
   // useForm hook
   const {
@@ -44,9 +46,8 @@ const EditTest = ({ onSubmit, isLoading, toggle }) => {
       try {
         if (guid) {
           const res = await TestApis.viewTest({ guid });
-          setData(res.payload)
+          setData(res.payload);
           reset(res.payload); // Reset form with fetched data
-
         }
       } catch (error) {
         console.error(error);
@@ -56,11 +57,13 @@ const EditTest = ({ onSubmit, isLoading, toggle }) => {
     fetchData();
   }, [guid, reset]);
 
-  console.log(data)
-
-  // Handle form submission
-  const handleFormSubmit = (data) => {
-    onSubmit(data); // Handle form submission logic passed from parent component
+  const handleFormSubmit = async (data) => {
+    const response = await EditTests({ guid, data });
+    if (response.success === true) {
+      toast.success(response.message);
+    } else {
+      toast.error(response.message);
+    }
   };
 
   const handleClose = () => {
@@ -107,6 +110,7 @@ const EditTest = ({ onSubmit, isLoading, toggle }) => {
                     labelId="typeLabel"
                     error={Boolean(errors.type)}
                     inputProps={{ placeholder: 'Select Type' }}
+                    key={data ? data.type : 'loading'} // Force re-render when data is fetched
                   >
                     <MenuItem value="evaluated">Evaluated</MenuItem>
                     <MenuItem value="practice">Practice</MenuItem>
@@ -142,7 +146,7 @@ const EditTest = ({ onSubmit, isLoading, toggle }) => {
           </Grid>
 
           <Grid item xs={12} sx={{ display: 'flex', alignItems: 'center' }}>
-            <Button size="large" type="submit" variant="contained" disabled={isLoading}>
+            <Button size="large" type="submit" variant="contained" disabled={isLoading} sx={{ mr: 2 }}>
               {isLoading && <CircularProgress color="inherit" size={20} sx={{ mr: 2 }} />}
               Submit
             </Button>

@@ -3,7 +3,6 @@ import React, { useState, useCallback } from 'react'
 
 // ** MUI Imports
 import {
-  Button,
   Box,
   Table,
   TableRow,
@@ -19,8 +18,7 @@ import {
   Toolbar,
   Tooltip,
   Checkbox,
-  Switch,
-  Menu, MenuItem
+  Switch
 } from '@mui/material'
 import { visuallyHidden } from '@mui/utils'
 import { alpha } from '@mui/material/styles'
@@ -28,6 +26,8 @@ import toast from 'react-hot-toast'
 import Link from 'next/link'
 import { styled } from '@mui/material/styles'
 import Translations from 'src/layouts/components/Translations'
+import Delete from 'src/pages/tests/_views/delete'
+import ActionMenu from 'src/pages/tests/_components/actionMenu'
 
 // ** Icon Imports
 import Icon from 'src/@core/components/icon'
@@ -62,8 +62,6 @@ function getComparator(order, orderBy) {
     : (a, b) => -descendingComparator(a, b, orderBy)
 }
 
-// This method is created for cross-browser compatibility, if you don't
-// need to support IE11, you can use Array.prototype.sort() directly
 function stableSort(array, comparator) {
   const stabilizedThis = array.map((el, index) => [el, index])
   stabilizedThis.sort((a, b) => {
@@ -196,96 +194,6 @@ const EnhancedTableToolbar = props => {
   )
 }
 
-const RowOptions = ({ guid }) => {
-
-  // ** State
-  const [anchorEl, setAnchorEl] = useState(null)
-  const rowOptionsOpen = Boolean(anchorEl)
-
-  const handleRowOptionsClick = event => {
-    event.stopPropagation()
-    setAnchorEl(event.currentTarget)
-  }
-
-  const handleRowOptionsClose = (e) => {
-    e.stopPropagation()
-    setAnchorEl(null)
-  }
-
-  const handleDelete = () => {
-    dispatch(deleteUser(id))
-    handleRowOptionsClose()
-  }
-
-  return (
-    <>
-      <IconButton size='small' onClick={handleRowOptionsClick}>
-        <Icon icon='mdi:dots-vertical' />
-      </IconButton>
-      <Menu
-        keepMounted
-        anchorEl={anchorEl}
-        open={rowOptionsOpen}
-        onClose={handleRowOptionsClose}
-        anchorOrigin={{
-          vertical: 'bottom',
-          horizontal: 'right'
-        }}
-        transformOrigin={{
-          vertical: 'top',
-          horizontal: 'right'
-        }}
-        PaperProps={{ style: { minWidth: '8rem' } }}
-      >
-        <MenuItem
-          component={Link}
-          sx={{ '& svg': { mr: 2 } }}
-          onClick={handleRowOptionsClose}
-          href={`/tests/${guid}/manage`}
-        >
-          <Icon icon='material-symbols:manage-history' fontSize={20} />
-          Manage
-        </MenuItem>
-        <MenuItem
-          component={Link}
-          sx={{ '& svg': { mr: 2 } }}
-          onClick={handleRowOptionsClose}
-          href={`/tests/${guid}/edit`}
-        >
-          <Icon icon='tabler:edit' fontSize={20} />
-          Edit
-        </MenuItem>
-        <MenuItem
-          component={Link}
-          sx={{ '& svg': { mr: 2 } }}
-          onClick={handleRowOptionsClose}
-          href={`/tests/${guid}/manage`}
-        >
-          <Icon icon='mdi:eye-outline' fontSize={20} />
-          Preview
-        </MenuItem>
-        <MenuItem
-          component={Link}
-          sx={{ '& svg': { mr: 2 } }}
-          onClick={handleRowOptionsClose}
-          href={`/tests/${guid}/manage`}
-        >
-          <Icon icon='uil:setting' fontSize={20} />
-          Settings
-        </MenuItem>
-        <MenuItem
-          component={Link}
-          sx={{ '& svg': { mr: 2 } }}
-          onClick={handleRowOptionsClose}
-          href={`/tests/${guid}/manage`}
-        >
-          <Icon icon='material-symbols-light:delete-outline' fontSize={20} />
-          Delete
-        </MenuItem>
-      </Menu>
-    </>
-  )
-}
 
 const EnhancedTable = (props) => {
   // ** States
@@ -297,6 +205,9 @@ const EnhancedTable = (props) => {
   const [guid, setGuid] = useState('')
   const [testStatus, setTestStatus] = useState(0)
   const [checked, setChecked] = useState(false)
+  const [guidToDelete, setGuidToDelete] = useState('')
+  const [openModal, setOpenModal] = useState(false)
+  const [openArcModal, setOpenArcModal] = useState(false)
 
   // ** Props
   const { rows, responseStatus, responseMessage, meta } = props
@@ -342,7 +253,7 @@ const EnhancedTable = (props) => {
     setPage(0)
   }
 
-  const handleChangeStatus = (async (event, guid) => {
+  const handleChangeStatus = async (event, guid) => {
     event.stopPropagation()
     const response = await ChangeStatus(event.target.checked, guid)
     if (response.status) {
@@ -350,7 +261,7 @@ const EnhancedTable = (props) => {
     } else {
       toast.error(response.message)
     }
-  })
+  }
 
   const isSelected = guid => selected.indexOf(guid) !== -1
 
@@ -387,7 +298,10 @@ const EnhancedTable = (props) => {
                     role='checkbox'
                     selected={isItemSelected}
                     aria-checked={isItemSelected}
-                    onClick={event => handleClick(event, row.guid)}
+                    onClick={(event) => {
+                      event.stopPropagation();
+                      handleClick(event, row.guid);
+                    }}
                   >
                     <TableCell padding='checkbox'>
                       <Checkbox checked={isItemSelected} inputProps={{ 'aria-labelledby': labelId }} />
@@ -400,8 +314,16 @@ const EnhancedTable = (props) => {
                     </TableCell>
                     <TableCell >{row.details}</TableCell>
                     <TableCell >{row.type}</TableCell>
-                    <TableCell ><Switch defaultChecked={row.status === '1' ? true : false} onChange={event => handleChangeStatus(event, row.guid)} /></TableCell>
-                    <TableCell><RowOptions guid={row.guid} /></TableCell>
+                    <TableCell ><Switch defaultChecked={row.status === '1' ? true : false} onChange={event => handleChangeStatus(event, row.guid)} onClick={e => { e.stopPropagation() }} /></TableCell>
+                    {/* <TableCell><RowOptions guid={row.guid} /></TableCell> */}
+                    <TableCell>
+                      <ActionMenu
+                        currStatus={row.status}
+                        guid={row.guid}
+                        openModal={openModal}
+                        setOpenModal={setOpenModal}
+                        setGuidToDelete={setGuidToDelete}
+                      /></TableCell>
                   </TableRow>
                 )
               })}
@@ -427,6 +349,15 @@ const EnhancedTable = (props) => {
         onPageChange={handleChangePage}
         rowsPerPageOptions={[5, 10, 25, 50, 100]}
         onRowsPerPageChange={handleChangeRowsPerPage}
+      />
+      <Delete
+        openModal={openModal}
+        setOpenModal={setOpenModal}
+        guidToDelete={guidToDelete}
+        onUserDeleted={() => {
+          // Add any additional logic you need after a user is deleted
+          // For example, refreshing the table data
+        }}
       />
     </>
   )

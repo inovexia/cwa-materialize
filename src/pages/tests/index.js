@@ -83,7 +83,7 @@ const UserList = () => {
         <Grid item xs={12}>
           <PageHeader
             title={<Typography variant='h5'>Tests</Typography>}
-            subtitle={<Typography variant='body2'>List all tests</Typography>}
+            subtitle={<Typography variant='body2' sx={{ mb: 2 }}>List all tests</Typography>}
             toggleDrawer={toggleCreateDrawer}
             buttonTitle='Add Test'
           />

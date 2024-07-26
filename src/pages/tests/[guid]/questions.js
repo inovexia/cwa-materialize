@@ -1,5 +1,6 @@
 // ** React Imports
 import React, { useEffect, useState, useCallback } from 'react'
+import { useRouter } from 'next/router';
 
 // ** MUI Imports
 import Divider from '@mui/material/Divider'
@@ -40,6 +41,8 @@ const Page = props => {
   const [responseMessage, setResponseMessage] = useState('')
   const [isLoading, setLoading] = useState(false)
   const [categories, setCategories] = useState([])
+  const router = useRouter();
+  const { guid } = router.query;
 
   const getCategories = useCallback(async () => {
     const response = await GetCategories()
