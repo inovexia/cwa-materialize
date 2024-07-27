@@ -77,8 +77,10 @@ const Page = props => {
     <Grid container spacing={6}>
       <Grid item xs={12}>
         <PageHeader
-          title={<Typography variant='h5'>Manage Test</Typography>}
+          title={<Typography variant='h5'>Create Question</Typography>}
           subtitle={<Typography variant='body2'></Typography>}
+          buttonHref={`/tests/${guid}/manage`}
+          buttonTitle='Back'
         />
       </Grid>
       <Grid item xs={12} md={12}>

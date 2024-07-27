@@ -48,6 +48,8 @@ const Page = () => {
         <PageHeader
           title={<Typography variant='h5'>Manage Test</Typography>}
           subtitle={<Typography variant='body2'></Typography>}
+          buttonHref={`/tests`}
+          buttonTitle='Back'
         />
       </Grid>
       <Grid item xs={12} md={6}>

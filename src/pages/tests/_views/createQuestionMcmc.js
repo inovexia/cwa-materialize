@@ -12,11 +12,11 @@ import FormControl from '@mui/material/FormControl'
 import FormHelperText from '@mui/material/FormHelperText'
 import CircularProgress from '@mui/material/CircularProgress'
 import Repeater from 'src/@core/components/repeater'
-import { useRouter } from 'next/router'
+import { useRouter } from 'next/router';
 import * as yup from 'yup'
 import { useForm, Controller } from 'react-hook-form'
 import { yupResolver } from '@hookform/resolvers/yup'
-import { Box, Checkbox, Divider } from '@mui/material'
+import { Box, Checkbox, Divider, FormControlLabel, Radio } from '@mui/material'
 import { ViewQuestion, AddQuestion, EditQuestion } from 'src/pages/tests/_models/QestionModel'
 
 const validationSchema = yup.object().shape({
@@ -33,7 +33,7 @@ const validationSchema = yup.object().shape({
       choice: yup.string().required(),
       correct_answer: yup.boolean().required()
     })
-  ).min(2) // Ensure at least two choices are provided
+  )
 })
 
 const defaultValues = {
@@ -47,23 +47,21 @@ const defaultValues = {
   answer_feedback: '',
   choices: [
     { choice: '', correct_answer: false },
+    { choice: '', correct_answer: false },
     { choice: '', correct_answer: false }
   ]
 }
 
 const CreateQuestionForm = props => {
-  const router = useRouter()
-  const { guid } = router.query
+  const router = useRouter();
+  const { guid } = router.query;
   const { Qid } = props
-  const [count, setCount] = useState(2) // Start with 2 choices by default
+  const [count, setCount] = useState(3)
   const [isLoading, setLoading] = useState(false)
+  const [choices, setChoices] = useState(defaultValues.choices)
   const [isSubmitting, setSubmitting] = useState(false)
-  const [questionType, setQuestionType] = useState(defaultValues.question_type)
 
-  const { reset, control, handleSubmit, watch, formState: { errors } } = useForm({
-    defaultValues,
-    resolver: yupResolver(validationSchema)
-  })
+  const { reset, control, handleSubmit, formState: { errors } } = useForm({ defaultValues, resolver: yupResolver(validationSchema) })
 
   useEffect(() => {
     const fetchData = async () => {
@@ -74,35 +72,27 @@ const CreateQuestionForm = props => {
         if (response.success === false) {
           toast.error(response.message)
         }
-        const payload = response.payload
+        const payload = response.payload;
         payload.choices = payload.choices.map(choice => ({
           ...choice,
           correct_answer: choice.correct_answer ? true : false
-        }))
+        }));
         reset(payload)
-        setQuestionType(payload.question_type)
-        setCount(payload.question_type === 'tf' ? 2 : payload.choices.length)
+        if (payload.choices) {
+          setChoices(payload.choices)
+          setCount(payload.choices.length)
+        }
       }
     }
     fetchData()
   }, [Qid, reset])
-
-  const handleQuestionTypeChange = (e) => {
-    const value = e.target.value
-    setQuestionType(value)
-    if (value === 'tf') {
-      setCount(2)
-    } else {
-      setCount(3) // Default to 3 choices for other types
-    }
-  }
 
   const handleFormSubmit = async (data) => {
     setSubmitting(true)
     data.choices = data.choices.map(choice => ({
       ...choice,
       correct_answer: choice.correct_answer ? 1 : 0
-    }))
+    }));
 
     if (Qid) {
       await EditQuestion({ guid: Qid, data })
@@ -126,6 +116,8 @@ const CreateQuestionForm = props => {
         })
     }
   }
+
+  const handleCancel = () => { }
 
   return (
     <>
@@ -163,7 +155,7 @@ const CreateQuestionForm = props => {
 
                 <Grid item xs={12} md={6}>
                   <FormControl fullWidth sx={{ mb: 6 }}>
-                    <InputLabel>Question Type</InputLabel>
+                    <InputLabel >Question Type</InputLabel>
                     <Controller
                       name='question_type'
                       control={control}
@@ -171,16 +163,15 @@ const CreateQuestionForm = props => {
                       render={({ field }) => (
                         <Select
                           fullWidth
-                          label='Question Type'
+                          defaultValue=''
+                          label='Question Type '
                           {...field}
-                          value={questionType}
-                          onChange={handleQuestionTypeChange}
                           error={Boolean(errors.question_type)}
                           inputProps={{ placeholder: 'Select Type' }}
                         >
                           <MenuItem value='mcmc'>Multi Choice</MenuItem>
                           <MenuItem value='tf'>True / False</MenuItem>
-                          <MenuItem value='la'>Long Answer / Essay</MenuItem>
+                          <MenuItem value='la'>Long Answer / Essay </MenuItem>
                           <MenuItem value='comp'>Comprehension</MenuItem>
                         </Select>
                       )}
@@ -195,7 +186,7 @@ const CreateQuestionForm = props => {
 
                 <Grid item xs={12} md={6}>
                   <FormControl fullWidth sx={{ mb: 6 }}>
-                    <InputLabel>Difficulty</InputLabel>
+                    <InputLabel >Difficulty</InputLabel>
                     <Controller
                       name='difficulty'
                       control={control}
@@ -203,6 +194,7 @@ const CreateQuestionForm = props => {
                       render={({ field }) => (
                         <Select
                           fullWidth
+                          defaultValue=''
                           label='Difficulty'
                           {...field}
                           error={Boolean(errors.difficulty)}
@@ -215,7 +207,7 @@ const CreateQuestionForm = props => {
                       )}
                     />
                     {errors.difficulty && (
-                      <FormHelperText sx={{ color: 'error.main' }}>
+                      <FormHelperText sx={{ color: 'error.main' }} >
                         {errors.difficulty.message}
                       </FormHelperText>
                     )}
@@ -260,9 +252,7 @@ const CreateQuestionForm = props => {
                       </Box>
                     }
                   </Repeater>
-                  {questionType !== 'tf' && (
-                    <Button onClick={() => setCount(count + 1)}>Add 1 More Choice</Button>
-                  )}
+                  <Button onClick={() => setCount(count + 1)}>Add 1 More Choice</Button>
                 </Grid>
 
                 <Divider sx={{ m: '0 !important' }} />
@@ -337,7 +327,7 @@ const CreateQuestionForm = props => {
                         />
                       )}
                     />
-                    {errors.time && (
+                    {errors.marks && (
                       <FormHelperText sx={{ color: 'error.main' }} id='validation-schema-time'>
                         {errors.time.message}
                       </FormHelperText>
@@ -396,8 +386,8 @@ const CreateQuestionForm = props => {
                 </Grid>
 
                 <Grid item xs={12} sx={{ display: 'flex', alignItems: 'center' }}>
-                  <Button size='large' type='submit' variant='contained' disabled={isSubmitting}>
-                    {isSubmitting && (
+                  <Button size='large' type='submit' variant='contained' disabled={isSubmitting ? true : false}>
+                    {isSubmitting ? (
                       <CircularProgress
                         sx={{
                           color: 'common.white',
@@ -406,7 +396,7 @@ const CreateQuestionForm = props => {
                           mr: theme => theme.spacing(2)
                         }}
                       />
-                    )}
+                    ) : null}
                     Submit
                   </Button>
                   <Button size='large' variant='outlined' color='secondary' component={Link} href='/qb' sx={{ ml: 3 }}>
