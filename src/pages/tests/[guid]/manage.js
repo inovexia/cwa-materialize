@@ -34,6 +34,10 @@ const Page = () => {
     createData('Enrol User', `/tests/${guid}/enrol`, 'mdi:email-outline'),
   ]
 
+  const reportCard = [
+    createData('All Reports', `/tests/${guid}/enrolments`, 'iconoir:reports-solid'),
+  ]
+
   const settingsCard = [
     createData('Settings', `/tests/${guid}/settings`, 'mdi:email-outline'),
     createData('Publish', `/tests/${guid}/status`, 'mdi:email-outline'),
@@ -66,6 +70,14 @@ const Page = () => {
           CardTitle='Enrolments'
           Count={20}
           ListItems={enrolmentCard}
+        />
+      </Grid>
+      <Grid item xs={12} md={6}>
+        <CardComponent
+          guid={guid}
+          CardTitle='Reports'
+          Count={20}
+          ListItems={reportCard}
         />
       </Grid>
 
