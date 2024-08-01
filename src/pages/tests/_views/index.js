@@ -306,7 +306,7 @@ const EnhancedTable = (props) => {
                     <TableCell padding='checkbox'>
                       <Checkbox checked={isItemSelected} inputProps={{ 'aria-labelledby': labelId }} />
                     </TableCell>
-                    <TableCell component='th' id={labelId} scope='row' padding='none'>
+                    <TableCell component='th' id={labelId} scope='row' padding='none' onClick={e => { e.stopPropagation() }}>
                       <Box sx={{ display: 'flex', alignItems: 'flex-start', flexDirection: 'column' }}>
                         <LinkStyled href={`/tests/${row.guid}/manage`}>{row.title}</LinkStyled>
                         <Typography noWrap variant='caption'>{row.guid}</Typography>
