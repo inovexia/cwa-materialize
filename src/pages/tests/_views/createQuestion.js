@@ -1,4 +1,7 @@
 import { useEffect, useState } from 'react'
+import { useForm, Controller } from 'react-hook-form'
+import { yupResolver } from '@hookform/resolvers/yup'
+import { useRouter } from 'next/router'
 import Grid from '@mui/material/Grid'
 import Link from '@mui/material/Link'
 import Select from '@mui/material/Select'
@@ -12,11 +15,8 @@ import FormControl from '@mui/material/FormControl'
 import FormHelperText from '@mui/material/FormHelperText'
 import CircularProgress from '@mui/material/CircularProgress'
 import Repeater from 'src/@core/components/repeater'
-import { useRouter } from 'next/router'
+import { Box, Checkbox, Divider, Radio, RadioGroup, FormControlLabel } from '@mui/material'
 import * as yup from 'yup'
-import { useForm, Controller } from 'react-hook-form'
-import { yupResolver } from '@hookform/resolvers/yup'
-import { Box, Checkbox, Divider } from '@mui/material'
 import { ViewQuestion, AddQuestion, EditQuestion } from 'src/pages/tests/_models/QestionModel'
 
 const validationSchema = yup.object().shape({
@@ -51,7 +51,7 @@ const defaultValues = {
   ]
 }
 
-const CreateQuestionForm = props => {
+const CreateQuestionForm = (props) => {
   const router = useRouter()
   const { guid } = router.query
   const { Qid } = props
@@ -92,8 +92,10 @@ const CreateQuestionForm = props => {
     setQuestionType(value)
     if (value === 'tf') {
       setCount(2)
+      reset({ ...defaultValues, question_type: value, choices: [{ choice: 'True', correct_answer: false }, { choice: 'False', correct_answer: false }] })
     } else {
       setCount(3) // Default to 3 choices for other types
+      reset({ ...defaultValues, question_type: value })
     }
   }
 
@@ -224,121 +226,134 @@ const CreateQuestionForm = props => {
 
                 <Grid item xs={12}>
                   <Typography xs={{ mb: 4 }}>Answer Choices</Typography>
-                  <Repeater count={count}>
-                    {i =>
-                      <Box sx={{ width: '100%' }} key={i}>
-                        <Box sx={{ mb: 2, display: 'flex', justifyContent: 'space-between' }}>
-                          <Controller
-                            name={`choices[${i}].correct_answer`}
-                            control={control}
-                            render={({ field }) => <Checkbox {...field} />}
-                          />
-
-                          <FormControl fullWidth sx={{ mb: 6, width: '100%' }} >
+                  {questionType === 'tf' ? (
+                    <FormControl component="fieldset">
+                      <RadioGroup
+                        aria-label="true-false"
+                        name="true-false-options"
+                      >
+                        <FormControlLabel
+                          value="true"
+                          control={<Radio />}
+                          label="True"
+                          checked={watch('choices[0].correct_answer')}
+                          onChange={() => reset({ ...watch(), choices: [{ choice: 'True', correct_answer: true }, { choice: 'False', correct_answer: false }] })}
+                        />
+                        <FormControlLabel
+                          value="false"
+                          control={<Radio />}
+                          label="False"
+                          checked={watch('choices[1].correct_answer')}
+                          onChange={() => reset({ ...watch(), choices: [{ choice: 'True', correct_answer: false }, { choice: 'False', correct_answer: true }] })}
+                        />
+                      </RadioGroup>
+                    </FormControl>
+                  ) : (
+                    <Repeater count={count}>
+                      {i =>
+                        <Box sx={{ width: '100%' }} key={i}>
+                          <Box sx={{ mb: 2, display: 'flex', justifyContent: 'space-between' }}>
                             <Controller
-                              name={`choices[${i}].choice`}
+                              name={`choices[${i}].correct_answer`}
                               control={control}
-                              rules={{ required: true }}
-                              render={({ field }) => (
-                                <TextField
-                                  rows={4}
-                                  multiline
-                                  {...field}
-                                  label={`Choice ${i + 1}`}
-                                  error={Boolean(errors?.choices?.[i]?.choice)}
-                                  aria-describedby='validation-test-details'
-                                />
-                              )}
+                              render={({ field }) => <Checkbox {...field} />}
                             />
-                            {errors?.choices?.[i]?.choice && (
-                              <FormHelperText sx={{ color: 'error.main' }} id='validation-choice' >
-                                {errors.choices[i].choice.message}
-                              </FormHelperText>
-                            )}
-                          </FormControl>
+
+                            <FormControl fullWidth sx={{ mb: 6, width: '100%' }} >
+                              <Controller
+                                name={`choices[${i}].choice`}
+                                control={control}
+                                rules={{ required: true }}
+                                render={({ field }) => (
+                                  <TextField
+                                    rows={4}
+                                    multiline
+                                    {...field}
+                                    label={`Choice ${i + 1}`}
+                                    error={Boolean(errors?.choices?.[i]?.choice)}
+                                    aria-describedby='validation-test-details'
+                                  />
+                                )}
+                              />
+                              {errors?.choices?.[i]?.choice && (
+                                <FormHelperText sx={{ color: 'error.main' }} id='validation-choice' >
+                                  {errors.choices[i].choice.message}
+                                </FormHelperText>
+                              )}
+                            </FormControl>
+                          </Box>
                         </Box>
-                      </Box>
-                    }
-                  </Repeater>
+                      }
+                    </Repeater>
+                  )}
                   {questionType !== 'tf' && (
                     <Button onClick={() => setCount(count + 1)}>Add 1 More Choice</Button>
                   )}
                 </Grid>
 
-                <Divider sx={{ m: '0 !important' }} />
-
-                <Grid item xs={12} md={4}>
-                  <FormControl fullWidth>
+                <Grid item xs={12} md={6}>
+                  <FormControl fullWidth sx={{ mb: 6 }}>
                     <Controller
                       name='marks'
                       control={control}
-                      rules={{ required: true }}
-                      render={({ field: { value, onChange } }) => (
+                      render={({ field }) => (
                         <TextField
                           type='number'
-                          value={value}
                           label='Marks'
-                          onChange={onChange}
-                          placeholder='1'
+                          {...field}
                           error={Boolean(errors.marks)}
-                          aria-describedby='validation-schema-title'
+                          aria-describedby='validation-marks'
                         />
                       )}
                     />
                     {errors.marks && (
-                      <FormHelperText sx={{ color: 'error.main' }} id='validation-schema-marks'>
+                      <FormHelperText sx={{ color: 'error.main' }} id='validation-marks'>
                         {errors.marks.message}
                       </FormHelperText>
                     )}
                   </FormControl>
                 </Grid>
 
-                <Grid item xs={12} md={4}>
-                  <FormControl fullWidth>
+                <Grid item xs={12} md={6}>
+                  <FormControl fullWidth sx={{ mb: 6 }}>
                     <Controller
                       name='neg_marks'
                       control={control}
-                      rules={{ required: true }}
-                      render={({ field: { value, onChange } }) => (
+                      render={({ field }) => (
                         <TextField
                           type='number'
-                          value={value}
                           label='Negative Marks'
-                          onChange={onChange}
-                          placeholder='0'
+                          {...field}
                           error={Boolean(errors.neg_marks)}
-                          aria-describedby='validation-schema-title'
+                          aria-describedby='validation-neg_marks'
                         />
                       )}
                     />
                     {errors.neg_marks && (
-                      <FormHelperText sx={{ color: 'error.main' }} id='validation-schema-neg_marks'>
+                      <FormHelperText sx={{ color: 'error.main' }} id='validation-neg_marks'>
                         {errors.neg_marks.message}
                       </FormHelperText>
                     )}
                   </FormControl>
                 </Grid>
 
-                <Grid item xs={12} md={4}>
-                  <FormControl fullWidth>
+                <Grid item xs={12} md={6}>
+                  <FormControl fullWidth sx={{ mb: 6 }}>
                     <Controller
                       name='time'
                       control={control}
-                      rules={{ required: true }}
-                      render={({ field: { value, onChange } }) => (
+                      render={({ field }) => (
                         <TextField
                           type='number'
-                          value={value}
-                          label='Allowed Time (Seconds)'
-                          onChange={onChange}
-                          placeholder='0'
+                          label='Time (seconds)'
+                          {...field}
                           error={Boolean(errors.time)}
-                          aria-describedby='validation-schema-title'
+                          aria-describedby='validation-time'
                         />
                       )}
                     />
                     {errors.time && (
-                      <FormHelperText sx={{ color: 'error.main' }} id='validation-schema-time'>
+                      <FormHelperText sx={{ color: 'error.main' }} id='validation-time'>
                         {errors.time.message}
                       </FormHelperText>
                     )}
@@ -346,24 +361,27 @@ const CreateQuestionForm = props => {
                 </Grid>
 
                 <Grid item xs={12}>
+                  <Divider sx={{ mt: 0, mb: 6 }} />
+                </Grid>
+
+                <Grid item xs={12}>
                   <FormControl fullWidth sx={{ mb: 6 }}>
                     <Controller
                       name='feedback'
                       control={control}
-                      rules={{ required: true }}
                       render={({ field }) => (
                         <TextField
                           rows={4}
                           multiline
+                          label='Feedback'
                           {...field}
-                          label='Question Hint'
                           error={Boolean(errors.feedback)}
-                          aria-describedby='validation-test-details'
+                          aria-describedby='validation-feedback'
                         />
                       )}
                     />
                     {errors.feedback && (
-                      <FormHelperText sx={{ color: 'error.main' }} id='validation-test-feedback'>
+                      <FormHelperText sx={{ color: 'error.main' }} id='validation-feedback'>
                         {errors.feedback.message}
                       </FormHelperText>
                     )}
@@ -375,44 +393,36 @@ const CreateQuestionForm = props => {
                     <Controller
                       name='answer_feedback'
                       control={control}
-                      rules={{ required: true }}
                       render={({ field }) => (
                         <TextField
                           rows={4}
                           multiline
-                          {...field}
                           label='Answer Feedback'
+                          {...field}
                           error={Boolean(errors.answer_feedback)}
-                          aria-describedby='validation-test-answer_feedback'
+                          aria-describedby='validation-answer_feedback'
                         />
                       )}
                     />
                     {errors.answer_feedback && (
-                      <FormHelperText sx={{ color: 'error.main' }} id='validation-test-answer_feedback'>
+                      <FormHelperText sx={{ color: 'error.main' }} id='validation-answer_feedback'>
                         {errors.answer_feedback.message}
                       </FormHelperText>
                     )}
                   </FormControl>
                 </Grid>
 
-                <Grid item xs={12} sx={{ display: 'flex', alignItems: 'center' }}>
+                <Grid item xs={12}>
                   <Button size='large' type='submit' variant='contained' disabled={isSubmitting}>
-                    {isSubmitting && (
-                      <CircularProgress
-                        sx={{
-                          color: 'common.white',
-                          width: '20px !important',
-                          height: '20px !important',
-                          mr: theme => theme.spacing(2)
-                        }}
-                      />
-                    )}
-                    Submit
+                    {Qid ? 'Update' : 'Create'}
                   </Button>
-                  <Button size='large' variant='outlined' color='secondary' component={Link} href='/qb' sx={{ ml: 3 }}>
-                    Cancel
-                  </Button>
+                  <Link href='/tests/questions' passHref>
+                    <Button size='large' type='button' variant='outlined' sx={{ ml: 2 }}>
+                      Cancel
+                    </Button>
+                  </Link>
                 </Grid>
+
               </Grid>
             </form>
           )
