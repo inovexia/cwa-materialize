@@ -9,8 +9,7 @@ import PageHeader from 'src/layouts/components/page-header'
 
 // ** Module Specific Imports
 import OnlineClassList from 'src/pages/onlineclass/_views/OnlineClassList'
-import CreateOnlineClass from 'src/pages/onlineclass/_views/CreateOnlineClass'
-
+import CreateOnlineClass from 'src/pages/onlineclass/_views/createOnlineClass'
 import Toolbar from 'src/pages/onlineclass/_components/Toolbar'
 
 // ** Actions Imports

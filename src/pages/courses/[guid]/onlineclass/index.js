@@ -10,7 +10,8 @@ import PageHeader from 'src/layouts/components/page-header'
 
 // ** Module Specific Imports
 import OnlineClassList from 'src/pages/onlineclass/_views/OnlineClassList'
-import CreateOnlineClass from 'src/pages/onlineclass/_views/CreateOnlineClass'
+// import CreateOnlineClass from 'src/pages/onlineclass/_views/CreateOnlineClass'
+import CreateOnlineClass from 'src/pages/onlineclass/_views/createOnlineClass'
 
 // ** Actions Imports
 import { GetOnlineClassInCourse } from 'src/pages/courses/_models/OnlineClassModel'

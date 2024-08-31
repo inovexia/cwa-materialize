@@ -5,8 +5,8 @@ import { useRouter } from 'next/router'
 import { Grid, Card, CardContent, Typography } from '@mui/material'
 
 // ** Module Specific Imports
-import UnEnrolUser from 'src/pages/onlineclass/_views/UnenrolUserList'
-
+// import UnEnrolUser from 'src/pages/onlineclass/_views/UnenrolUserList'
+import UnEnrolUser from 'src/pages/onlineclass/_views/unenroluserlist'
 // ** Core Imports
 import PageHeader from 'src/layouts/components/page-header'
 

@@ -1,7 +1,6 @@
 import API from 'src/pages/tests/_components/apis'
 import CAPI from 'src/pages/courses/_components/Apis'
-import MessageFormatter from 'src/lib/common/MessageFormatter'
-
+import MessageFormatter from 'src/lib/common/messageFormatter'
 /** GET TESTS */
 export async function ListTests({ guid, data }) {
 
