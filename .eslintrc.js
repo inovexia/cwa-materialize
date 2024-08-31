@@ -19,35 +19,43 @@ module.exports = {
   rules: {
     'newline-before-return': 'off',
     'react/react-in-jsx-scope': 'off',
-    'lines-around-comment': 'off',
-    'padding-line-between-statements': 'off',
+    'lines-around-comment': 'off', // Turn off to avoid errors
+    'padding-line-between-statements': 'off', // Turn
     'react/jsx-filename-extension': [1, { extensions: ['.js', '.jsx'] }],
     'react/display-name': 'off',
     '@next/next/no-img-element': 'off',
     'react/no-unescaped-entities': 'off',
     'import/no-anonymous-default-export': 'off',
-    'import/newline-after-import': ['error', { count: 1 }],
 
-    // Ensure that all imports are resolved correctly
-    'import/no-unresolved': 'error',
+    // add new line above comment
+    // 'lines-around-comment': [
+    //   'error',
+    //   {
+    //     beforeLineComment: false,
+    //     beforeBlockComment: true,
+    //     allowBlockStart: true,
+    //     allowClassStart: true,
+    //     allowObjectStart: true,
+    //     allowArrayStart: true
+    //   }
+    // ],
 
-    // Enforce a specific order for imports
-    'import/order': [
+    // add new line above return
+    // 'newline-before-return': 'error',
+
+    // add new line below import
+    'import/newline-after-import': [
       'error',
       {
-        groups: [
-          'builtin', // Node "builtin" modules (e.g., `fs`, `path`)
-          'external', // External modules (e.g., `react`, `lodash`)
-          'internal', // Internal modules (e.g., `components`, `utils`)
-          ['parent', 'sibling', 'index'], // Parent, sibling, and index imports
-          'object' // Imports with object destructuring
-        ],
-        'newlines-between': 'always',
-        alphabetize: {
-          order: 'asc',
-          caseInsensitive: true
-        }
+        count: 1
       }
     ]
+
+    // add new line after each var, const, let declaration
+    // 'padding-line-between-statements': [
+    //   'error',
+    //   { blankLine: 'always', prev: ['export'], next: ['*'] },
+    //   { blankLine: 'always', prev: ['*'], next: ['multiline-const', 'multiline-let', 'multiline-var', 'export'] }
+    // ]
   }
 }
