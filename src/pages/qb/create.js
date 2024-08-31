@@ -18,9 +18,9 @@ import PageHeader from 'src/layouts/components/page-header'
 // import CreateQuestionForm from 'src/pages/qb/_views/CreateQuestion'
 import CreateQuestionForm from 'src/pages/qb/_views/createQuestion'
 // ** Actions Imports
-import { AddQuestion, GetCategories } from 'src/pages/qb/_models/QuestionModel'
-
-
+import { AddQuestion } from 'src/pages/qb/_models/QuestionModel'
+// import {GetCategor}
+import { GetCategories } from './_models/CategoriesModel'
 const Page = props => {
 
   // ** Props

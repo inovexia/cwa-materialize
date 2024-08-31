@@ -26,7 +26,8 @@ import { alpha } from '@mui/material/styles'
 import Link from 'next/link'
 import ReactHtmlParser from 'react-html-parser'
 
-import Translations from 'src/layouts/components/Translations'
+// import Translations from 'src/layouts/components/Translations'
+import Translationss from 'src/layouts/components/Translations'
 
 // import extractUrlFromHtml from 'src/lib/common/extractUrlFromHtml'
 
@@ -436,7 +437,7 @@ const EnhancedTable = (props) => {
                   }}
                 >
                   <TableCell colSpan={6}>
-                    <Translations text={responseMessage} message='No online classes found' />
+                    <Translationss text={responseMessage} message='No online classes found' />
                   </TableCell>
                 </TableRow>
               )}
