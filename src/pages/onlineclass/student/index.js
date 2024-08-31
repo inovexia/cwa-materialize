@@ -8,8 +8,8 @@ import toast from 'react-hot-toast'
 import PageHeader from 'src/layouts/components/page-header'
 
 // ** Module Specific Imports
-import OnlineClassList from 'src/pages/onlineclass/student/_views/OnlineClassList'
-
+// import OnlineClassList from 'src/pages/onlineclass/student/_views/OnlineClassList'
+import OnlineClassList from 'src/pages/onlineclass/student/_views/onlineclasslist'
 // ** Actions Imports
 import { GetOnlineClass } from 'src/pages/onlineclass/_models/OnlineClassModel'
 

@@ -15,8 +15,8 @@ import toast from 'react-hot-toast'
 import PageHeader from 'src/layouts/components/page-header'
 
 // ** View Imports
-import CreateQuestionForm from 'src/pages/qb/_views/CreateQuestion'
-
+// import CreateQuestionForm from 'src/pages/qb/_views/CreateQuestion'
+import CreateQuestionForm from 'src/pages/qb/_views/createQuestion'
 // ** Actions Imports
 import { AddQuestion, GetCategories } from 'src/pages/qb/_models/QuestionModel'
 

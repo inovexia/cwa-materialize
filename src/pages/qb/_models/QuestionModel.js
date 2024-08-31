@@ -1,6 +1,6 @@
 import API from 'src/pages/qb/_components/Apis'
-import MessageFormatter from 'src/lib/common/MessageFormatter'
-
+// import MessageFormatter from 'src/lib/common/MessageFormatter'
+import MessageFormatter from 'src/lib/common/messageFormatter'
 /** GET TESTS */
 export async function GetQuestions(data) {
 
