@@ -8,8 +8,8 @@ import toast from 'react-hot-toast'
 import PageHeader from 'src/layouts/components/page-header'
 
 // ** Module Specific Imports
-import SingleQuestion from 'src/pages/qb/_views/SingleQuestion'
-
+// import SingleQuestion from 'src/pages/qb/_views/SingleQuestion'
+import SingleQuestion from 'src/pages/qb/_views/singleQuestion'
 //import CreateQuestion from 'src/pages/qb/create'
 import Toolbar from 'src/pages/qb/_components/Toolbar'
 
