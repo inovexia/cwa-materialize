@@ -26,7 +26,7 @@ import { alpha } from '@mui/material/styles'
 import Link from 'next/link'
 import ReactHtmlParser from 'react-html-parser'
 
-// import Translations from 'src/layouts/components/Translations'
+//
 import Translationss from 'src/layouts/components/Translations'
 
 // import extractUrlFromHtml from 'src/lib/common/extractUrlFromHtml'
